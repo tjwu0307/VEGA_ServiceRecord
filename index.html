@@ -82,6 +82,7 @@ table.form th,table.form td {
   flex-wrap: wrap;
   gap: 8px;
   padding: 4px;
+  background-color: lightyellow;
 }
 
 #service-methods label {
@@ -89,8 +90,8 @@ table.form th,table.form td {
   display: inline-block;
   text-align: left;
   vertical-align: top;
+  box-sizing: border-box;
 }
-
 </style>
 </head>
 <body>
@@ -115,9 +116,9 @@ table.form th,table.form td {
       <td><input id="projectCode" type="text"></td>
       <th>叫修單號</th>
       <td><input id="ticketNo" type="text"></td>
-      <th style="font-size:18px;text-align:center">服務記錄表</th>
+      <th  colspan="2" style="font-size:18px;text-align:center">服務記錄表</th>
       <th>CRM 安裝單號</th>
-      <td><input colspan="2" id="crm_install" type="text"></td>
+      <td><input id="crm_install" type="text"></td>
     </tr>
     <tr>
       <th>客戶名稱</th>
@@ -383,6 +384,7 @@ table.form th,table.form td {
 </body>
 
 </html>
+
 
 
 
