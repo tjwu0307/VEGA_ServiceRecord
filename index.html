@@ -387,11 +387,31 @@ function downloadPDF() {
   google.script.run.appendData(data);
 
   // 接著處理 PDF 與簽名儲存
-  generatePDF();
+function generatePDF() {
+  const source = document.getElementById('pdf-content');
+  const clone = source.cloneNode(true);
+
+  clone.style.position = 'fixed';
+  clone.style.left = '-99999px';
+  clone.style.top = '0';
+  clone.style.width = '800px'; // 避免寬度過小導致 PDF 空白
+  document.body.appendChild(clone);
+
+  html2pdf()
+    .set({
+      margin: 10,
+      filename: '服務記錄.pdf',
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    })
+    .from(clone)
+    .save()
+    .finally(() => clone.remove());
 }
   </script>
 </body>
 
 </html>
+
 
 
