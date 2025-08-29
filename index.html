@@ -374,9 +374,9 @@ insertSignaturePreviews(clone);
   const engineerCanvas = document.getElementById('sig-engineer');
   const customerCanvas = document.getElementById('sig-customer');
   const managerCanvas = document.getElementById('sig-manager');
-  const engineerSign = engineerCanvas ? engineerCanvas.toDataURL() : "";
-  const customerSign = customerCanvas ? customerCanvas.toDataURL() : "";
-  const managerSign = managerCanvas ? managerCanvas.toDataURL() : "";
+const engineerSign = document.getElementById('sig-engineer')?.toDataURL() || "";
+const customerSign = document.getElementById('sig-customer')?.toDataURL() || "";
+const managerSign = document.getElementById('sig-manager')?.toDataURL() || "";
   if (engineerCanvas && customerCanvas) {
     const engImg = document.createElement('img');
     engImg.src = engineerCanvas.toDataURL();
@@ -604,5 +604,6 @@ function generatePDF(formData, engineerSignDataURL, customerSignDataURL) {
 </body>
 
 </html>
+
 
 
