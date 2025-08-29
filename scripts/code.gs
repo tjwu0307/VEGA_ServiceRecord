@@ -8,14 +8,15 @@ function doGet(e) {
 
 function doPost(e) {
   Logger.log('postData: ' + (e.postData ? e.postData.contents : 'no data'));
-  // 輸入防錯與debug
+
   if (!e || !e.postData || !e.postData.contents) {
     return ContentService.createTextOutput("No payload").setMimeType(ContentService.MimeType.TEXT);
   }
+
   try {
     var payload = JSON.parse(e.postData.contents);
 
-    // 儲存PDF到雲端
+    // 儲存 PDF
     var pdfUrl = '';
     if (payload.pdfBase64 && payload.filename) {
       var base64 = payload.pdfBase64.split(',')[1];
@@ -25,41 +26,42 @@ function doPost(e) {
     }
 
     // 儲存簽名
-    function saveSignature(dataUrl, name) {
-      if (!dataUrl) return '';
-      var bytes = Utilities.base64Decode(dataUrl.split(',')[1]);
-      var blob = Utilities.newBlob(bytes, 'image/png', `${name}.png`);
-      var file = DriveApp.getFolderById(FOLDER_ID).createFile(blob);
-      return file.getUrl();
-    }
-    var engineerUrl = (payload.signatures && payload.signatures.engineer) ? saveSignature(payload.signatures.engineer, 'sign_engineer') : '';
-    var customerUrl = (payload.signatures && payload.signatures.customer) ? saveSignature(payload.signatures.customer, 'sign_customer') : '';
+    var engineerUrl = payload.signatures?.engineer ? saveSignature(payload.signatures.engineer, 'sign_engineer') : '';
+    var customerUrl = payload.signatures?.customer ? saveSignature(payload.signatures.customer, 'sign_customer') : '';
+    var managerUrl  = payload.signatures?.manager  ? saveSignature(payload.signatures.manager,  'sign_manager')  : '';
 
-    // 寫入表單到指定試算表
-    var sheet = SpreadsheetApp.openById(SHEET_ID).getSheetByName("VEGA服務記錄表_回傳");
-    var serial = sheet.getLastRow() + 1;
+    // 寫入 Google Sheet
     var form = payload.form || {};
-    var rocDate = `民國${form.rocY}年${form.rocM}月${form.rocD}日`;
+    appendData({
+      serialNo: form.serialNo,
+      projectId: form.projectId,
+      ticketNo: form.ticketNo,
+      customer: form.customer,
+      address: form.address,
+      contact: form.contact,
+      phone: form.phone,
+      serviceDate: form.serviceDate,
+      arrivalTime: form.arrivalTime,
+      finishTime: form.finishTime,
+      serviceMethod: form.serviceMethod || [],
+      serviceProduct: form.serviceProduct || [],
+      serviceContent: form.serviceContent,
+      customerFeedback: form.customerFeedback,
+      engineer: form.engineer
+    });
 
-    sheet.appendRow([
-      form.timestamp || new Date(),
-      form.projectCode || '',
-      form.ticketNo || '',
-      form.customerName || '',
-      form.address || '',
-      form.contact || '',
-      form.phone || '',
-      rocDate,
-      form.arriveTxt || '',
-      form.finishTxt || '',
-      form.jobNo || '',
-      form.products || '',
-      form.serviceContent || '',
-      form.customerFeedback || '',
-      engineerUrl,
-      customerUrl,
-      pdfUrl
-    ]);
+    // 寄送 Email
+    if (payload.filename && pdfBlob) {
+      sendEmailWithPDF(payload.pdfBase64, payload.filename, form);
+    }
+
+    return ContentService.createTextOutput(JSON.stringify({ result: "ok", pdfUrl })).setMimeType(ContentService.MimeType.JSON);
+
+  } catch (e) {
+    Logger.log("doPost error: " + e.message);
+    return ContentService.createTextOutput("Error: " + e.message).setMimeType(ContentService.MimeType.TEXT);
+  }
+}
 
 function getTemplate() {
   return HtmlService.createHtmlOutputFromFile('pdf_template').getContent();
