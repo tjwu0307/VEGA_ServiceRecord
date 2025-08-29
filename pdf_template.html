@@ -5,14 +5,19 @@ table { width: 100%; border-collapse: collapse; }
 td, th { border: 1px solid #000; padding: 4px; }
 </style>
 <h1>服務記錄表</h1>
-<table>
-<tr><td>專案代號</td><td>{{projectCode}}</td><td>叫修單號</td><td>{{ticketNo}}</td></tr>
-<tr><td>客戶名稱</td><td>{{customerName}}</td><td>地址</td><td>{{address}}</td></tr>
-<tr><td>聯絡人</td><td>{{contact}}</td><td>電話</td><td>{{phone}}</td></tr>
-<tr><td colspan="4">服務日期（民國）：{{rocY}}年{{rocM}}月{{rocD}}日，到達：{{arriveTxt}} 結束：{{finishTxt}}</td></tr>
-<tr><td colspan="4">服務方式：{{serviceMethods}}</td></tr>
-<tr><td colspan="4">服務產品：{{products}}</td></tr>
-<tr><td colspan="4">服務內容：<br>{{serviceContent}}</td></tr>
-<tr><td colspan="4">客戶意見：<br>{{customerFeedback}}</td></tr>
-<tr><td>工程師簽名</td><td><img src="{{sign_engineer}}" width="150"></td><td>客戶簽名</td><td><img src="{{sign_customer}}" width="150"></td></tr>
-</table>
+<p>工程編號：{{projectCode}}</p>
+<p>叫修單號：{{ticketNo}}</p>
+<p>客戶名稱：{{customerName}}</p>
+<p>地址：{{address}}</p>
+<p>聯絡人：{{contact}}</p>
+<p>電話：{{phone}}</p>
+<p>服務日期：民國{{rocY}}年{{rocM}}月{{rocD}}日</p>
+<p>到達時間：{{arriveTxt}}</p>
+<p>結束時間：{{finishTxt}}</p>
+<p>服務方式：{{serviceMethods}}</p>
+<p>服務產品：{{products}}</p>
+<p>服務內容：{{serviceContent}}</p>
+<p>客戶意見：{{customerFeedback}}</p>
+<p>工程師簽名：<img src="{{sign_engineer}}" style="height:50px;"></p>
+<p>客戶簽名：<img src="{{sign_customer}}" style="height:50px;"></p>
+
