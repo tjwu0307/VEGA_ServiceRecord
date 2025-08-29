@@ -367,7 +367,8 @@ table {
 
 function downloadPDF() {
   const src = document.getElementById('service-form');
-  const clone = src.cloneNode(true);
+const clone = src.cloneNode(true);
+insertSignaturePreviews(clone); 
 
   // 插入簽名圖
   const engineerCanvas = document.getElementById('engineer-signature');
@@ -416,24 +417,24 @@ function downloadPDF() {
 }
 
 function insertSignaturePreviews(clone) {
-  const engineerSign = document.getElementById('sig-engineer').toDataURL();
-  const customerSign = document.getElementById('sig-customer').toDataURL();
-  const managerSign = document.getElementById('sig-manager').toDataURL();
+  const engineerCanvas = document.getElementById('sig-engineer');
+  const customerCanvas = document.getElementById('sig-customer');
+  const managerCanvas = document.getElementById('sig-manager');
 
-  const engTarget = clone.querySelector('#sig-preview-engineer');
-  const custTarget = clone.querySelector('#sig-preview-customer');
-  const mgrTarget = clone.querySelector('#sig-preview-manager');
+  const engineerSign = engineerCanvas ? engineerCanvas.toDataURL() : "";
+  const customerSign = customerCanvas ? customerCanvas.toDataURL() : "";
+  const managerSign = managerCanvas ? managerCanvas.toDataURL() : "";
 
-  if (engTarget) {
-    engTarget.innerHTML = `<img src="${engineerSign}" width="150">`;
-  }
-  if (custTarget) {
-    custTarget.innerHTML = `<img src="${customerSign}" width="150">`;
-  }
-  if (mgrTarget) {
-    mgrTarget.innerHTML = `<img src="${managerSign}" width="150">`;
-  }
+  if (clone.querySelector('#sig-preview-engineer'))
+    clone.querySelector('#sig-preview-engineer').innerHTML = `<img src="${engineerSign}" width="150">`;
+
+  if (clone.querySelector('#sig-preview-customer'))
+    clone.querySelector('#sig-preview-customer').innerHTML = `<img src="${customerSign}" width="150">`;
+
+  if (clone.querySelector('#sig-preview-manager'))
+    clone.querySelector('#sig-preview-manager').innerHTML = `<img src="${managerSign}" width="150">`;
 }
+    
  function submitForm() {
   const form = document.getElementById('service-form');
   if (!form.reportValidity()) return;
@@ -560,3 +561,4 @@ function generatePDF(formData, engineerSignDataURL, customerSignDataURL) {
 </body>
 
 </html>
+
