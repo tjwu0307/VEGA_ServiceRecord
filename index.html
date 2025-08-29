@@ -371,9 +371,12 @@ const clone = src.cloneNode(true);
 insertSignaturePreviews(clone); 
 
   // 插入簽名圖
-  const engineerCanvas = document.getElementById('engineer-signature');
-  const customerCanvas = document.getElementById('customer-signature');
-
+  const engineerCanvas = document.getElementById('sig-engineer');
+  const customerCanvas = document.getElementById('sig-customer');
+  const managerCanvas = document.getElementById('sig-manager');
+  const engineerSign = engineerCanvas ? engineerCanvas.toDataURL() : "";
+  const customerSign = customerCanvas ? customerCanvas.toDataURL() : "";
+  const managerSign = managerCanvas ? managerCanvas.toDataURL() : "";
   if (engineerCanvas && customerCanvas) {
     const engImg = document.createElement('img');
     engImg.src = engineerCanvas.toDataURL();
@@ -442,8 +445,8 @@ function insertSignaturePreviews(clone) {
   // 安全抓取簽名 Canvas
   const engineerCanvas = document.getElementById('engineer-signature');
   const customerCanvas = document.getElementById('customer-signature');
-  const engineerSign = engineerCanvas ? engineerCanvas.toDataURL() : "";
-  const customerSign = customerCanvas ? customerCanvas.toDataURL() : "";
+const engineerSign = document.getElementById('sig-engineer')?.toDataURL() || '';
+const customerSign = document.getElementById('sig-customer')?.toDataURL() || '';
 
   const data = {
     serialNo: document.getElementById('serialNo').value,
@@ -495,6 +498,27 @@ function insertSignaturePreviews(clone) {
   }).getTemplate();
 }
 
+function appendData(data) {
+  const sheet = SpreadsheetApp.openById('1I_vz6Psk2g_5yOj0sBUlVTquv1RLEJ50xJfTp6wKAWA').getSheetByName('工作表1');
+  sheet.appendRow([
+    new Date(),
+    data.serialNo,
+    data.projectId,
+    data.ticketNo,
+    data.customer,
+    data.address,
+    data.contact,
+    data.phone,
+    data.serviceDate,
+    data.arrivalTime,
+    data.finishTime,
+    (data.serviceMethod || []).join(', '),
+    (data.serviceProduct || []).join(', '),
+    data.serviceContent,
+    data.customerFeedback,
+    data.engineer
+  ]);
+}
 
 function fillTemplate(template, data, signEng, signCust) {
   return template
@@ -515,6 +539,19 @@ function fillTemplate(template, data, signEng, signCust) {
     .replace('{{customerFeedback}}', data.customerFeedback)
     .replace('{{sign_engineer}}', signEng)
     .replace('{{sign_customer}}', signCust || '');
+}
+
+function getROCYear(dateStr) {
+  const date = new Date(dateStr);
+  return date.getFullYear() - 1911;
+}
+function getROCMonth(dateStr) {
+  const date = new Date(dateStr);
+  return date.getMonth() + 1;
+}
+function getROCDay(dateStr) {
+  const date = new Date(dateStr);
+  return date.getDate();
 }
     
 function generatePDF(formData, engineerSignDataURL, customerSignDataURL) {
@@ -557,8 +594,15 @@ function generatePDF(formData, engineerSignDataURL, customerSignDataURL) {
     function uploadPDF(base64Data, filename) {
   google.script.run.savePDFtoDrive(base64Data, filename);
 }
+    function savePDFtoDrive(base64Data, filename) {
+  const folder = DriveApp.getFolderById('1YY9e1mTTWAnXhgCoq9oUzyJe27MUwIlX');
+  const blob = Utilities.newBlob(Utilities.base64Decode(base64Data.split(',')[1]), MimeType.PDF, filename);
+  folder.createFile(blob);
+}
+
   </script>
 </body>
 
 </html>
+
 
