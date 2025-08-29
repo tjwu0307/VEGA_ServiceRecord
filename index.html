@@ -365,6 +365,9 @@ function downloadPDF() {
   const form = document.getElementById('service-form');
   if (!form.reportValidity()) return;
 
+  const engineerSign = document.getElementById('engineer-signature').toDataURL();
+  const customerSign = document.getElementById('customer-signature').toDataURL();
+
   const data = {
     serialNo: document.getElementById('serialNo').value,
     projectId: document.getElementById('projectId').value,
@@ -383,35 +386,63 @@ function downloadPDF() {
     engineer: document.getElementById('engineer').value
   };
 
-  // 寫入試算表
+  // 1. 寫入試算表
   google.script.run.appendData(data);
 
-  // 接著處理 PDF 與簽名儲存
-function generatePDF() {
-  const source = document.getElementById('pdf-content');
-  const clone = source.cloneNode(true);
+  // 2. 產生 PDF 並下載
+  generatePDF(data, engineerSign, customerSign);
 
-  clone.style.position = 'fixed';
-  clone.style.left = '-99999px';
-  clone.style.top = '0';
-  clone.style.width = '800px'; // 避免寬度過小導致 PDF 空白
-  document.body.appendChild(clone);
+  // 3. 儲存兩份簽名到雲端資料夾
+  google.script.run.saveSignature(engineerSign, "engineer_" + data.serialNo + ".png");
+  google.script.run.saveSignature(customerSign, "customer_" + data.serialNo + ".png");
 
-  html2pdf()
-    .set({
+  // 4. 可另外呼叫 uploadPDF(data, pdfBlob) 若要儲存 PDF 檔案
+}
+function generatePDF(formData, engineerSignDataURL, customerSignDataURL) {
+  google.script.run.withSuccessHandler(function(template) {
+    // 替換變數
+    const formatted = template
+      .replace('{{projectCode}}', formData.projectId)
+      .replace('{{ticketNo}}', formData.ticketNo)
+      .replace('{{customerName}}', formData.customer)
+      .replace('{{address}}', formData.address)
+      .replace('{{contact}}', formData.contact)
+      .replace('{{phone}}', formData.phone)
+      .replace('{{rocY}}', parseInt(formData.serviceDate.split('-')[0]) - 1911)
+      .replace('{{rocM}}', formData.serviceDate.split('-')[1])
+      .replace('{{rocD}}', formData.serviceDate.split('-')[2])
+      .replace('{{arriveTxt}}', formData.arrivalTime)
+      .replace('{{finishTxt}}', formData.finishTime)
+      .replace('{{serviceMethods}}', formData.serviceMethod.join('、'))
+      .replace('{{products}}', formData.serviceProduct.join('、'))
+      .replace('{{serviceContent}}', formData.serviceContent)
+      .replace('{{customerFeedback}}', formData.customerFeedback)
+      .replace('{{sign_engineer}}', engineerSignDataURL)
+      .replace('{{sign_customer}}', customerSignDataURL || '');
+
+    const container = document.createElement('div');
+    container.innerHTML = formatted;
+    container.style.position = 'fixed';
+    container.style.left = '-9999px';
+    document.body.appendChild(container);
+
+    html2pdf().set({
       margin: 10,
-      filename: '服務記錄.pdf',
+      filename: `服務記錄_${formData.customer}_${formData.serviceDate}_${formData.engineer}.pdf`,
       html2canvas: { scale: 2 },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    })
-    .from(clone)
-    .save()
-    .finally(() => clone.remove());
+      jsPDF: { format: 'a4', orientation: 'portrait' }
+    }).from(container).save().finally(() => container.remove());
+
+  }).getTemplate(); // GAS 端回傳 template HTML
+}
+    function uploadPDF(base64Data, filename) {
+  google.script.run.savePDFtoDrive(base64Data, filename);
 }
   </script>
 </body>
 
 </html>
+
 
 
 
