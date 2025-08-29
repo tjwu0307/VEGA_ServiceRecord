@@ -80,7 +80,11 @@ function appendData(formData) {
       customerUrl,
       pdfUrl
     ]);
-
+function savePDFtoDrive(base64, filename) {
+  const folder = DriveApp.getFolderById("1YY9e1mTTWAnXhgCoq9oUzyJe27MUwIlX");
+  const blob = Utilities.base64Decode(base64.split(',')[1]);
+  folder.createFile(blob).setName(filename);
+}
     // Email功能
 if (payload.to) {
   GmailApp.sendEmail(payload.to, '服務記錄表 PDF', '附件為 PDF', {attachments: pdfBlob ? [pdfBlob] : []});
