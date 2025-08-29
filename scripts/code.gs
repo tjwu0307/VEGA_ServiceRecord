@@ -85,6 +85,31 @@ function savePDFtoDrive(base64, filename) {
   const blob = Utilities.base64Decode(base64.split(',')[1]);
   folder.createFile(blob).setName(filename);
 }
+function getTemplate() {
+  return HtmlService.createHtmlOutputFromFile('pdf_template').getContent();
+}
+
+function appendData(formData) {
+  const sheet = SpreadsheetApp.openById("1I_vz6Psk2g_5yOj0sBUlVTquv1RLEJ50xJfTp6wKAWA").getSheetByName("回傳");
+  sheet.appendRow([
+    new Date(),
+    formData.serialNo,
+    formData.projectId,
+    formData.ticketNo,
+    formData.customer,
+    formData.address,
+    formData.contact,
+    formData.phone,
+    formData.serviceDate,
+    formData.arrivalTime,
+    formData.finishTime,
+    formData.serviceMethod.join(', '),
+    formData.serviceProduct.join(', '),
+    formData.serviceContent,
+    formData.customerFeedback,
+    formData.engineer
+  ]);
+}
     // Email功能
 if (payload.to) {
   GmailApp.sendEmail(payload.to, '服務記錄表 PDF', '附件為 PDF', {attachments: pdfBlob ? [pdfBlob] : []});
