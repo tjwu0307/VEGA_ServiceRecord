@@ -361,7 +361,7 @@ function downloadPDF() {
   });
 }
 
-    function submitForm() {
+ function submitForm() {
   const form = document.getElementById('service-form');
   if (!form.reportValidity()) return;
 
@@ -386,18 +386,61 @@ function downloadPDF() {
     engineer: document.getElementById('engineer').value
   };
 
-  // 1. 寫入試算表
+  // 1. 寫入 Google Sheet
   google.script.run.appendData(data);
 
-  // 2. 產生 PDF 並下載
-  generatePDF(data, engineerSign, customerSign);
-
-  // 3. 儲存兩份簽名到雲端資料夾
+  // 2. 儲存簽名圖
   google.script.run.saveSignature(engineerSign, "engineer_" + data.serialNo + ".png");
   google.script.run.saveSignature(customerSign, "customer_" + data.serialNo + ".png");
 
-  // 4. 可另外呼叫 uploadPDF(data, pdfBlob) 若要儲存 PDF 檔案
+  // 3. 產出 PDF → 存雲端 + Email
+  google.script.run.withSuccessHandler(function(templateHTML) {
+    const filled = fillTemplate(templateHTML, data, engineerSign, customerSign);
+    const container = document.createElement('div');
+    container.innerHTML = filled;
+    container.style.position = 'fixed';
+    container.style.left = '-9999px';
+    document.body.appendChild(container);
+
+    const opt = {
+      margin: 10,
+      filename: `服務記錄_${data.customer}_${data.serviceDate}_${data.engineer}.pdf`,
+      html2canvas: { scale: 2 },
+      jsPDF: { format: 'a4', orientation: 'portrait' }
+    };
+
+    html2pdf().set(opt).from(container).outputPdf('datauristring').then(function (pdfBase64) {
+      // 4. 存雲端
+      google.script.run.savePDFtoDrive(pdfBase64, opt.filename);
+      // 5. 寄送 Email
+      google.script.run.sendEmailWithPDF(pdfBase64, opt.filename, data);
+      container.remove();
+    });
+
+  }).getTemplate();
 }
+
+function fillTemplate(template, data, signEng, signCust) {
+  return template
+    .replace('{{projectCode}}', data.projectId)
+    .replace('{{ticketNo}}', data.ticketNo)
+    .replace('{{customerName}}', data.customer)
+    .replace('{{address}}', data.address)
+    .replace('{{contact}}', data.contact)
+    .replace('{{phone}}', data.phone)
+    .replace('{{rocY}}', parseInt(data.serviceDate.split('-')[0]) - 1911)
+    .replace('{{rocM}}', data.serviceDate.split('-')[1])
+    .replace('{{rocD}}', data.serviceDate.split('-')[2])
+    .replace('{{arriveTxt}}', data.arrivalTime)
+    .replace('{{finishTxt}}', data.finishTime)
+    .replace('{{serviceMethods}}', data.serviceMethod.join('、'))
+    .replace('{{products}}', data.serviceProduct.join('、'))
+    .replace('{{serviceContent}}', data.serviceContent)
+    .replace('{{customerFeedback}}', data.customerFeedback)
+    .replace('{{sign_engineer}}', signEng)
+    .replace('{{sign_customer}}', signCust || '');
+}
+    
 function generatePDF(formData, engineerSignDataURL, customerSignDataURL) {
   google.script.run.withSuccessHandler(function(template) {
     // 替換變數
@@ -442,6 +485,7 @@ function generatePDF(formData, engineerSignDataURL, customerSignDataURL) {
 </body>
 
 </html>
+
 
 
 
