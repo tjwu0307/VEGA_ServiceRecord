@@ -77,18 +77,18 @@ table.form th,table.form td {
     .checkboxes label {
   width: 20%;
 }
-.service-methods {
+#service-methods {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  align-items: flex-start;
+  padding: 4px;
 }
 
-.service-methods label {
+#service-methods label {
   width: 160px;
   display: inline-block;
   text-align: left;
-  white-space: nowrap;
+  vertical-align: top;
 }
 
 </style>
@@ -115,7 +115,7 @@ table.form th,table.form td {
       <td><input id="projectCode" type="text"></td>
       <th>叫修單號</th>
       <td><input id="ticketNo" type="text"></td>
-      <th colspan="2" style="font-size:18px;text-align:center">服務記錄表</th>
+      <th style="font-size:18px;text-align:center">服務記錄表</th>
       <th>CRM 安裝單號</th>
       <td><input id="crm_install" type="text"></td>
     </tr>
@@ -148,7 +148,7 @@ table.form th,table.form td {
 
     <tr>
       <th>服務方式</th>
-      <td colspan="7">
+      <td colspan="6">
         <div class="checkboxes" id="service-methods" style="background-color: lightyellow;">
           <label><input type="checkbox" value="場勘">場勘</label>
           <label><input type="checkbox" value="客戶需求訪談">客戶需求訪談</label>
@@ -383,6 +383,7 @@ table.form th,table.form td {
 </body>
 
 </html>
+
 
 
 
