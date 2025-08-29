@@ -349,13 +349,16 @@ table {
   document.querySelectorAll('button').forEach(btn => btn.style.display = 'none');
   document.querySelectorAll('.actions').forEach(div => div.style.display = 'none');
   // 產生PDF
-html2pdf().set({
-  margin: 0,
-  pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
-  html2canvas: { scale: 2 },
-  jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-  filename: '服務記錄表.pdf'
-}).from(document.querySelector('.page')).save();
+  html2pdf().from(document.getElementById('pdf-content')).set({
+    margin: 0,
+    filename: '服務記錄表.pdf',
+    html2canvas: { scale: 2 },
+    jsPDF: { format: 'a4', orientation: 'portrait' }
+  }).save().then(() => {
+    // PDF產生後恢復顯示
+    document.querySelectorAll('button').forEach(btn => btn.style.display = '');
+    document.querySelectorAll('.actions').forEach(div => div.style.display = '');
+  });
 
 }
 
@@ -401,34 +404,3 @@ html2pdf().set({
 </body>
 
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
