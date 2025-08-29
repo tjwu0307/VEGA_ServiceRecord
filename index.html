@@ -78,20 +78,15 @@ table.form th,table.form td {
   width: 25%;
 }
 #service-methods {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 每列 5 欄 */
+  gap: 6px 12px; /* 垂直與水平間距 */
   padding: 4px;
-  background-color: lightyellow;
 }
-
 #service-methods label {
-  width: 160px;
-  display: inline-block;
-  text-align: left;
-  vertical-align: top;
-  box-sizing: border-box;
-}
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
 </style>
 </head>
 <body>
@@ -149,9 +144,9 @@ table.form th,table.form td {
 
     <tr>
       <th>服務方式</th>
-      <td colspan="6">
+      <td colspan="7">
         <div class="checkboxes" id="service-methods">
-          <label><input style="background-color: pink;" type="checkbox" value="場勘">場勘</label>
+          <label><input type="checkbox" value="場勘">場勘</label>
           <label><input type="checkbox" value="客戶需求訪談">客戶需求訪談</label>
           <label><input type="checkbox" value="POC">POC</label>
           <label><input type="checkbox" value="簡報">簡報</label>
@@ -384,6 +379,7 @@ table.form th,table.form td {
 </body>
 
 </html>
+
 
 
 
