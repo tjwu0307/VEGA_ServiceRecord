@@ -110,6 +110,31 @@ function appendData(formData) {
     formData.engineer
   ]);
 }
+
+function saveSignature(dataUrl, filename) {
+  const folder = DriveApp.getFolderById("1YY9e1mTTWAnXhgCoq9oUzyJe27MUwIlX");  // 修改為你的資料夾 ID
+  const blob = Utilities.base64Decode(dataUrl.split(',')[1]);
+  folder.createFile(blob).setName(filename);
+}
+
+function savePDFtoDrive(base64, filename) {
+  const folder = DriveApp.getFolderById("1YY9e1mTTWAnXhgCoq9oUzyJe27MUwIlX");
+  const blob = Utilities.base64Decode(base64.split(',')[1]);
+  folder.createFile(blob).setName(filename);
+}
+
+function sendEmailWithPDF(base64, filename, data) {
+  const recipient = "your_notify_email@t-tech.com.tw";  // ← 收件者改你要的
+  const blob = Utilities.base64Decode(base64.split(',')[1]);
+  const pdfBlob = Utilities.newBlob(blob, MimeType.PDF, filename);
+  MailApp.sendEmail({
+    to: recipient,
+    subject: `[服務記錄] ${data.customer} ${data.serviceDate}`,
+    body: `您好，請查收服務記錄 PDF 附件。\n\n客戶：${data.customer}\n工程師：${data.engineer}`,
+    attachments: [pdfBlob]
+  });
+}
+
     // Email功能
 if (payload.to) {
   GmailApp.sendEmail(payload.to, '服務記錄表 PDF', '附件為 PDF', {attachments: pdfBlob ? [pdfBlob] : []});
