@@ -362,45 +362,36 @@ function downloadPDF() {
 }
 
     function submitForm() {
-      var payload = {
-        form: {
-          projectCode: document.getElementById('projectCode').value,
-          ticketNo: document.getElementById('ticketNo').value,
-          crm_install: document.getElementById('crm_install').value,
-          customerName: document.getElementById('customerName').value,
-          crm_repair: document.getElementById('crm_repair').value,
-          address: document.getElementById('address').value,
-          contact: document.getElementById('contact').value,
-          rocY: document.getElementById('roc_y').value,
-          rocM: document.getElementById('roc_m').value,
-          rocD: document.getElementById('roc_d').value,
-          arriveTxt: document.getElementById('arriveTxt').value,
-          finishTxt: document.getElementById('finishTxt').value,
-          phone: document.getElementById('phone').value,
-          serviceMethods: getServiceMethods(),
-          products: getProducts(),
-          serviceContent: document.getElementById('serviceContent').value,
-          customerFeedback: document.getElementById('customerFeedback').value,
-          expenses: getExpenses()
-        },
-        signatures: getSignatures()
-      };
-      html2pdf().from(document.getElementById('pdf-content')).toPdf().get('pdf').then(function (pdf) {
-        payload.pdfBase64 = pdf.output('datauristring');
-        payload.filename = '服務記錄表_' + Date.now() + '.pdf';
-        payload.to = prompt('請輸入收件者Email', 'user@example.com');
-        fetch('https://script.google.com/macros/s/AKfycbywnGGh90_QpPQcwm45VDuTfq4-ToeFdG1PFwBjhYHM22DJ_xZ7Yarl7X9IOTyQgTCHsg/exec', {
-          method: 'POST',
-          body: JSON.stringify(payload),
-          headers: { 'Content-Type': 'application/json' }
-        })
-        .then(res => res.json())
-        .then(r => { alert('送出完成！'); })
-        .catch(e => { alert('錯誤：' + e.message); });
-      });
-    }
+  const form = document.getElementById('service-form');
+  if (!form.reportValidity()) return;
+
+  const data = {
+    serialNo: document.getElementById('serialNo').value,
+    projectId: document.getElementById('projectId').value,
+    ticketNo: document.getElementById('ticketNo').value,
+    customer: document.getElementById('customer').value,
+    address: document.getElementById('address').value,
+    contact: document.getElementById('contact').value,
+    phone: document.getElementById('phone').value,
+    serviceDate: document.getElementById('serviceDate').value,
+    arrivalTime: document.getElementById('arrivalTime').value,
+    finishTime: document.getElementById('finishTime').value,
+    serviceMethod: Array.from(document.querySelectorAll('input[name="serviceMethod"]:checked')).map(e => e.value),
+    serviceProduct: Array.from(document.getElementById('serviceProduct').selectedOptions).map(e => e.value),
+    serviceContent: document.getElementById('serviceContent').value,
+    customerFeedback: document.getElementById('customerFeedback').value,
+    engineer: document.getElementById('engineer').value
+  };
+
+  // 寫入試算表
+  google.script.run.appendData(data);
+
+  // 接著處理 PDF 與簽名儲存
+  generatePDF();
+}
   </script>
 </body>
 
 </html>
+
 
