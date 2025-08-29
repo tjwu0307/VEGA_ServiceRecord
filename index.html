@@ -16,7 +16,6 @@ body {
   display: block; /* 避免 flex 導致垂直置中 */
   height: auto;
 }
-
     .paper, #pdf-content {
       width: 190mm !important;
       max-width: 190mm !important;
@@ -99,24 +98,23 @@ table.form th,table.form td {
   margin-top: 4px;
   margin-bottom: 4px;
 }
-
 table {
   margin-top: 0;
 }
-
 .page {
+  width: 190mm;
+  min-height: 270mm;
   padding: 20px;
-  box-sizing: border-box;
-  page-break-after: always;
-  vertical-align: top;
-.form-note {
-  text-align: center;         /* 水平置中 */
-  font-size: 10px;            /* 字體縮小 */
-  margin-top: 12px;           /* 與表格間距 */
-  page-break-inside: avoid;   /* 避免被切頁 */
-  white-space: nowrap;        /* 不換行 */
   position: relative;
-  bottom: 0;
+  box-sizing: border-box;
+}
+    .footer {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 10px;
 }
 
 </style>
@@ -351,16 +349,14 @@ table {
   document.querySelectorAll('button').forEach(btn => btn.style.display = 'none');
   document.querySelectorAll('.actions').forEach(div => div.style.display = 'none');
   // 產生PDF
-  html2pdf().from(document.getElementById('pdf-content')).set({
-    margin: 0,
-    filename: '服務記錄表.pdf',
-    html2canvas: { scale: 2 },
-    jsPDF: { format: 'a4', orientation: 'portrait' }
-  }).save().then(() => {
-    // PDF產生後恢復顯示
-    document.querySelectorAll('button').forEach(btn => btn.style.display = '');
-    document.querySelectorAll('.actions').forEach(div => div.style.display = '');
-  });
+html2pdf().set({
+  margin: 0,
+  pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
+  html2canvas: { scale: 2 },
+  jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+  filename: '服務記錄表.pdf'
+}).from(document.querySelector('.page')).save();
+
 }
 
     function submitForm() {
@@ -405,6 +401,7 @@ table {
 </body>
 
 </html>
+
 
 
 
