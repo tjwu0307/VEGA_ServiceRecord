@@ -99,9 +99,24 @@ table {
 }
 
 body {
-  padding-top: 0;
-  margin-top: 0;
+  margin: 0;
+  padding: 0;
+  display: block; /* 避免 flex 導致置中 */
 }
+
+.page {
+  padding: 20px;
+  box-sizing: border-box;
+  page-break-after: always;
+  vertical-align: top;
+    .form-note {
+  text-align: center;         /* 水平置中 */
+  font-size: 12px;            /* 字體縮小 */
+  margin-top: 12px;           /* 與表格間距 */
+  page-break-inside: avoid;   /* 避免被切頁 */
+  white-space: nowrap;        /* 不換行 */
+}
+
 </style>
 </head>
 <body>
@@ -267,7 +282,9 @@ body {
       </td>
     </tr>
   </table>
-    <div class="footer-note">白聯：工程師部門　｜　紅：財務部(請款用)　｜　黃：客戶收執</div>
+  <div class="form-note">
+  白聯：工程師部門　｜　紅：財務部(請款用)　｜　黃：客戶收執
+</div>
     <div class="page-break"></div>
     <div class="actions">
       <button class="btn" onclick="downloadPDF()">列印 / PDF</button>
@@ -386,6 +403,7 @@ body {
 </body>
 
 </html>
+
 
 
 
