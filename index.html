@@ -16,7 +16,7 @@ body {
   display: block; /* 避免 flex 導致垂直置中 */
   height: auto;
 }
-    .paper, #pdf-content {
+    .paper, #service-form {
       width: 190mm !important;
       max-width: 190mm !important;
       margin: 20px auto;
@@ -40,16 +40,28 @@ body {
     .logo { height: 70px; margin-right: 24px; }
     .company-info { line-height:1.3; }
     .branch { font-size:12px; margin-bottom:4px;}
-    .actions { margin-top: 10px; text-align: right; }
-    .btn {
-      border: 1px solid #444;
-      background: #FF5151;
-      color: #111;
-      padding: 3px 18px;
-      font-size: 12px;
-      cursor: pointer;
-      font-weight: bold;
-    }
+.actions {
+  margin-top: 16px;
+  display: flex;
+  justify-content: center; /* 或 space-between / right */
+  gap: 12px;
+}
+
+.btn {
+  border: 1px solid #444;
+  background-color: #FF5151;
+  color: #fff; /* 改成白字對比好 */
+  padding: 8px 20px;
+  font-size: 14px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn:hover {
+  background-color: #cc3c3c;
+}
     @media print {
       .paper, #pdf-content { width: 190mm !important; max-width: 190mm !important; margin: 0 auto; padding: 0; }
       table { page-break-inside: avoid; }
@@ -241,14 +253,24 @@ table {
               <th>工程師簽名</th>
               <th>客戶簽名</th>
             </tr>
-            <tr>
-              <td><canvas id="sig-manager" width="250" height="100" style="border:1px solid #000;width:100%;"></canvas>
-                <button type="button" onclick="clearSignature('manager')">清除</button></td>
-              <td><canvas id="sig-engineer" width="250" height="100" style="border:1px solid #000;width:100%;"></canvas>
-                <button type="button" onclick="clearSignature('engineer')">清除</button></td>
-              <td><canvas id="sig-customer" width="250" height="100" style="border:1px solid #000;width:100%;"></canvas>
-                <button type="button" onclick="clearSignature('customer')">清除</button></td>
-            </tr>
+<tr>
+  <td>
+    <canvas id="sig-manager" width="250" height="100" style="border:1px solid #000;width:100%;"></canvas>
+    <button type="button" onclick="clearSignature('manager')">清除</button>
+    <div id="sig-preview-manager"></div>
+  </td>
+  <td>
+    <canvas id="sig-engineer" width="250" height="100" style="border:1px solid #000;width:100%;"></canvas>
+    <button type="button" onclick="clearSignature('engineer')">清除</button>
+    <div id="sig-preview-engineer"></div>
+  </td>
+  <td>
+    <canvas id="sig-customer" width="250" height="100" style="border:1px solid #000;width:100%;"></canvas>
+    <button type="button" onclick="clearSignature('customer')">清除</button>
+    <div id="sig-preview-customer"></div>
+  </td>
+</tr>
+
           </table>
         </td>
    </tr>
@@ -285,12 +307,11 @@ table {
   <div style="font-size:10px;text-align:center;">  
     白聯：工程師部門　｜　紅：財務部(請款用)　｜　黃：客戶收執
 </div>
-    <div class="page-break"></div>
-    <div class="actions">
-      <button class="btn" onclick="downloadPDF()">列印 / PDF</button>
-      <button class="btn" onclick="submitForm()">發送(Email/雲端)</button>
-    </div>
-  </div>
+<div class="page-break"></div>
+<div class="actions">
+  <button type="button" class="btn" onclick="downloadPDF()">列印 / PDF</button>
+  <button type="button" class="btn" onclick="submitForm()">發送(Email/雲端)</button>
+</div>
   <script>
     // 全域唯一，勿在window.onload裡再宣告
     let pads = {};
@@ -345,22 +366,64 @@ table {
     }
 
 function downloadPDF() {
-  const src = document.getElementById('pdf-content');
+  const src = document.getElementById('service-form');
   const clone = src.cloneNode(true);
+  insertSignaturePreviews(clone); 
+  // 插入簽名圖（防止 toDataURL 出不來）
+  const engineerCanvas = document.getElementById('engineer-signature');
+  const customerCanvas = document.getElementById('customer-signature');
+  if (engineerCanvas && customerCanvas) {
+    const engImg = document.createElement('img');
+    engImg.src = engineerCanvas.toDataURL();
+    engImg.width = 150;
+    const custImg = document.createElement('img');
+    custImg.src = customerCanvas.toDataURL();
+    custImg.width = 150;
+
+    const engCell = clone.querySelector('#engineer-sign-cell');
+    const custCell = clone.querySelector('#customer-sign-cell');
+    if (engCell) engCell.innerHTML = ''; engCell?.appendChild(engImg);
+    if (custCell) custCell.innerHTML = ''; custCell?.appendChild(custImg);
+  }
+
+  // 隱藏畫面外產出
   clone.style.position = 'fixed';
   clone.style.left = '-99999px';
   document.body.appendChild(clone);
 
+  // 動態檔名：從填單欄位中擷取
+  const customer = document.getElementById('customer')?.value || '未知客戶';
+  const date = document.getElementById('serviceDate')?.value || '未填日期';
+  const engineer = document.getElementById('engineer')?.value || '未選工程師';
+
   html2pdf().from(clone).set({
-    margin: 0,
-    filename: '服務記錄表.pdf',
+    margin: 10,
+    filename: `服務記錄_${customer}_${date}_${engineer}.pdf`,
     html2canvas: { scale: 2 },
     jsPDF: { format: 'a4', orientation: 'portrait' }
   }).save().finally(() => {
-    clone.remove(); // 不論成功或失敗都清掉
+    clone.remove();
   });
 }
+function insertSignaturePreviews(clone) {
+  const engineerSign = document.getElementById('sig-engineer').toDataURL();
+  const customerSign = document.getElementById('sig-customer').toDataURL();
+  const managerSign = document.getElementById('sig-manager').toDataURL();
 
+  const engTarget = clone.querySelector('#sig-preview-engineer');
+  const custTarget = clone.querySelector('#sig-preview-customer');
+  const mgrTarget = clone.querySelector('#sig-preview-manager');
+
+  if (engTarget) {
+    engTarget.innerHTML = `<img src="${engineerSign}" width="150">`;
+  }
+  if (custTarget) {
+    custTarget.innerHTML = `<img src="${customerSign}" width="150">`;
+  }
+  if (mgrTarget) {
+    mgrTarget.innerHTML = `<img src="${managerSign}" width="150">`;
+  }
+}
  function submitForm() {
   const form = document.getElementById('service-form');
   if (!form.reportValidity()) return;
@@ -485,6 +548,7 @@ function generatePDF(formData, engineerSignDataURL, customerSignDataURL) {
 </body>
 
 </html>
+
 
 
 
