@@ -7,10 +7,16 @@
   <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
   <style>
-    body {
-      font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;
-      margin:0;padding:0;background:#fff;color:#111;
-    }
+body {
+  font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #fff;
+  color: #111;
+  display: block; /* 避免 flex 導致垂直置中 */
+  height: auto;
+}
+
     .paper, #pdf-content {
       width: 190mm !important;
       max-width: 190mm !important;
@@ -96,12 +102,6 @@ table.form th,table.form td {
 
 table {
   margin-top: 0;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  display: block; /* 避免 flex 導致置中 */
 }
 
 .page {
@@ -405,6 +405,7 @@ body {
 </body>
 
 </html>
+
 
 
 
