@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>服務記錄表</title>
+  <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+  <style>
+    body {
+      font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;
+      margin:0;padding:0;background:#fff;color:#111;
+    }
+    .paper, #pdf-content {
+      width: 190mm !important;
+      max-width: 190mm !important;
+      margin: 20px auto;
+      background: #fff;
+      box-sizing: border-box;
+      padding: 0 8mm;
+    }
+    table.form {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      table-layout: fixed;
+    }
+    .form th, .form td {
+      border: 1px solid #000;
+      padding: 2px 4px;
+      vertical-align: middle;
+      word-break: break-all;
+      overflow-wrap: break-word;
+    }
+    .logo { height: 70px; margin-right: 24px; }
+    .company-info { line-height:1.3; }
+    .branch { font-size:12px; margin-bottom:4px;}
+    .actions { margin-top: 10px; text-align: right; }
+    .btn {
+      border: 1px solid #444;
+      background: #FF5151;
+      color: #111;
+      padding: 3px 18px;
+      font-size: 12px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    @media print {
+      .paper, #pdf-content { width: 190mm !important; max-width: 190mm !important; margin: 0 auto; padding: 0; }
+      table { page-break-inside: avoid; }
+      .actions { display: none; }
+    }
+    table.form input[type="text"],
+  table.form input[type="number"],
+  table.form textarea {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 12px;
+  border: none;
+  padding: 0 2px;
+  margin: 0;
+}
+table.form th,table.form td {
+  padding: 2px 4px !important;
+  vertical-align: middle;
+  box-sizing: border-box;
+}
+.form th, .form td { border: 1px solid #999; }
+  </style>
+</head>
+<body>
+  <div id="pdf-content" class="paper">
+   <header class="form-header">
+  <div style="display:flex;align-items:flex-start;">
+    <img src="https://vega-global.com/wp-content/uploads/2024/07/Website-Logo-2048x1833-1-1536x1375.png" class="logo"/>
+    <div class="company-info" style="flex:1;">
+      <div class="company-name">維嘉全球科技股份有限公司</div>
+      <div style="display:flex;gap:32px;">
+        <div class="branch">北區<br>免付費專線:0800-521-800<br>Tel:(02)3518-2883<br>Fax:(02)2545-1155</div>
+        <div class="branch">中區<br>台中市北區文心路四段81號9樓之2<br>Tel:(04)2295-8966<br>Fax:(04)2295-5833</div>
+        <div class="branch">南區<br>高雄市新興區中山二路91號8樓之9<br>Tel:(07)333-0099<br>Fax:(07)535-0099</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+    <table class="form">
+    <tr>
+      <th>專案代號</th>
+      <td><input id="projectCode" type="text"></td>
+      <th>叫修單號</th>
+      <td><input id="ticketNo" type="text"></td>
+      <th colspan="2" style="font-size:18px;text-align:center">服務記錄表</th>
+      <th>CRM 安裝單號</th>
+      <td><input id="crm_install" type="text"></td>
+    </tr>
+    <tr>
+      <th>客戶名稱</th>
+      <td colspan="5"><input id="customerName" type="text"></td>
+      <th>CRM 維修單號</th>
+      <td><input id="crm_repair" type="text"></td>
+    </tr>
+    <tr>
+      <th>地址</th>
+      <td colspan="5"><input id="address" type="text"></td>
+      <th>連絡人</th>
+      <td><input id="contact" type="text"></td>
+    </tr>
+    <tr>
+      <th>服務時間</th>
+      <td colspan="5">
+        民國 <input id="roc_y" type="text" style="width:40px">年
+        <input id="roc_m" type="text" style="width:25px">月
+        <input id="roc_d" type="text" style="width:25px">日 |
+        到達時間 <input id="arriveTxt" type="text" style="width:80px">
+        | 結束時間 <input id="finishTxt" type="text" style="width:80px">
+      </td>
+      <th>電話</th>
+      <td><input id="phone" type="text"></td>
+    </tr>
+
+
+    <tr>
+      <th>服務方式</th>
+      <td colspan="7">
+        <div class="checkboxes" id="serviceMethods">
+          <label><input type="checkbox" value="場勘">場勘</label>
+          <label><input type="checkbox" value="客戶需求訪談">客戶需求訪談</label>
+          <label><input type="checkbox" value="POC">POC</label>
+          <label><input type="checkbox" value="簡報">簡報</label>
+          <label><input type="checkbox" value="工地會議">工地會議</label>
+          <label><input type="checkbox" value="交貨">交貨</label>
+          <label><input type="checkbox" value="安裝">安裝</label>
+          <label><input type="checkbox" value="教育訓練">教育訓練</label>
+          <label><input type="checkbox" value="驗收">驗收</label>
+          <label><input type="checkbox" value="檢修">檢修</label>
+          <label><input type="checkbox" value="維修">維修</label>
+          <label><input type="checkbox" value="移機服務">移機服務</label>
+          <label><input type="checkbox" value="DEMO 產品展示">DEMO 產品展示</label>
+          <label><input type="checkbox" value="會議支援">會議支援</label>
+          <label>其他：<input id="otherServiceMethod" type="text" style="border:1px solid #000; width:100px"></label>
+        </div>
+      </td>
+    </tr>
+
+
+    <tr>
+      <th>服務產品</th>
+      <td colspan="7">
+        <table style="width:100%;border-collapse:collapse">
+          <tr>
+            <th>廠牌</th>
+            <th>型號</th>
+            <th>版本</th>
+            <th>序號</th>
+          </tr>
+          <tr>
+            <td><input id="brand1" type="text"></td>
+            <td><input id="model1" type="text"></td>
+            <td><input id="version1" type="text"></td>
+            <td><input id="serial1" type="text"></td>
+          </tr>
+          <tr>
+            <td><input id="brand2" type="text"></td>
+            <td><input id="model2" type="text"></td>
+            <td><input id="version2" type="text"></td>
+            <td><input id="serial2" type="text"></td>
+          </tr>
+          <tr>
+            <td><input id="brand3" type="text"></td>
+            <td><input id="model3" type="text"></td>
+            <td><input id="version3" type="text"></td>
+            <td><input id="serial3" type="text"></td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+
+
+    <tr>
+      <th>服務內容</th>
+      <td colspan="7"><textarea id="serviceContent"></textarea></td>
+    </tr>
+
+
+    <tr>
+      <th>客戶意見</th>
+      <td colspan="7"><textarea id="customerFeedback"></textarea></td>
+    </tr>
+
+
+   <tr>
+        <td colspan="8" style="padding:0;">
+          <table style="width:100%">
+            <tr>
+              <th>直屬主管</th>
+              <th>工程師簽名</th>
+              <th>客戶簽名</th>
+            </tr>
+            <tr>
+              <td><canvas id="sig-manager" width="250" height="100" style="border:1px solid #000;width:100%;"></canvas>
+                <button type="button" onclick="clearSignature('manager')">清除</button></td>
+              <td><canvas id="sig-engineer" width="250" height="100" style="border:1px solid #000;width:100%;"></canvas>
+                <button type="button" onclick="clearSignature('engineer')">清除</button></td>
+              <td><canvas id="sig-customer" width="250" height="100" style="border:1px solid #000;width:100%;"></canvas>
+                <button type="button" onclick="clearSignature('customer')">清除</button></td>
+            </tr>
+          </table>
+        </td>
+   </tr>
+
+
+    <tr>
+      <td colspan="8" style="text-align:left;font-weight:bold">費用申請：</td>
+    </tr>
+    <tr>
+      <td colspan="8">
+        <table style="width:100%;border-collapse:collapse">
+          <tr>
+            <th>里程 KM</th>
+            <th>出發地點</th>
+            <th>計程車資</th>
+            <th>停車費</th>
+            <th>eTag</th>
+            <th>大眾運輸</th>
+            <th>其他</th>
+          </tr>
+          <tr>
+            <td><input id="km" type="number" style="height:2em; text-align:center;"></td>
+            <td><input id="startPlace" type="text" value="公司" style="height:2em; text-align:center;"></td>
+            <td><input id="taxi" type="number" style="height:2em; text-align:center;"></td>
+            <td><input id="parking" type="number" style="height:2em; text-align:center;"></td>
+            <td><input id="etag" type="number" style="height:2em; text-align:center;"></td>
+            <td><input id="publicTrans" type="number" style="height:2em; text-align:center;"></td>
+            <td><input id="expenseOther" type="text" style="height:2em; text-align:center;"></td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+    <div class="footer-note">白聯：工程師部門　｜　紅：財務部(請款用)　｜　黃：客戶收執</div>
+    <div class="actions">
+      <button class="btn" onclick="downloadPDF()">列印 / PDF</button>
+      <button class="btn" onclick="submitForm()">發送(Email/雲端)</button>
+    </div>
+  </div>
+  <script>
+    // 全域唯一，勿在window.onload裡再宣告
+    let pads = {};
+
+    window.onload = function() {
+      pads.manager = new SignaturePad(document.getElementById('sig-manager'));
+      pads.engineer = new SignaturePad(document.getElementById('sig-engineer'));
+      pads.customer = new SignaturePad(document.getElementById('sig-customer'));
+
+      // 預設值設定
+      const t = new Date(); t.setDate(t.getDate()+1);
+      document.getElementById('roc_y').value = t.getFullYear()-1911;
+      document.getElementById('roc_m').value = String(t.getMonth()+1).padStart(2,'0');
+      document.getElementById('roc_d').value = String(t.getDate()).padStart(2,'0');
+      document.getElementById('arriveTxt').value = '09:00';
+      document.getElementById('finishTxt').value = '18:00';
+    };
+
+    function clearSignature(who){
+      pads[who].clear();
+    }
+
+    function getServiceMethods() {
+      const selected = Array.from(document.querySelectorAll('#serviceMethods input[type=checkbox]:checked')).map(e=>e.value);
+      const other = document.getElementById('otherServiceMethod').value.trim();
+      return other ? [...selected, other] : selected;
+    }
+    function getProducts() {
+      return [
+        { brand: document.getElementById('brand1').value, model: document.getElementById('model1').value, version: document.getElementById('version1').value, serial: document.getElementById('serial1').value },
+        { brand: document.getElementById('brand2').value, model: document.getElementById('model2').value, version: document.getElementById('version2').value, serial: document.getElementById('serial2').value },
+        { brand: document.getElementById('brand3').value, model: document.getElementById('model3').value, version: document.getElementById('version3').value, serial: document.getElementById('serial3').value }
+      ];
+    }
+    function getExpenses() {
+      return {
+        km: document.getElementById('km').value,
+        startPlace: document.getElementById('startPlace').value,
+        taxi: document.getElementById('taxi').value,
+        parking: document.getElementById('parking').value,
+        etag: document.getElementById('etag').value,
+        publicTrans: document.getElementById('publicTrans').value,
+        expenseOther: document.getElementById('expenseOther').value
+      };
+    }
+    function getSignatures() {
+      return {
+        manager: pads.manager.toDataURL(),
+        engineer: pads.engineer.toDataURL(),
+        customer: pads.customer.toDataURL()
+      };
+    }
+
+    function downloadPDF() {
+       // 暫時隱藏所有要排除在PDF之外的按鈕
+  document.querySelectorAll('button').forEach(btn => btn.style.display = 'none');
+  document.querySelectorAll('.actions').forEach(div => div.style.display = 'none');
+  // 產生PDF
+  html2pdf().from(document.getElementById('pdf-content')).set({
+    margin: 0,
+    filename: '服務記錄表.pdf',
+    html2canvas: { scale: 2 },
+    jsPDF: { format: 'a4', orientation: 'portrait' }
+  }).save().then(() => {
+    // PDF產生後恢復顯示
+    document.querySelectorAll('button').forEach(btn => btn.style.display = '');
+    document.querySelectorAll('.actions').forEach(div => div.style.display = '');
+  });
+}
+
+    function submitForm() {
+      var payload = {
+        form: {
+          projectCode: document.getElementById('projectCode').value,
+          ticketNo: document.getElementById('ticketNo').value,
+          crm_install: document.getElementById('crm_install').value,
+          customerName: document.getElementById('customerName').value,
+          crm_repair: document.getElementById('crm_repair').value,
+          address: document.getElementById('address').value,
+          contact: document.getElementById('contact').value,
+          rocY: document.getElementById('roc_y').value,
+          rocM: document.getElementById('roc_m').value,
+          rocD: document.getElementById('roc_d').value,
+          arriveTxt: document.getElementById('arriveTxt').value,
+          finishTxt: document.getElementById('finishTxt').value,
+          phone: document.getElementById('phone').value,
+          serviceMethods: getServiceMethods(),
+          products: getProducts(),
+          serviceContent: document.getElementById('serviceContent').value,
+          customerFeedback: document.getElementById('customerFeedback').value,
+          expenses: getExpenses()
+        },
+        signatures: getSignatures()
+      };
+      html2pdf().from(document.getElementById('pdf-content')).toPdf().get('pdf').then(function (pdf) {
+        payload.pdfBase64 = pdf.output('datauristring');
+        payload.filename = '服務記錄表_' + Date.now() + '.pdf';
+        payload.to = prompt('請輸入收件者Email', 'user@example.com');
+        fetch('https://script.google.com/macros/s/AKfycbywnGGh90_QpPQcwm45VDuTfq4-ToeFdG1PFwBjhYHM22DJ_xZ7Yarl7X9IOTyQgTCHsg/exec', {
+          method: 'POST',
+          body: JSON.stringify(payload),
+          headers: { 'Content-Type': 'application/json' }
+        })
+        .then(res => res.json())
+        .then(r => { alert('送出完成！'); })
+        .catch(e => { alert('錯誤：' + e.message); });
+      });
+    }
+  </script>
+</body>
+</html>
