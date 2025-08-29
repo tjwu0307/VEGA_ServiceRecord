@@ -368,22 +368,31 @@ table {
 function downloadPDF() {
   const src = document.getElementById('service-form');
   const clone = src.cloneNode(true);
-  insertSignaturePreviews(clone); 
-  // 插入簽名圖（防止 toDataURL 出不來）
+
+  // 插入簽名圖
   const engineerCanvas = document.getElementById('engineer-signature');
   const customerCanvas = document.getElementById('customer-signature');
+
   if (engineerCanvas && customerCanvas) {
     const engImg = document.createElement('img');
     engImg.src = engineerCanvas.toDataURL();
     engImg.width = 150;
+
     const custImg = document.createElement('img');
     custImg.src = customerCanvas.toDataURL();
     custImg.width = 150;
 
     const engCell = clone.querySelector('#engineer-sign-cell');
     const custCell = clone.querySelector('#customer-sign-cell');
-    if (engCell) engCell.innerHTML = ''; engCell?.appendChild(engImg);
-    if (custCell) custCell.innerHTML = ''; custCell?.appendChild(custImg);
+
+    if (engCell) {
+      engCell.innerHTML = '';
+      engCell.appendChild(engImg);
+    }
+    if (custCell) {
+      custCell.innerHTML = '';
+      custCell.appendChild(custImg);
+    }
   }
 
   // 隱藏畫面外產出
@@ -391,7 +400,7 @@ function downloadPDF() {
   clone.style.left = '-99999px';
   document.body.appendChild(clone);
 
-  // 動態檔名：從填單欄位中擷取
+  // 動態檔名
   const customer = document.getElementById('customer')?.value || '未知客戶';
   const date = document.getElementById('serviceDate')?.value || '未填日期';
   const engineer = document.getElementById('engineer')?.value || '未選工程師';
@@ -405,6 +414,7 @@ function downloadPDF() {
     clone.remove();
   });
 }
+
 function insertSignaturePreviews(clone) {
   const engineerSign = document.getElementById('sig-engineer').toDataURL();
   const customerSign = document.getElementById('sig-customer').toDataURL();
@@ -428,8 +438,11 @@ function insertSignaturePreviews(clone) {
   const form = document.getElementById('service-form');
   if (!form.reportValidity()) return;
 
-  const engineerSign = document.getElementById('engineer-signature').toDataURL();
-  const customerSign = document.getElementById('customer-signature').toDataURL();
+  // 安全抓取簽名 Canvas
+  const engineerCanvas = document.getElementById('engineer-signature');
+  const customerCanvas = document.getElementById('customer-signature');
+  const engineerSign = engineerCanvas ? engineerCanvas.toDataURL() : "";
+  const customerSign = customerCanvas ? customerCanvas.toDataURL() : "";
 
   const data = {
     serialNo: document.getElementById('serialNo').value,
@@ -449,14 +462,14 @@ function insertSignaturePreviews(clone) {
     engineer: document.getElementById('engineer').value
   };
 
-  // 1. 寫入 Google Sheet
+  // 寫入試算表
   google.script.run.appendData(data);
 
-  // 2. 儲存簽名圖
-  google.script.run.saveSignature(engineerSign, "engineer_" + data.serialNo + ".png");
-  google.script.run.saveSignature(customerSign, "customer_" + data.serialNo + ".png");
+  // 儲存簽名圖
+  if (engineerSign) google.script.run.saveSignature(engineerSign, "engineer_" + data.serialNo + ".png");
+  if (customerSign) google.script.run.saveSignature(customerSign, "customer_" + data.serialNo + ".png");
 
-  // 3. 產出 PDF → 存雲端 + Email
+  // 產出 PDF 並送出
   google.script.run.withSuccessHandler(function(templateHTML) {
     const filled = fillTemplate(templateHTML, data, engineerSign, customerSign);
     const container = document.createElement('div');
@@ -473,15 +486,14 @@ function insertSignaturePreviews(clone) {
     };
 
     html2pdf().set(opt).from(container).outputPdf('datauristring').then(function (pdfBase64) {
-      // 4. 存雲端
       google.script.run.savePDFtoDrive(pdfBase64, opt.filename);
-      // 5. 寄送 Email
       google.script.run.sendEmailWithPDF(pdfBase64, opt.filename, data);
       container.remove();
     });
 
   }).getTemplate();
 }
+
 
 function fillTemplate(template, data, signEng, signCust) {
   return template
@@ -548,11 +560,3 @@ function generatePDF(formData, engineerSignDataURL, customerSignDataURL) {
 </body>
 
 </html>
-
-
-
-
-
-
-
-
