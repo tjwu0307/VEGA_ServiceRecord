@@ -23,7 +23,27 @@ function doPost(e) {
       var pdfFile = DriveApp.getFolderById(FOLDER_ID).createFile(pdfBlob);
       pdfUrl = pdfFile.getUrl();
     }
-
+function appendData(formData) {
+  const sheet = SpreadsheetApp.openById("1I_vz6Psk2g_5yOj0sBUlVTquv1RLEJ50xJfTp6wKAWA").getSheetByName("回傳"); // 表單名稱
+  sheet.appendRow([
+    new Date(),
+    formData.projectId,
+    formData.ticketNo,
+    formData.customer,
+    formData.address,
+    formData.contact,
+    formData.phone,
+    formData.serviceDate,
+    formData.arrivalTime,
+    formData.finishTime,
+    formData.serviceMethod.join(', '),
+    formData.serviceProduct.join(', '),
+    formData.serviceContent,
+    formData.customerFeedback,
+    formData.engineer,
+    formData.serialNo
+  ]);
+}
     // 儲存簽名
     function saveSignature(dataUrl, name) {
       if (!dataUrl) return '';
