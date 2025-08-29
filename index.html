@@ -344,22 +344,21 @@ table {
       };
     }
 
-    function downloadPDF() {
-       // 暫時隱藏所有要排除在PDF之外的按鈕
-  document.querySelectorAll('button').forEach(btn => btn.style.display = 'none');
-  document.querySelectorAll('.actions').forEach(div => div.style.display = 'none');
-  // 產生PDF
-  html2pdf().from(document.getElementById('pdf-content')).set({
+function downloadPDF() {
+  const src = document.getElementById('pdf-content');
+  const clone = src.cloneNode(true);
+  clone.style.position = 'fixed';
+  clone.style.left = '-99999px';
+  document.body.appendChild(clone);
+
+  html2pdf().from(clone).set({
     margin: 0,
     filename: '服務記錄表.pdf',
     html2canvas: { scale: 2 },
     jsPDF: { format: 'a4', orientation: 'portrait' }
-  }).save().then(() => {
-    // PDF產生後恢復顯示
-    document.querySelectorAll('button').forEach(btn => btn.style.display = '');
-    document.querySelectorAll('.actions').forEach(div => div.style.display = '');
+  }).save().finally(() => {
+    clone.remove(); // 不論成功或失敗都清掉
   });
-
 }
 
     function submitForm() {
@@ -404,3 +403,4 @@ table {
 </body>
 
 </html>
+
