@@ -399,13 +399,15 @@ window.clearSignature = clearSignature;
     }
 
    // === 產 PDF（照頁面樣子；clone 放進 DOM；隱藏清除/動作按鈕）===
-   async function createPdf() {
-  const src = document.getElementById('service-form');   // ← 換這個
+<script>
+// 1) 供「發送」用：回傳 PDF base64
+async function createPdf() {
+  const src = document.getElementById('service-form');   // ← 一律抓這個
   if (!src) { alert('找不到 #service-form'); throw new Error('missing #service-form'); }
 
   const clone = src.cloneNode(true);
 
-  // 只處理 clone：移除清除鍵與動作列，不影響畫面本體
+  // 只動 clone：把清除鍵與動作列藏起來（不影響畫面）
   clone.querySelectorAll('.clear-btn, .actions').forEach(el => el.remove());
   clone.style.position = 'fixed';
   clone.style.left = '-99999px';
@@ -423,37 +425,42 @@ window.clearSignature = clearSignature;
   return dataUri; // data:application/pdf;base64,....
 }
 
+// 2) 供「列印 / PDF」用：直接下載
 async function downloadPDF(){
-  const src   = document.getElementById('pdf-content');  // 不動你的表格，只換來源容器
-  const clone = src.cloneNode(true);
-  const form = collectFormData();
-  const pdfBase64 = await createPdf();
-  // 放進 DOM，否則抓不到樣式
-  clone.style.position = 'fixed';
-  clone.style.left = '-99999px';
+  const src = document.getElementById('service-form');   // ← 同樣抓這個
+  if (!src) { alert('找不到 #service-form'); return; }
 
-  // 只影響 clone：把清除鍵與「動作列」藏起來
+  const clone = src.cloneNode(true);
   const style = document.createElement('style');
   style.textContent = `.pdf-hidden{display:none!important;}`;
   clone.querySelectorAll('.clear-btn, .actions').forEach(el => el.classList.add('pdf-hidden'));
   clone.prepend(style);
 
+  clone.style.position = 'fixed';
+  clone.style.left = '-99999px';
   document.body.appendChild(clone);
 
-  // 檔名（不改你的表格結構）
+  const y = document.getElementById('roc_y')?.value || '';
+  const m = document.getElementById('roc_m')?.value || '';
+  const d = document.getElementById('roc_d')?.value || '';
+  const date = (y && m && d) ? `民國${y}年${m}月${d}日` : '未填日期';
   const customer = document.getElementById('customerName')?.value || '未填客戶';
-  const y=form.rocY||'', m=form.rocM||'', d=form.rocD||'';
-  const date = (y&&m&&d) ? `民國${y}年${m}月${d}日` : '未填日期';
   const engineer = document.getElementById('engineer')?.value || '未選工程師';
-  const fileName = `服務記錄_${formData.customerName||'未填客戶'}_${date}_${formData.engineer||'未選工程師'}.pdf`;
 
-  html2pdf().from(clone).set({
+  await html2pdf().from(clone).set({
     margin: 10,
     filename: `服務記錄_${customer}_${date}_${engineer}.pdf`,
     html2canvas: { scale: 2, useCORS: true },
     jsPDF: { format: 'a4', orientation: 'portrait' }
-  }).save().finally(()=>clone.remove());
+  }).save();
+
+  clone.remove();
 }
+
+// 若你的按鈕是 onclick 方式，需要匯出到全域
+window.downloadPDF = downloadPDF;
+</script>
+
 
 // === 避免 Preflight 的送法 + 備援（不要自訂 Content-Type）===
 async function postToWebApp(payload){
@@ -511,16 +518,14 @@ async function submitForm(){
   if (res.data?.ok || res.data?.result === 'ok') {
     alert('發送成功！' + (res.data.pdfUrl ? ('\nPDF：' + res.data.pdfUrl) : ''));
   } else if (res.opaque) {
-    alert('已送出（跨網域限制無法讀回伺服器回覆）。\n請到試算表與雲端資料夾確認，或查看通知信。');
+    alert('已送出（跨網域限制無法讀回）。請到試算表與雲端資料夾確認，或查看通知信。');
   } else {
     alert('送出完成，但回應無法解析：' + (res.raw ? res.raw.slice(0,200) : ''));
   }
 }
-window.downloadPDF = downloadPDF;
-window.submitForm  = submitForm;
+window.submitForm = submitForm;
 </script>
-
-  <script>
+ <script>
 document.addEventListener('DOMContentLoaded', () => {
   const btnPrint = document.getElementById('btn-print');
   const btnSend  = document.getElementById('btn-send');
@@ -530,6 +535,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
+
 
 
 
