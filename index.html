@@ -10,8 +10,6 @@
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signatur    e_pad.umd.min.js"></script>
   <style>
     body {
       font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
@@ -256,22 +254,41 @@ function collectSignatures() {
     // 設定您的 Apps Script 部署網址
     const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxICCCLbL9oIZkvgub5X7RPBohzw0u1VxbarINmkhWcEliulpXVMM0vlxdaqYlBx9yr7A/exec';
     
-    // 初始化簽名板
-    const pads = {};
-    window.onload = () => {
-      pads.manager = new SignaturePad(document.getElementById('sig-manager'));
-      pads.engineer = new SignaturePad(document.getElementById('sig-engineer'));
-      pads.customer = new SignaturePad(document.getElementById('sig-customer'));
-      // 預設時間
-      const now = new Date();
-      document.getElementById('roc_y').value = now.getFullYear() - 1911;
-      document.getElementById('roc_m').value = String(now.getMonth() + 1).padStart(2,'0');
-      document.getElementById('roc_d').value = String(now.getDate()).padStart(2,'0');
-    };
+    <script>
+/* 只載入一次，避免重複宣告造成 SyntaxError */
+(function () {
+  if (window.__sigInit) return;     // 已初始化就直接跳過
+  window.__sigInit = true;
+  window.pads = window.pads || {};  // 單一全域容器（不要再 let/const pads = {}）
 
-    function clearSignature(type) {
-      pads[type].clear();
-    }
+  function setupCanvas(cnv){
+    const ratio = Math.max(window.devicePixelRatio || 1, 1);
+    const rect  = cnv.getBoundingClientRect();
+    cnv.width   = Math.max(1, rect.width  * ratio);
+    cnv.height  = Math.max(1, rect.height * ratio);
+    const ctx = cnv.getContext('2d');
+    ctx.scale(ratio, ratio);
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    // 三個簽名 canvas
+    const m = document.getElementById('sig-manager');
+    const e = document.getElementById('sig-engineer');
+    const c = document.getElementById('sig-customer');
+
+    if (m) { setupCanvas(m); window.pads.manager  = new SignaturePad(m, {penColor:'#000', backgroundColor:'rgba(0,0,0,0)'}); }
+    if (e) { setupCanvas(e); window.pads.engineer = new SignaturePad(e, {penColor:'#000', backgroundColor:'rgba(0,0,0,0)'}); }
+    if (c) { setupCanvas(c); window.pads.customer = new SignaturePad(c, {penColor:'#000', backgroundColor:'rgba(0,0,0,0)'}); }
+  });
+
+  // 清除簽名（給按鈕 onclick 用）
+  window.clearSignature = function(who){
+    const pad = (window.pads || {})[who];
+    if (pad) pad.clear();
+  };
+})();
+
+
 
     // 收集服務方式
     function collectServiceMethods() {
@@ -540,6 +557,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
+
 
 
 
