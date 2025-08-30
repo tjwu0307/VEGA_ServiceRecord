@@ -207,8 +207,9 @@
       </tr>
     </table>
     <div class="actions">
-      <button type="button" class="btn" onclick="downloadPDF()">列印 / PDF</button>
-      <button type="button" class="btn" onclick="submitForm()">發送 (Email/雲端)</button>
+      <button class="btn" id="btn-print"  type="button">列印 / PDF</button>
+      <button class="btn" id="btn-send"   type="button">發送(Email/雲端)</button>
+
     </div>
   </form>
   <!-- 隱藏容器供產生 PDF 用 -->
@@ -529,9 +530,17 @@ async function submitForm(){
   }
 }
 window.submitForm = submitForm;
+    
+</script>
+  <script>
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('btn-print').addEventListener('click', printPDF); // 或 downloadPDF
+  document.getElementById('btn-send').addEventListener('click',  sendAll);  // 或 submitForm
+});
 </script>
 </body>
 </html>
+
 
 
 
