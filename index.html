@@ -196,6 +196,10 @@
         <td><input id="engineer" type="text"></td>
       </tr>
       <tr>
+        <!-- 三個簽名清除鍵 -->
+<button type="button" class="clear-btn" onclick="clearSignature('manager')">清除</button>
+<button type="button" class="clear-btn" onclick="clearSignature('engineer')">清除</button>
+<button type="button" class="clear-btn" onclick="clearSignature('customer')">清除</button>
         <th>寄送 Email (可選)</th>
         <td colspan="3"><input id="sendTo" type="email" placeholder="收件者 Email (若不寄送請留空)"></td>
       </tr>
@@ -366,23 +370,47 @@
       return { pdfBase64, fileName };
     }
 
-    // 按「列印 / PDF」產生本地 PDF 下載
-    async function downloadPDF() {
-      const form = document.getElementById('service-form');
-      if (!form.reportValidity()) {
-        alert('請確認所有必填欄位均已填寫');
-        return;
-      }
-      const formData = collectFormData();
-      const signatures = collectSignatures();
-      const { pdfBase64, fileName } = await createPdf(formData, signatures);
-      // 利用 html2pdf 另存本地檔案
-      const link = document.createElement('a');
-      link.href = pdfBase64;
-      link.download = fileName;
-      link.click();
-    }
-    window.downloadPDF = downloadPDF;
+    function downloadPDF() {
+  // 以「頁面原樣」為準：整份表單 #service-form
+  const src = document.getElementById('service-form');
+  const clone = src.cloneNode(true);
+
+  // 把 clone 放到畫面外（必須在 DOM 內，html2canvas 才能算到樣式）
+  clone.style.position = 'fixed';
+  clone.style.left = '-99999px';
+
+  // 只對 clone 動手腳：隱藏清除鍵與動作列
+  //（不影響畫面本體）
+  // 方式一：直接套一段只作用在 clone 的 style
+  const style = document.createElement('style');
+  style.textContent = `
+    .pdf-hidden{display:none!important;}
+  `;
+  // 先把要藏的節點加上 pdf-hidden
+  clone.querySelectorAll('.clear-btn, .actions').forEach(el => el.classList.add('pdf-hidden'));
+  // 把 style 加到 clone
+  clone.prepend(style);
+
+  // 送去轉 PDF
+  document.body.appendChild(clone);
+  const customer  = document.getElementById('customer')?.value || '未填客戶';
+  const date      = (() => {
+    const y = document.getElementById('roc_y')?.value || '';
+    const m = document.getElementById('roc_m')?.value || '';
+    const d = document.getElementById('roc_d')?.value || '';
+    return (y && m && d) ? `民國${y}年${m}月${d}日` : '未填日期';
+  })();
+  const engineer  = document.getElementById('engineer')?.value || '未選工程師';
+
+  html2pdf().from(clone).set({
+    margin: 10,
+    filename: `服務記錄_${customer}_${date}_${engineer}.pdf`,
+    html2canvas: { scale: 2, useCORS: true },
+    jsPDF: { format: 'a4', orientation: 'portrait' }
+  }).save().finally(() => {
+    clone.remove();
+  });
+}
 
     // 按「發送」提交表單、存入試算表、存檔並寄送
     async function submitForm() {
@@ -423,6 +451,7 @@
   </script>
 </body>
 </html>
+
 
 
 
