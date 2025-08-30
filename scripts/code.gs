@@ -5,7 +5,6 @@ function doGet(e) {
   // 回傳主要頁面，index.html需新增在Script專案裡
   return HtmlService.createHtmlOutputFromFile('index');
 }
-
 function doPost(e) {
   Logger.log('postData: ' + (e.postData ? e.postData.contents : 'no data'));
   // 輸入防錯與debug
