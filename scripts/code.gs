@@ -16,12 +16,19 @@ function doPost(e) {
 
     // 儲存PDF到雲端
     var pdfUrl = '';
-    if (payload.pdfBase64 && payload.filename) {
-      var base64 = payload.pdfBase64.split(',')[1];
-      var pdfBlob = Utilities.newBlob(Utilities.base64Decode(base64), 'application/pdf', payload.filename);
-      var pdfFile = DriveApp.getFolderById(FOLDER_ID).createFile(pdfBlob);
-      pdfUrl = pdfFile.getUrl();
-    }
+if (payload.pdfBase64 && payload.filename) {
+  var base64 = payload.pdfBase64;
+  // 有前綴時才拆分，否則直接用本身
+  if (base64.indexOf(',') > -1) base64 = base64.split(',')[1];
+  try {
+    var pdfBlob = Utilities.newBlob(Utilities.base64Decode(base64), 'application/pdf', payload.filename);
+    var pdfFile = DriveApp.getFolderById(FOLDER_ID).createFile(pdfBlob);
+    pdfUrl = pdfFile.getUrl();
+  } catch(err) {
+    Logger.log("PDF存檔失敗：" + err.message);
+    pdfUrl = '';
+  }
+}
 function appendData(formData) {
   const sheet = SpreadsheetApp.openById("1I_vz6Psk2g_5yOj0sBUlVTquv1RLEJ50xJfTp6wKAWA").getSheetByName("回傳"); // 表單名稱
   sheet.appendRow([
