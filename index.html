@@ -339,9 +339,7 @@ window.clearSignature = clearSignature;
       };
     }
 
-    // PDF 範本，使用 mustache 樣式占位符
-    const pdfTemplate = `
-      <style>
+        <style>
         body { font-family: 'Noto Sans TC', sans-serif; font-size: 12px; margin: 0; padding: 0; }
         table { width: 100%; border-collapse: collapse; }
         td, th { border: 1px solid #000; padding: 4px; vertical-align: top; }
@@ -397,8 +395,7 @@ window.clearSignature = clearSignature;
       });
       return result;
     }
-</script>
- <script>  
+
 // === 產 PDF（照頁面樣子；clone 放進 DOM；隱藏清除/動作按鈕）===
 // 1) 供「發送」用：回傳 PDF base64
 async function createPdf() {
@@ -488,7 +485,9 @@ async function postToWebApp(payload){
     return { ok:false, error:'Failed to fetch（三種方式都失敗）' };
   }
 }
-
+<script type="text/x-template" id="pdf-template">
+  <!-- 這裡放原本的 pdf_template.html 內容，含 {{…}} 欄位 -->
+</script>
 <script>
 async function submitForm(){
   const formEl = document.getElementById('service-form');
@@ -535,36 +534,4 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
