@@ -5,11 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>服務記錄表填寫</title>
   <!-- 使用 html2pdf 與 SignaturePad 來源 -->
-  <!-- 先載入外掛，再載自家 JS -->
-<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
-
   <style>
     body {
       font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
@@ -82,6 +77,10 @@
   width: 16%;
 }
   </style>
+<!-- 先載入外掛，再載自家 JS --> 
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
   
 </head>
 <body>
@@ -213,13 +212,8 @@
   <!-- 隱藏容器供產生 PDF 用 -->
   <div id="pdf-container"></div>
   <script>
-let pads = {};
 window.addEventListener('DOMContentLoaded', () => {
-  // 依你表單上的三個 canvas id 初始化
-  pads.manager  = new SignaturePad(document.getElementById('sig-manager'),  { penColor: 'black', backgroundColor: 'rgba(0,0,0,0)' });
-  pads.engineer = new SignaturePad(document.getElementById('sig-engineer'), { penColor: 'black', backgroundColor: 'rgba(0,0,0,0)' });
-  pads.customer = new SignaturePad(document.getElementById('sig-customer'), { penColor: 'black', backgroundColor: 'rgba(0,0,0,0)' });
-
+ 
   // 依螢幕倍率調整 canvas 實際像素，避免壓縮模糊/繪不出
   [ 'sig-manager', 'sig-engineer', 'sig-customer' ].forEach(id => {
     const c = document.getElementById(id);
@@ -255,6 +249,7 @@ function collectSignatures() {
     const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxICCCLbL9oIZkvgub5X7RPBohzw0u1VxbarINmkhWcEliulpXVMM0vlxdaqYlBx9yr7A/exec';
     
   </script>
+  <script>
 /* 只載入一次，避免重複宣告造成 SyntaxError */
 (function () {
   if (window.__sigInit) return;     // 已初始化就直接跳過
@@ -315,32 +310,35 @@ function collectSignatures() {
 
     // 收集表單資料
     function collectFormData() {
+      const get = id => document.getElementById(id)?.value?.trim() || '';
+      const checkedVals = name => Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(e=>e.value).join('、');
+      const selectedVals = id => Array.from(document.getElementById(id)?.selectedOptions || []).map(o=>o.value).join('、');
       return {
-        projectCode: document.getElementById('projectCode').value.trim(),
-        ticketNo: document.getElementById('ticketNo').value.trim(),
-        customerName: document.getElementById('customerName').value.trim(),
-        address: document.getElementById('address').value.trim(),
-        contact: document.getElementById('contact').value.trim(),
-        phone: document.getElementById('phone').value.trim(),
-        rocY: document.getElementById('roc_y').value.trim(),
-        rocM: document.getElementById('roc_m').value.trim(),
-        rocD: document.getElementById('roc_d').value.trim(),
-        arriveTxt: document.getElementById('arriveTxt').value.trim(),
-        finishTxt: document.getElementById('finishTxt').value.trim(),
-        serviceMethods: collectServiceMethods(),
-        products: collectProducts(),
-        serviceContent: document.getElementById('serviceContent').value.trim(),
-        customerFeedback: document.getElementById('customerFeedback').value.trim(),
-        engineer: document.getElementById('engineer').value.trim()
-      };
+        projectCode: get('projectCode'),
+        ticketNo: get('ticketNo'),
+        customerName: get('customer'),
+        address: get('address'),
+        contact: get('contact'),
+        phone: get('phone'),
+        rocY: get('roc_y'),
+        rocM: get('roc_m'),
+        rocD: get('roc_d'),
+        arriveTxt: get('arriveTxt'),
+        finishTxt: get('finishTxt'),
+        serviceMethods: checkedVals('serviceMethod'),
+        products: selectedVals('serviceProduct'),
+        serviceContent: get('serviceContent'),
+        customerFeedback: get('customerFeedback'),
+        engineer: get('engineer')
+       };
     }
 
     // 將簽名轉為 DataURL
     function collectSignatures() {
       return {
-        manager: pads.manager && !pads.manager.isEmpty() ? pads.manager.toDataURL() : '',
-        engineer: pads.engineer && !pads.engineer.isEmpty() ? pads.engineer.toDataURL() : '',
-        customer: pads.customer && !pads.customer.isEmpty() ? pads.customer.toDataURL() : ''
+       manager:  window.pads.manager  && !window.pads.manager.isEmpty()  ? window.pads.manager.toDataURL()  : '',
+        engineer: window.pads.engineer && !window.pads.engineer.isEmpty() ? window.pads.engineer.toDataURL() : '',
+        customer: window.pads.customer && !window.pads.customer.isEmpty() ? window.pads.customer.toDataURL() : ''
       };
     }
 
@@ -403,97 +401,65 @@ function collectSignatures() {
       return result;
     }
 
-    // 產生 PDF base64 並返回 {pdfBase64, fileName}
-    async function createPdf(formData, signatures) {
-      // 將簽名加入 formData 以供範本替換
-      const pdfData = Object.assign({}, formData, {
-        sign_manager: signatures.manager,
-        sign_engineer: signatures.engineer,
-        sign_customer: signatures.customer
-      });
-      const html = fillTemplate(pdfTemplate, pdfData);
-      // 使用 html2pdf 直接從 HTML 字串產生 PDF。必須指定 type: 'string'。
-      const opt = {
+   // === 產 PDF（照頁面樣子；clone 放進 DOM；隱藏清除/動作按鈕）===
+    async function createPdf() {
+      const src   = document.getElementById('pdf-content'); // 你的主要容器
+      const clone = src.cloneNode(true);
+      // 在 clone 中移除清除鍵/動作列
+      clone.querySelectorAll('.clear-btn, .actions').forEach(el => el.remove());
+      clone.style.position = 'fixed';
+      clone.style.left = '-99999px';
+      clone.style.background = '#fff';
+      document.body.appendChild(clone);
+
+      const dataUri = await html2pdf().from(clone).set({
         margin: 10,
-        html2canvas: { scale: 2 },
+        filename: 'tmp.pdf',
+        html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      };
-      // Worker API: 從 HTML 字串生成 PDF 並輸出為 base64 data uri
-      const worker = html2pdf().set(opt).from(html, 'string');
-      const pdfBase64 = await worker.outputPdf('datauristring');
-      // 檔名：服務記錄_客戶名稱_yyyymmdd.pdf
-      const dateStr = formData.rocY + formData.rocM + formData.rocD;
-      const safeName = formData.customerName.replace(/\s+/g, '') || '未命名';
-      const fileName = `服務記錄_${safeName}_${dateStr}.pdf`;
-      return { pdfBase64, fileName };
+      }).outputPdf('datauristring');
+
+      clone.remove();
+      return dataUri; // data:application/pdf;base64,....
     }
 
-    function downloadPDF() {
-  // 以「頁面原樣」為準：整份表單 #service-form
-  const src = document.getElementById('service-form');
+async function downloadPDF(){
+  const src   = document.getElementById('pdf-content');  // 不動你的表格，只換來源容器
   const clone = src.cloneNode(true);
-
-  // 把 clone 放到畫面外（必須在 DOM 內，html2canvas 才能算到樣式）
+  const form = collectFormData();
+  const pdfBase64 = await createPdf();
+  // 放進 DOM，否則抓不到樣式
   clone.style.position = 'fixed';
   clone.style.left = '-99999px';
 
-  // 只對 clone 動手腳：隱藏清除鍵與動作列
-  //（不影響畫面本體）
-  // 方式一：直接套一段只作用在 clone 的 style
+  // 只影響 clone：把清除鍵與「動作列」藏起來
   const style = document.createElement('style');
-  style.textContent = `
-    .pdf-hidden{display:none!important;}
-  `;
-  // 先把要藏的節點加上 pdf-hidden
+  style.textContent = `.pdf-hidden{display:none!important;}`;
   clone.querySelectorAll('.clear-btn, .actions').forEach(el => el.classList.add('pdf-hidden'));
-  // 把 style 加到 clone
   clone.prepend(style);
 
-  // 送去轉 PDF
   document.body.appendChild(clone);
-  const customer  = document.getElementById('customer')?.value || '未填客戶';
-  const date      = (() => {
-    const y = document.getElementById('roc_y')?.value || '';
-    const m = document.getElementById('roc_m')?.value || '';
-    const d = document.getElementById('roc_d')?.value || '';
-    return (y && m && d) ? `民國${y}年${m}月${d}日` : '未填日期';
-  })();
-  const engineer  = document.getElementById('engineer')?.value || '未選工程師';
+
+  // 檔名（不改你的表格結構）
+  const customer = document.getElementById('customerName')?.value || '未填客戶';
+  const y=form.rocY||'', m=form.rocM||'', d=form.rocD||'';
+  const date = (y&&m&&d) ? `民國${y}年${m}月${d}日` : '未填日期';
+  const engineer = document.getElementById('engineer')?.value || '未選工程師';
+  const fileName = `服務記錄_${formData.customerName||'未填客戶'}_${date}_${formData.engineer||'未選工程師'}.pdf`;
 
   html2pdf().from(clone).set({
     margin: 10,
     filename: `服務記錄_${customer}_${date}_${engineer}.pdf`,
     html2canvas: { scale: 2, useCORS: true },
     jsPDF: { format: 'a4', orientation: 'portrait' }
-  }).save().finally(() => {
-    clone.remove();
-  });
+  }).save().finally(()=>clone.remove());
 }
 
-  async function postToWebApp(payload) {
-  // 嘗試 1：純字串 body（瀏覽器會用 text/plain；不會 Preflight）
-  try {
-    const r1 = await fetch(WEBAPP_URL, { method: 'POST', body: JSON.stringify(payload) });
-    const t1 = await r1.text();
-    try { return JSON.parse(t1); } catch { return { ok: false, raw: t1 }; }
-  } catch (e1) {
-    // 嘗試 2：FormData（application/x-www-form-urlencoded；也不會 Preflight）
-    try {
-      const fd = new FormData();
-      fd.append('data', JSON.stringify(payload));
-      const r2 = await fetch(WEBAPP_URL, { method: 'POST', body: fd });
-      const t2 = await r2.text();
-      try { return JSON.parse(t2); } catch { return { ok: false, raw: t2 }; }
-    } catch (e2) {
-      return { ok: false, error: 'Failed to fetch（兩種方式都失敗）' };
-    }
-  }
-}
-
+// === 避免 Preflight 的送法 + 備援（不要自訂 Content-Type）===
 async function postToWebApp(payload){
   // 1) 純字串 POST（text/plain）——多數情況成功
   try{
-    const r1 = await fetch(WEB_APP_URL, { method:'POST', body: JSON.stringify(payload) });
+    const r1 = await fetch(WEBAPP_URL, { method:'POST', body: JSON.stringify(payload) });
     const t1 = await r1.text();
     try { return { ok:true, data: JSON.parse(t1) }; } catch { return { ok:true, data:null, raw:t1 }; }
   }catch(e1){ /* 繼續備援 */ }
@@ -502,14 +468,14 @@ async function postToWebApp(payload){
   try{
     const fd = new FormData();
     fd.append('data', JSON.stringify(payload));
-    const r2 = await fetch(WEB_APP_URL, { method:'POST', body: fd });
+    const r2 = await fetch(WEBAPP_URL, { method:'POST', body: fd });
     const t2 = await r2.text();
     try { return { ok:true, data: JSON.parse(t2) }; } catch { return { ok:true, data:null, raw:t2 }; }
   }catch(e2){ /* 繼續備援 */ }
 
   // 3) no-cors —— 一定送得出去，但拿不到任何回應（opaque）
   try{
-    await fetch(WEB_APP_URL, { method:'POST', mode:'no-cors', body: JSON.stringify(payload) });
+    await fetch(WEBAPP_URL, { method:'POST', mode:'no-cors', body: JSON.stringify(payload) });
     return { ok:true, data:null, opaque:true };
   }catch(e3){
     return { ok:false, error:'Failed to fetch（三種方式都失敗）' };
@@ -522,18 +488,21 @@ async function submitForm(){
 
   const formData   = collectFormData();
   const signatures = collectSignatures();
-  const { pdfBase64, fileName } = await createPdf(formData, signatures);
+  const pdfBase64  = await createPdf();
+const y=formData.rocY||'', m=formData.rocM||'', d=formData.rocD||'';
+      const date = (y&&m&&d)?`民國${y}年${m}月${d}日`:'未填日期';
+      const fileName = `服務記錄_${formData.customerName||'未填客戶'}_${date}_${formData.engineer||'未選工程師'}.pdf`;
 
-  const sendTo = document.getElementById('sendTo')?.value.trim() || '';
-  const payload = {
-    form: formData,
-    signatures,
-    pdfBase64,
-    filename: fileName,
-    sendTo,            // 有填就寄
-    sendEmail: !!sendTo
-  };
-
+      const sendTo = document.getElementById('sendTo')?.value.trim() || '';
+      const payload = {
+        form: formData,
+        signatures,
+        pdfBase64,
+        filename: fileName,
+        sendTo,
+        sendEmail: !!sendTo
+      };
+  
   const res = await postToWebApp(payload);
   if (!res.ok){ alert(res.error || '送出失敗'); return; }
 
@@ -546,17 +515,22 @@ async function submitForm(){
     alert('送出完成，但回應無法解析：' + (res.raw ? res.raw.slice(0,200) : ''));
   }
 }
-window.submitForm = submitForm;
+// === 匯出到全域，給 onclick 使用（若你的按鈕是 inline onclick）===
+    window.downloadPDF = downloadPDF;
+    window.submitForm  = submitForm;
     
 </script>
   <script>
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('btn-print').addEventListener('click', printPDF); // 或 downloadPDF
-  document.getElementById('btn-send').addEventListener('click',  sendAll);  // 或 submitForm
+  const btnPrint = document.getElementById('btn-print');
+  const btnSend  = document.getElementById('btn-send');
+  btnPrint?.addEventListener('click', downloadPDF);
+  btnSend?.addEventListener('click',  submitForm);
 });
 </script>
 </body>
 </html>
+
 
 
 
