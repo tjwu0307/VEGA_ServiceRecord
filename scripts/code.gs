@@ -7,26 +7,31 @@ function doGet(e) {
 }
 function doPost(e) {
   Logger.log('postData: ' + (e.postData ? e.postData.contents : 'no data'));
-  // 輸入防錯與debug
   if (!e || !e.postData || !e.postData.contents) {
     return ContentService.createTextOutput("No payload").setMimeType(ContentService.MimeType.TEXT);
   }
   try {
     var payload = JSON.parse(e.postData.contents);
+    var form = payload.form || {};
 
-    // 儲存PDF到雲端
-    var pdfUrl = '';
-if (payload.pdfBase64 && payload.filename) {
-  var base64 = payload.pdfBase64;
-  // 有前綴時才拆分，否則直接用本身
-  if (base64.indexOf(',') > -1) base64 = base64.split(',')[1];
-  try {
-    var pdfBlob = Utilities.newBlob(Utilities.base64Decode(base64), 'application/pdf', payload.filename);
-    var pdfFile = DriveApp.getFolderById(FOLDER_ID).createFile(pdfBlob);
-    pdfUrl = pdfFile.getUrl();
-  } catch(err) {
-    Logger.log("PDF存檔失敗：" + err.message);
-    pdfUrl = '';
+    // 防呆檢查
+    var requiredFields = ['projectCode', 'ticketNo', 'customerName', 'address', 'contact', 'phone', 'rocY', 'rocM', 'rocD'];
+    var missing = [];
+    requiredFields.forEach(function(field) {
+      if (!form[field] || form[field].toString().trim()=='') missing.push(field);
+    });
+    if (missing.length > 0) {
+      Logger.log('缺少欄位: ' + missing.join(', '));
+      return ContentService.createTextOutput("缺少欄位：" + missing.join(',')).setMimeType(ContentService.MimeType.TEXT);
+    }
+
+    // 儲存PDF、簽名、appendRow程式碼...
+    // appendRow前可再檢查
+    // if (!pdfUrl) return ContentService.createTextOutput("PDF存檔失敗").setMimeType(ContentService.MimeType.TEXT);
+
+    // 最後return結果
+  } catch (err) {
+    return ContentService.createTextOutput("Error: " + err.message).setMimeType(ContentService.MimeType.TEXT);
   }
 }
 function appendData(formData) {
