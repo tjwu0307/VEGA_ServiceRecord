@@ -117,18 +117,18 @@
         <th>電話</th>
         <td><input id="phone" type="text" ></td>
       </tr>
-<tr>
-  <th style="width:16%;">服務日期（民國）</th>
-  <td style="width:16%;">
-    <input id="roc_y" type="number" placeholder="年" style="width:50px" required> 年
-    <input id="roc_m" type="number" placeholder="月" style="width:40px" required> 月
-    <input id="roc_d" type="number" placeholder="日" style="width:40px" required> 日
-  </td>
-  <th style="width:16%;">到達時間</th>
-  <td style="width:16%;"><input id="arriveTxt" type="text" required></td>
-  <th style="width:16%;">結束時間</th>
-  <td style="width:16%;"><input id="finishTxt" type="text" required></td>
-</tr>
+ <tr class="six-col-row">
+    <th>服務日期（民國）</th>
+    <td>
+      <input id="roc_y" type="number" placeholder="年" style="width:50px" required> 年
+      <input id="roc_m" type="number" placeholder="月" style="width:40px" required> 月
+      <input id="roc_d" type="number" placeholder="日" style="width:40px" required> 日
+    </td>
+    <th>到達時間</th>
+    <td><input id="arriveTxt" type="text" required></td>
+    <th>結束時間</th>
+    <td><input id="finishTxt" type="text" required></td>
+  </tr>
 
       <tr>
         <th>服務方式</th>
@@ -145,7 +145,7 @@
             <label><input type="checkbox" name="serviceMethod" value="維修"> 維修</label>
             <label><input type="checkbox" name="serviceMethod" value="移機服務"> 移機服務</label>
             <label><input type="checkbox" name="serviceMethod" value="會議支援"> 會議支援</label>
-            <label style="grid-column:span 3;">其他：<input id="otherService" type="text"></label>
+            <label style="grid-column:span 2;">其他：<input id="otherService" type="text"></label>
           </div>
         </td>
       </tr>
@@ -423,6 +423,7 @@
   </script>
 </body>
 </html>
+
 
 
 
