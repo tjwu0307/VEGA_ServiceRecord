@@ -251,37 +251,34 @@ function collectSignatures() {
   </script>
   <script>
 /* 只載入一次，避免重複宣告造成 SyntaxError */
+<script>
 (function () {
-  if (window.__sigInit) return;     // 已初始化就直接跳過
+  if (window.__sigInit) return;
   window.__sigInit = true;
-  window.pads = window.pads || {};  // 單一全域容器（不要再 let/const pads = {}）
+  window.pads = {};
 
-  function setupCanvas(cnv){
+  function tuneCanvas(cnv){
     const ratio = Math.max(window.devicePixelRatio || 1, 1);
     const rect  = cnv.getBoundingClientRect();
-    cnv.width   = Math.max(1, rect.width  * ratio);
-    cnv.height  = Math.max(1, rect.height * ratio);
-    const ctx = cnv.getContext('2d');
-    ctx.scale(ratio, ratio);
+    cnv.width  = Math.max(1, rect.width  * ratio);
+    cnv.height = Math.max(1, rect.height * ratio);
+    cnv.getContext('2d').scale(ratio, ratio);
   }
 
   window.addEventListener('DOMContentLoaded', () => {
-    // 三個簽名 canvas
     const m = document.getElementById('sig-manager');
     const e = document.getElementById('sig-engineer');
     const c = document.getElementById('sig-customer');
+    [m,e,c].forEach(tuneCanvas);
 
-    if (m) { setupCanvas(m); window.pads.manager  = new SignaturePad(m, {penColor:'#000', backgroundColor:'rgba(0,0,0,0)'}); }
-    if (e) { setupCanvas(e); window.pads.engineer = new SignaturePad(e, {penColor:'#000', backgroundColor:'rgba(0,0,0,0)'}); }
-    if (c) { setupCanvas(c); window.pads.customer = new SignaturePad(c, {penColor:'#000', backgroundColor:'rgba(0,0,0,0)'}); }
+    pads.manager  = new SignaturePad(m, {penColor:'black', backgroundColor:'rgba(0,0,0,0)'});
+    pads.engineer = new SignaturePad(e, {penColor:'black', backgroundColor:'rgba(0,0,0,0)'});
+    pads.customer = new SignaturePad(c, {penColor:'black', backgroundColor:'rgba(0,0,0,0)'});
   });
-
-  // 清除簽名（給按鈕 onclick 用）
-  window.clearSignature = function(who){
-    const pad = (window.pads || {})[who];
-    if (pad) pad.clear();
-  };
 })();
+function clearSignature(who){ pads[who]?.clear(); }
+window.clearSignature = clearSignature;
+</script>
 
 
 
@@ -402,26 +399,29 @@ function collectSignatures() {
     }
 
    // === 產 PDF（照頁面樣子；clone 放進 DOM；隱藏清除/動作按鈕）===
-    async function createPdf() {
-      const src   = document.getElementById('pdf-content'); // 你的主要容器
-      const clone = src.cloneNode(true);
-      // 在 clone 中移除清除鍵/動作列
-      clone.querySelectorAll('.clear-btn, .actions').forEach(el => el.remove());
-      clone.style.position = 'fixed';
-      clone.style.left = '-99999px';
-      clone.style.background = '#fff';
-      document.body.appendChild(clone);
+   async function createPdf() {
+  const src = document.getElementById('service-form');   // ← 換這個
+  if (!src) { alert('找不到 #service-form'); throw new Error('missing #service-form'); }
 
-      const dataUri = await html2pdf().from(clone).set({
-        margin: 10,
-        filename: 'tmp.pdf',
-        html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      }).outputPdf('datauristring');
+  const clone = src.cloneNode(true);
 
-      clone.remove();
-      return dataUri; // data:application/pdf;base64,....
-    }
+  // 只處理 clone：移除清除鍵與動作列，不影響畫面本體
+  clone.querySelectorAll('.clear-btn, .actions').forEach(el => el.remove());
+  clone.style.position = 'fixed';
+  clone.style.left = '-99999px';
+  clone.style.background = '#fff';
+  document.body.appendChild(clone);
+
+  const dataUri = await html2pdf().from(clone).set({
+    margin: 10,
+    filename: 'tmp.pdf',
+    html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  }).outputPdf('datauristring');
+
+  clone.remove();
+  return dataUri; // data:application/pdf;base64,....
+}
 
 async function downloadPDF(){
   const src   = document.getElementById('pdf-content');  // 不動你的表格，只換來源容器
@@ -482,6 +482,7 @@ async function postToWebApp(payload){
   }
 }
 
+<script>
 async function submitForm(){
   const formEl = document.getElementById('service-form');
   if (!formEl.reportValidity()) { alert('請確認所有必填欄位均已填寫'); return; }
@@ -489,24 +490,24 @@ async function submitForm(){
   const formData   = collectFormData();
   const signatures = collectSignatures();
   const pdfBase64  = await createPdf();
-const y=formData.rocY||'', m=formData.rocM||'', d=formData.rocD||'';
-      const date = (y&&m&&d)?`民國${y}年${m}月${d}日`:'未填日期';
-      const fileName = `服務記錄_${formData.customerName||'未填客戶'}_${date}_${formData.engineer||'未選工程師'}.pdf`;
 
-      const sendTo = document.getElementById('sendTo')?.value.trim() || '';
-      const payload = {
-        form: formData,
-        signatures,
-        pdfBase64,
-        filename: fileName,
-        sendTo,
-        sendEmail: !!sendTo
-      };
-  
+  const y=formData.rocY||'', m=formData.rocM||'', d=formData.rocD||'';
+  const date = (y&&m&&d)?`民國${y}年${m}月${d}日`:'未填日期';
+  const fileName = `服務記錄_${formData.customerName||'未填客戶'}_${date}_${formData.engineer||'未選工程師'}.pdf`;
+
+  const sendTo = document.getElementById('sendTo')?.value.trim() || '';
+  const payload = {
+    form: formData,
+    signatures,
+    pdfBase64,
+    filename: fileName,
+    sendTo,
+    sendEmail: !!sendTo
+  };
+
   const res = await postToWebApp(payload);
   if (!res.ok){ alert(res.error || '送出失敗'); return; }
 
-  // 能讀到就顯示後端回傳；no-cors 的情況用提示引導你到試算表/雲端確認
   if (res.data?.ok || res.data?.result === 'ok') {
     alert('發送成功！' + (res.data.pdfUrl ? ('\nPDF：' + res.data.pdfUrl) : ''));
   } else if (res.opaque) {
@@ -515,11 +516,10 @@ const y=formData.rocY||'', m=formData.rocM||'', d=formData.rocD||'';
     alert('送出完成，但回應無法解析：' + (res.raw ? res.raw.slice(0,200) : ''));
   }
 }
-// === 匯出到全域，給 onclick 使用（若你的按鈕是 inline onclick）===
-    window.downloadPDF = downloadPDF;
-    window.submitForm  = submitForm;
-    
+window.downloadPDF = downloadPDF;
+window.submitForm  = submitForm;
 </script>
+
   <script>
 document.addEventListener('DOMContentLoaded', () => {
   const btnPrint = document.getElementById('btn-print');
@@ -530,6 +530,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
+
 
 
 
