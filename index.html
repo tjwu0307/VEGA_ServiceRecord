@@ -210,7 +210,7 @@
   <script>
     // 設定您的 Apps Script 部署網址
     const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycby4p_ZHHAki_TeBDZyTHyD_T4Hef7uTzl65stE6gy3uDn3WcY0EF4Q7wne1XGYBnJB_LA/exec';
-
+    
     // 初始化簽名板
     const pads = {};
     window.onload = () => {
@@ -408,45 +408,68 @@
   });
 }
 
-    // 按「發送」提交表單、存入試算表、存檔並寄送
-    async function submitForm() {
-      const form = document.getElementById('service-form');
-      if (!form.reportValidity()) {
-        alert('請確認所有必填欄位均已填寫');
-        return;
-      }
-      const formData = collectFormData();
-      const signatures = collectSignatures();
-      const { pdfBase64, fileName } = await createPdf(formData, signatures);
-      // 組成 payload
-      const payload = {
-        data: formData,
-        signatures: signatures,
-        pdfBase64: pdfBase64,
-        filename: fileName,
-        sendTo: document.getElementById('sendTo').value.trim() || ''
-      };
-      try {
-        const res = await fetch(WEBAPP_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        const result = await res.json();
-        if (result && result.result === 'ok') {
-          alert('發送成功！');
-        } else {
-          alert('發送失敗。');
-        }
-      } catch (err) {
-        console.error(err);
-        alert('發送過程中發生錯誤：' + err.message);
-      }
+  async function postToWebApp(payload) {
+  // 嘗試 1：純字串 body（瀏覽器會用 text/plain；不會 Preflight）
+  try {
+    const r1 = await fetch(WEBAPP_URL, { method: 'POST', body: JSON.stringify(payload) });
+    const t1 = await r1.text();
+    try { return JSON.parse(t1); } catch { return { ok: false, raw: t1 }; }
+  } catch (e1) {
+    // 嘗試 2：FormData（application/x-www-form-urlencoded；也不會 Preflight）
+    try {
+      const fd = new FormData();
+      fd.append('data', JSON.stringify(payload));
+      const r2 = await fetch(WEBAPP_URL, { method: 'POST', body: fd });
+      const t2 = await r2.text();
+      try { return JSON.parse(t2); } catch { return { ok: false, raw: t2 }; }
+    } catch (e2) {
+      return { ok: false, error: 'Failed to fetch（兩種方式都失敗）' };
     }
-    window.submitForm = submitForm;
+  }
+}
+
+// 按「發送」提交表單、存入試算表、存檔並（可選）寄送
+async function submitForm() {
+  const formEl = document.getElementById('service-form');
+  if (!formEl.reportValidity()) {
+    alert('請確認所有必填欄位均已填寫');
+    return;
+  }
+
+  const formData   = collectFormData();
+  const signatures = collectSignatures();
+  const { pdfBase64, fileName } = await createPdf(formData, signatures);
+
+  // payload 同時帶 'form' 與 'data'，新舊後端都相容
+  const sendTo = document.getElementById('sendTo')?.value.trim() || '';
+  const payload = {
+    form: formData,            // 建議後端讀這個
+    data: formData,            // 舊版後端若讀 data 也能用
+    signatures,
+    pdfBase64,
+    filename: fileName,
+    sendTo,
+    sendEmail: !!sendTo        // 有填收件者就寄
+  };
+
+  try {
+    const result = await postToWebApp(payload);
+    if (result?.ok === true || result?.result === 'ok') {
+      alert('發送成功！' + (result.pdfUrl ? `\nPDF連結：${result.pdfUrl}` : ''));
+    } else {
+      alert('發送失敗：' + (result?.error || result?.raw || '未知'));
+      console.error(result);
+    }
+  } catch (err) {
+    console.error(err);
+    alert('發送過程中發生錯誤：' + err.message);
+  }
+}
+window.submitForm = submitForm;
   </script>
 </body>
 </html>
+
 
 
 
