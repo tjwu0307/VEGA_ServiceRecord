@@ -185,22 +185,18 @@
       </tr>
       <tr>
         <th>直屬主管簽名</th>
-        <td><canvas id="sig-manager" class="signature-box" width="250" height="100"></canvas><br><button type="button" onclick="clearSignature('manager')">清除</button></td>
+        <td><canvas id="sig-manager" class="signature-box" width="250" height="100"></canvas><br><button type="button" class="clear-btn" onclick="clearSignature('manager')">清除</button></td>
         <th>工程師簽名</th>
-        <td><canvas id="sig-engineer" class="signature-box" width="250" height="100"></canvas><br><button type="button" onclick="clearSignature('engineer')">清除</button></td>
+        <td><canvas id="sig-engineer" class="signature-box" width="250" height="100"></canvas><br><button type="button" class="clear-btn" onclick="clearSignature('engineer')">清除</button></td>
       </tr>
       <tr>
         <th>客戶簽名</th>
-        <td><canvas id="sig-customer" class="signature-box" width="250" height="100"></canvas><br><button type="button" onclick="clearSignature('customer')">清除</button></td>
+        <td><canvas id="sig-customer" class="signature-box" width="250" height="100"></canvas><br><button type="button" class="clear-btn" onclick="clearSignature('customer')">清除</button></td>
         <th>工程師姓名</th>
         <td><input id="engineer" type="text"></td>
       </tr>
       <tr>
-        <!-- 三個簽名清除鍵 -->
-<button type="button" class="clear-btn" onclick="clearSignature('manager')">清除</button>
-<button type="button" class="clear-btn" onclick="clearSignature('engineer')">清除</button>
-<button type="button" class="clear-btn" onclick="clearSignature('customer')">清除</button>
-        <th>寄送 Email (可選)</th>
+             <th>寄送 Email (可選)</th>
         <td colspan="3"><input id="sendTo" type="email" placeholder="收件者 Email (若不寄送請留空)"></td>
       </tr>
     </table>
@@ -451,6 +447,7 @@
   </script>
 </body>
 </html>
+
 
 
 
