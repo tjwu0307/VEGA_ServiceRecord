@@ -398,8 +398,8 @@ window.clearSignature = clearSignature;
       return result;
     }
 </script>
-   // === 產 PDF（照頁面樣子；clone 放進 DOM；隱藏清除/動作按鈕）===
-<script>
+ <script>  
+// === 產 PDF（照頁面樣子；clone 放進 DOM；隱藏清除/動作按鈕）===
 // 1) 供「發送」用：回傳 PDF base64
 async function createPdf() {
   const src = document.getElementById('service-form');   // ← 一律抓這個
@@ -535,6 +535,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
+
 
 
 
