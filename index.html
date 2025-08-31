@@ -67,40 +67,65 @@
     </tr>
 
     <!-- 日期 + 時段（同一列） -->
-    <tr>
-      <th>服務日期（民國）</th>
-      <td>
-        <input id="roc_y" type="number" placeholder="年" style="width:50px"> 年
-        <input id="roc_m" type="number" placeholder="月" style="width:40px"> 月
-        <input id="roc_d" type="number" placeholder="日" style="width:40px"> 日
-      </td>
-      <th>到達時間</th>
-      <td><input id="arriveTxt" type="text" style="width:100%"></td>
-    </tr>
-    <tr>
-      <th>工程師</th>
-      <td><input id="engineer" type="text" style="width:100%"></td>
-      <th>結束時間</th>
-      <td><input id="finishTxt" type="text" style="width:100%"></td>
-    </tr>
+  <tr >
+  <th colspan="4">
+    &nbsp;&nbsp;服務日期（民國）：</span>
+    <input id="roc_y" type="number" placeholder="年" style="width:50px" required> 年
+    <input id="roc_m" type="number" placeholder="月" style="width:40px" required> 月
+    <input id="roc_d" type="number" placeholder="日" style="width:40px" required> 日
+    &nbsp;&nbsp;到達時間：
+    <input id="arriveTxt" type="text" style="width:80px" required>
+    &nbsp;&nbsp;結束時間：
+    <input id="finishTxt" type="text" style="width:80px" required>
+  </th>
+</tr>
 
-    <tr>
-      <th>服務方式</th>
-      <td colspan="3">
-        <label><input type="checkbox" name="serviceMethod" value="到場"> 到場</label>
-        <label style="margin-left:12px"><input type="checkbox" name="serviceMethod" value="遠端"> 遠端</label>
-        <label style="margin-left:12px"><input type="checkbox" name="serviceMethod" value="電話"> 電話</label>
-        <label style="margin-left:12px"><input type="checkbox" name="serviceMethod" value="返廠"> 返廠</label>
-      </td>
-    </tr>
+      <tr>
+        <th>服務方式</th>
+        <td colspan="3">
+          <div id="service-methods" style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px;">
+            <label><input type="checkbox" name="serviceMethod" value="場勘"> 場勘</label>
+            <label><input type="checkbox" name="serviceMethod" value="客戶需求討論"> 客戶需求討論</label>
+            <label><input type="checkbox" name="serviceMethod" value="POC"> POC</label>
+            <label><input type="checkbox" name="serviceMethod" value="教育訓練"> 教育訓練</label>
+            <label><input type="checkbox" name="serviceMethod" value="DEMO 產品展示"> DEMO 產品展示</label>
+            <label><input type="checkbox" name="serviceMethod" value="交貨"> 交貨</label>
+            <label><input type="checkbox" name="serviceMethod" value="安裝"> 安裝</label>
+            <label><input type="checkbox" name="serviceMethod" value="驗收"> 驗收</label>
+            <label><input type="checkbox" name="serviceMethod" value="維修"> 維修</label>
+            <label><input type="checkbox" name="serviceMethod" value="移機服務"> 移機服務</label>
+            <label><input type="checkbox" name="serviceMethod" value="會議支援"> 會議支援</label>
+            <label style="grid-column:span 2;">其他：<input id="otherService" type="text"></label>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <th>服務產品</th>
+        <td colspan="3">
+          <table style="width:100%;border-collapse:collapse">
+            <tr><th>廠牌</th><th>型號</th><th>版本</th><th>序號</th></tr>
+            <tr>
+              <td><input id="brand1" type="text"></td>
+              <td><input id="model1" type="text"></td>
+              <td><input id="version1" type="text"></td>
+              <td><input id="serial1" type="text"></td>
+            </tr>
+            <tr>
+              <td><input id="brand2" type="text"></td>
+              <td><input id="model2" type="text"></td>
+              <td><input id="version2" type="text"></td>
+              <td><input id="serial2" type="text"></td>
+            </tr>
+            <tr>
+              <td><input id="brand3" type="text"></td>
+              <td><input id="model3" type="text"></td>
+              <td><input id="version3" type="text"></td>
+              <td><input id="serial3" type="text"></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
 
-    <tr>
-      <th>服務產品</th>
-      <td colspan="3">
-        <textarea id="products" rows="2" style="width:100%" placeholder="品牌/型號/版本/序號… 逐項一行"></textarea>
-      </td>
-    </tr>
-    <tr>
       <th>服務內容</th>
       <td colspan="3"><textarea id="serviceContent" rows="3" style="width:100%"></textarea></td>
     </tr>
@@ -357,3 +382,4 @@ window.addEventListener('load', initPads);
 </script>
 </body>
 </html>
+
