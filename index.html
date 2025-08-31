@@ -50,6 +50,16 @@
 
   /* 列印/轉PDF避免拆行 */
   table, tr, th, td{ page-break-inside:avoid !important; }
+  /* 內層簽名表：三等分滿版 */
+.sig-table{ width:100%; border-collapse:collapse; table-layout:fixed; }
+.sig-table th, .sig-table td{ width:33.333%; padding:6px; vertical-align:top; }
+
+/* 簽名區塊保持高度、按鈕在下方 */
+.sig-wrap{ display:flex; flex-direction:column; gap:6px; }
+.sig-box{ border:1px solid #888; height:120px; }
+.sig-box canvas{ width:100%; height:100%; display:block; }
+.sig-clear{ align-self:flex-end; }
+
 </style>
 </head>
 <body>
@@ -171,27 +181,36 @@
         <th>客戶意見</th>
         <td colspan="7"><textarea id="customerFeedback" rows="3"></textarea></td>
       </tr>
-    <td colspan="8" style="padding:0;">
-    <table style="width:100%">
+   <td colspan="8" style="padding:0;">
+  <table class="sig-table">
     <tr>
-              <th>直屬主管</th>
-              <th>工程師簽名</th>
-              <th>客戶簽名</th>
-            </tr>
-      <tr>
-        <td>
+      <th>直屬主管</th>
+      <th>工程師簽名</th>
+      <th>客戶簽名</th>
+    </tr>
+    <tr>
+      <td>
+        <div class="sig-wrap">
           <div class="sig-box"><canvas id="sig-manager"></canvas></div>
           <button type="button" class="no-pdf sig-clear" onclick="clearSignature('manager')">清除</button>
-        </td>
-        <td>
+        </div>
+      </td>
+      <td>
+        <div class="sig-wrap">
           <div class="sig-box"><canvas id="sig-engineer"></canvas></div>
           <button type="button" class="no-pdf sig-clear" onclick="clearSignature('engineer')">清除</button>
-        </td>
-        <td colspan="3">
+        </div>
+      </td>
+      <!-- ★ 這裡把原本的 colspan="3" 拿掉 -->
+      <td>
+        <div class="sig-wrap">
           <div class="sig-box"><canvas id="sig-customer"></canvas></div>
           <button type="button" class="no-pdf sig-clear" onclick="clearSignature('customer')">清除</button>
-        </td>
-      </tr>
+        </div>
+      </td>
+    </tr>
+  </table>
+     
 
       <tr>
         <th>寄送 Email（可選）</th>
@@ -406,6 +425,7 @@ window.addEventListener('load', initPads);
 </script>
 </body>
 </html>
+
 
 
 
