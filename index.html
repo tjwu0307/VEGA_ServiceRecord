@@ -24,7 +24,11 @@
     .sig-wrap{display:flex;gap:12px;align-items:center}
     .sig-box{border:1px solid #999;height:130px}
     .sig-box canvas{width:100%;height:100%}
-    .sig-clear{margin-top:6px}
+    .sig-clear{margin-top:6px}    
+    /* PDF專用補丁：避免日期時間斷行、避免表格被切頁 */
+.nowrap{ white-space: nowrap !important; }
+table, tr, th, td{ page-break-inside: avoid !important; }
+
   </style>
 </head>
 
@@ -178,7 +182,7 @@
 <script>
 /* ================= 基本設定 ================= */
 const WEBAPP_URL =
-  'https://script.google.com/macros/s/AKfycby4p_ZHHAki_TeBDZyTHyD_T4Hef7uTzl65stE6gy3uDn3WcY0EF4Q7wne1XGYBnJB_LA/exec';
+  'https://script.google.com/macros/s/AKfycbxJa1yOCHCJSiBdNiMW0v9-nfvBvdnEJGX12rfkzrOIb7-a4V_rsutVW2hr0nzSI5ffaw/exec';
 
 /* 嘗試由 /VEGAbase64LOGO.txt 載入 logo（若不存在就忽略） */
 (function loadTxtLogo(){
@@ -291,17 +295,41 @@ function buildPrintableNode(data, sigs){
 
   return node;
 }
+
+  // 1) 新增這個小工具：只在有簽名時塞 <img>，沒有就放固定高度的空容器
+function putSignatureImg(cloneRoot, canvasId, dataUrl){
+  const c = cloneRoot.querySelector('#' + canvasId);
+  if (!c) return;
+
+  // 簽名 canvas 的外層（你的結構是 <div class="sig-box"><canvas ...></canvas></div>）
+  const holder = c.parentElement;
+  holder.innerHTML = '';  // 先清空
+
+  if (dataUrl && /^data:image\//.test(dataUrl)) {
+    const img = document.createElement('img');
+    img.src = dataUrl;           // 只有有資料才設 src
+    img.style.height = '100px';  // 與你表格格高對齊（可調）
+    img.style.maxWidth = '100%';
+    holder.appendChild(img);
+  } else {
+    // 沒簽名：放一個空盒子撐住高度，避免版面跑位與 html2canvas 試圖載入當前頁面
+    const box = document.createElement('div');
+    box.style.height = '100px';
+    holder.appendChild(box);
+  }
+}
+
 async function createPdf(formData, signatures){
   const el = buildPrintableNode(formData, signatures);
   const fileName = `服務記錄_${formData.customerName||''}_${formData.rocY||''}${formData.rocM||''}${formData.rocD||''}.pdf`;
 
   const opt = {
-    margin:       [10,10,10,10],
-    filename:     fileName,
-    image:        { type: 'jpeg', quality: 0.98 },
-    html2canvas:  { scale: 2, useCORS:true, allowTaint:true },
-    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-  };
+  margin: 8,                                      // 原本 10 可略縮
+  filename: fileName,
+  image: { type:'jpeg', quality: 0.95 },
+  html2canvas: { scale: 2, useCORS: true, backgroundColor: '#fff', letterRendering: true },
+  jsPDF: { unit:'mm', format:'a4', orientation:'portrait' }
+};
 
   // 1) 下載/列印用
   const worker = html2pdf().set(opt).from(el);
@@ -313,7 +341,11 @@ async function downloadPDF(){
   const formEl = document.getElementById('service-form');
   if (!formEl.reportValidity()){ alert('請確認所有必填欄位均已填寫'); return; }
   const data = collectFormData();
-  const sigs = collectSignatures();
+  const sigs = collectSignatures();  // 你現有的函式，會回傳 {manager, engineer, customer}
+
+putSignatureImg(clone, 'pad-manager',  sigs.manager);
+putSignatureImg(clone, 'pad-engineer', sigs.engineer);
+putSignatureImg(clone, 'pad-customer', sigs.customer);
   const { worker } = await createPdf(data, sigs);
   await worker.save();   // 直接存檔
 }
@@ -382,6 +414,7 @@ window.addEventListener('load', initPads);
 </script>
 </body>
 </html>
+
 
 
 
