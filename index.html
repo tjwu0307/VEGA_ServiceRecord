@@ -171,19 +171,20 @@
         <th>客戶意見</th>
         <td colspan="7"><textarea id="customerFeedback" rows="3"></textarea></td>
       </tr>
-
+  <tr>
+              <th>直屬主管</th>
+              <th>工程師簽名</th>
+              <th>客戶簽名</th>
+            </tr>
       <tr>
-        <th>直屬主管簽名</th>
         <td>
           <div class="sig-box"><canvas id="sig-manager"></canvas></div>
           <button type="button" class="no-pdf sig-clear" onclick="clearSignature('manager')">清除</button>
         </td>
-        <th>工程師簽名</th>
         <td>
           <div class="sig-box"><canvas id="sig-engineer"></canvas></div>
           <button type="button" class="no-pdf sig-clear" onclick="clearSignature('engineer')">清除</button>
         </td>
-        <th>客戶簽名</th>
         <td colspan="3">
           <div class="sig-box"><canvas id="sig-customer"></canvas></div>
           <button type="button" class="no-pdf sig-clear" onclick="clearSignature('customer')">清除</button>
@@ -195,6 +196,7 @@
         <td colspan="7"><input id="sendTo" type="email" placeholder="收件者 Email（若不寄送可留空）"></td>
       </tr>
     </table>
+ <div class="footer-note">白聯：工程師部門　｜　紅：財務部(請款用)　｜　黃：客戶收執</div>
 
     <div class="actions" style="text-align:center; margin:14px 0">
       <button type="button" class="no-pdf" onclick="downloadPDF()" style="padding:6px 18px">列印 / PDF</button>
@@ -402,3 +404,4 @@ window.addEventListener('load', initPads);
 </script>
 </body>
 </html>
+
