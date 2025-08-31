@@ -5,83 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>服務記錄表填寫</title>
   <!-- 使用 html2pdf 與 SignaturePad 來源 -->
+   <!-- 先載入外掛：SignaturePad → html2canvas → html2pdf -->
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
+
   <style>
-    body {
-      font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #fff;
-      color: #111;
-    }
-    /* 表單容器寬度與背景 */
-    #service-form {
-      width: 190mm;
-      max-width: 100%;
-      margin: 0 auto;
-      padding: 10mm;
-      box-sizing: border-box;
-      background: #fff;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12px;
-      margin-bottom: 10px;
-    }
-    th, td {
-      border: 1px solid #999;
-      padding: 4px;
-      vertical-align: top;
-      word-break: break-word;
-    }
-    th {
-      background: #f1f1f1;
-      text-align: left;
-      white-space: nowrap;
-    }
-    input[type="text"], input[type="number"], textarea {
-      width: 100%;
-      box-sizing: border-box;
-      font-size: 12px;
-      padding: 2px;
-      border: 1px solid #ccc;
-    }
-    textarea {
-      resize: vertical;
-    }
-    .signature-box {
-      border: 1px solid #000;
-      height: 100px;
-    }
-    .actions {
-      margin-top: 10px;
-      text-align: center;
-    }
-    .btn {
-      border: 1px solid #444;
-      background: #FF5151;
-      color: #fff;
-      padding: 6px 20px;
-      font-size: 14px;
-      cursor: pointer;
-      margin: 0 10px;
-    }
-    .btn:hover {
-      background: #e04848;
-    }
-    /* 隱藏用於填充 PDF 的容器 */
-    #pdf-container {
-      display: none;
-    }
-    .six-col-row > th, .six-col-row > td {
-  width: 16%;
-}
+     body{font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;color:#111;background:#fff;margin:0}
+    #service-form{width:190mm;max-width:100%;margin:0 auto;padding:10mm;box-sizing:border-box;background:#fff}
+    table{width:100%;border-collapse:collapse;font-size:12px}
+    th,td{border:1px solid #999;padding:4px;vertical-align:top;word-break:break-word}
+    th{background:#f5f5f5;white-space:nowrap;text-align:left}
+    .actions{text-align:center;margin:12px 0}
+    .btn{border:1px solid #444;background:#FF5151;color:#fff;padding:6px 20px;font-size:14px;cursor:pointer}
+    .btn:hover{background:#e04848}
+      /* 只在輸出 PDF/列印時要隱藏的東西：
+       在你的「清除」鍵/操作鈕加上 class="no-pdf" 即可（不影響畫面） */
+    .no-pdf{display:inline-block}
+    @media print{ .no-pdf{ display:none !important; } }
   </style>
-<!-- 先載入外掛，再載自家 JS --> 
-<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
-  
+
 </head>
 <body>
   <form id="service-form">
@@ -97,7 +40,7 @@
       </div>
     </div>
   </div>
-</header>
+  </header>
          <h2 style="text-align:center; margin-top:0">服務記錄表</h2>
     <table>
       <tr>
@@ -188,13 +131,13 @@
       </tr>
       <tr>
         <th>直屬主管簽名</th>
-        <td><canvas id="sig-manager" class="signature-box" width="250" height="100"></canvas><br><button type="button" class="clear-btn" onclick="clearSignature('manager')">清除</button></td>
+        <td><canvas id="sig-manager" class="signature-box" width="250" height="100"></canvas><br><button type="button" class="no-pdf" onclick="clearSignature('manager')">清除</button></td>
         <th>工程師簽名</th>
-        <td><canvas id="sig-engineer" class="signature-box" width="250" height="100"></canvas><br><button type="button" class="clear-btn" onclick="clearSignature('engineer')">清除</button></td>
+        <td><canvas id="sig-engineer" class="signature-box" width="250" height="100"></canvas><br><button type="button" class="no-pdf" onclick="clearSignature('engineer')">清除</button></td>
       </tr>
       <tr>
         <th>客戶簽名</th>
-        <td><canvas id="sig-customer" class="signature-box" width="250" height="100"></canvas><br><button type="button" class="clear-btn" onclick="clearSignature('customer')">清除</button></td>
+        <td><canvas id="sig-customer" class="signature-box" width="250" height="100"></canvas><br><button type="button" class="no-pdf" onclick="clearSignature('customer')">清除</button></td>
         <th>工程師姓名</th>
         <td><input id="engineer" type="text"></td>
       </tr>
@@ -204,280 +147,152 @@
       </tr>
     </table>
     <div class="actions">
-      <button class="btn" id="btn-print"  type="button">列印 / PDF</button>
-      <button class="btn" id="btn-send"   type="button">發送(Email/雲端)</button>
+      <button class="no-pdf" id="btn-print"  type="button">列印 / PDF</button>
+      <button class="no-pdf" id="btn-send"   type="button">發送(Email/雲端)</button>
 
     </div>
-  </form>
-  <!-- 隱藏容器供產生 PDF 用 -->
-  <div id="pdf-container"></div>
-  <script>
-window.addEventListener('DOMContentLoaded', () => {
- 
-  // 依螢幕倍率調整 canvas 實際像素，避免壓縮模糊/繪不出
-  [ 'sig-manager', 'sig-engineer', 'sig-customer' ].forEach(id => {
-    const c = document.getElementById(id);
-    const ratio = Math.max(window.devicePixelRatio || 1, 1);
-    const rect = c.getBoundingClientRect();
-    c.width  = rect.width  * ratio;
-    c.height = rect.height * ratio;
-    const ctx = c.getContext('2d');
-    ctx.scale(ratio, ratio);
+    <script>
+/* ========= 必填：你的 Apps Script Web App URL（/exec） ========= */
+const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycby9sjVRg_OR6eMbG5Glb52LMBPY2kevqt99CbUbSlXeeV8aVr3jBffko3QFr-MNfNwOXA/exec';
+
+/* ========= 0) 小工具 ========= */
+const $id = (s)=>document.getElementById(s);
+const safe = (s)=> (s||'').replace(/[\\/:*?"<>|]/g,'_');
+
+/* ========= 1) 簽名板：自動初始化頁面上看得到的 canvas ========= */
+const pads = {};
+function initSignaturePads(){
+  document.querySelectorAll('canvas').forEach((cv,i)=>{
+    const rect = cv.getBoundingClientRect();
+    if (rect.width < 80 || rect.height < 40) return; // 避免把非簽名的小canvas也吃進來
+    if (!cv.id) cv.id = 'sig_'+i;
+
+    const ratio = Math.max(window.devicePixelRatio||1,1);
+    const w = cv.offsetWidth, h = cv.offsetHeight;
+    if (w && h){
+      cv.width = Math.round(w*ratio);
+      cv.height= Math.round(h*ratio);
+      cv.getContext('2d').setTransform(ratio,0,0,ratio,0,0);
+    }
+    pads[cv.id] = new SignaturePad(cv, {backgroundColor:'rgba(255,255,255,0)', penColor:'#000'});
   });
-});
-
-// 清除按鈕呼叫這個
-function clearSignature(who) {
-  const map = { manager:'manager', engineer:'engineer', customer:'customer' };
-  const pad = pads[map[who]];
-  if (pad) pad.clear();
 }
-window.clearSignature = clearSignature;
+function collectSignatures(){
+  const out = {};
+  Object.entries(pads).forEach(([id, pad])=>{
+    if (!pad.isEmpty()) out[id] = pad.toDataURL('image/png');
+  });
+  return out;
+}
+function clearSignatureById(id){ pads[id]?.clear(); }
+window.clearSignatureById = clearSignatureById;  // 讓你的「清除」鈕可用
 
-// 取簽名 dataURL
-function collectSignatures() {
+/* ========= 2) 收集表單資料（不改你的欄位，照 id/name 取） ========= */
+function valOf(...ids){
+  for (const id of ids){
+    const el = $id(id);
+    if (el && typeof el.value === 'string') return el.value.trim();
+  }
+  return '';
+}
+function collectFormData(){
   return {
-    manager:  pads.manager  && !pads.manager.isEmpty()  ? pads.manager.toDataURL()  : '',
-    engineer: pads.engineer && !pads.engineer.isEmpty() ? pads.engineer.toDataURL() : '',
-    customer: pads.customer && !pads.customer.isEmpty() ? pads.customer.toDataURL() : ''
+    projectCode:   valOf('projectCode'),
+    ticketNo:      valOf('ticketNo'),
+    customerName:  valOf('customerName','customer'),
+    address:       valOf('address'),
+    contact:       valOf('contact'),
+    phone:         valOf('phone'),
+    rocY:          valOf('roc_y'),  rocM: valOf('roc_m'),  rocD: valOf('roc_d'),
+    arriveTxt:     valOf('arriveTxt'),
+    finishTxt:     valOf('finishTxt'),
+    engineer:      valOf('engineer','engineerName'),
+    serviceMethods: Array.from(document.querySelectorAll('input[name="serviceMethod"]:checked')).map(x=>x.value),
+    // 如果你有「多列產品格」，這裡可再依你的 data-* 屬性擴充；先保留為空字串
+    products:      valOf('serviceProductText','products'),
+    serviceContent: valOf('serviceContent'),
+    customerFeedback: valOf('customerFeedback'),
   };
 }
-</script>
 
-  <script>
-    // 設定您的 Apps Script 部署網址
-    const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycby9sjVRg_OR6eMbG5Glb52LMBPY2kevqt99CbUbSlXeeV8aVr3jBffko3QFr-MNfNwOXA/exec';
-    
-  </script>
-  <script>
-/* 只載入一次，避免重複宣告造成 SyntaxError */
-<script>
-(function () {
-  if (window.__sigInit) return;
-  window.__sigInit = true;
-  window.pads = {};
+/* ========= 3) 把互動欄位展平成純文字（html2canvas 不會畫 input 值） ========= */
+function formToStaticNode(form){
+  const clone = form.cloneNode(true);
 
-  function tuneCanvas(cnv){
-    const ratio = Math.max(window.devicePixelRatio || 1, 1);
-    const rect  = cnv.getBoundingClientRect();
-    cnv.width  = Math.max(1, rect.width  * ratio);
-    cnv.height = Math.max(1, rect.height * ratio);
-    cnv.getContext('2d').scale(ratio, ratio);
-  }
+  // 隱藏不該進 PDF 的按鈕/清除鍵（你只要在原鈕加 class="no-pdf"）
+  clone.querySelectorAll('.no-pdf, button').forEach(n=>n.remove());
 
-  window.addEventListener('DOMContentLoaded', () => {
-    const m = document.getElementById('sig-manager');
-    const e = document.getElementById('sig-engineer');
-    const c = document.getElementById('sig-customer');
-    [m,e,c].forEach(tuneCanvas);
-
-    pads.manager  = new SignaturePad(m, {penColor:'black', backgroundColor:'rgba(0,0,0,0)'});
-    pads.engineer = new SignaturePad(e, {penColor:'black', backgroundColor:'rgba(0,0,0,0)'});
-    pads.customer = new SignaturePad(c, {penColor:'black', backgroundColor:'rgba(0,0,0,0)'});
+  // input/textarea/select → 替換成 DIV 純文字（保留表格線）
+  clone.querySelectorAll('input, textarea, select').forEach(el=>{
+    const box = document.createElement('div');
+    box.style.minHeight = (el.offsetHeight? (el.offsetHeight+'px') : '18px');
+    box.style.whiteSpace = 'pre-wrap';
+    box.style.padding = '2px';
+    if (el.type === 'checkbox'){
+      // 用方塊顯示勾選狀態；旁邊你的文字原本就還在
+      box.textContent = el.checked ? '■' : '□';
+    }else{
+      box.textContent = el.value || '';
+    }
+    el.replaceWith(box);
   });
-})();
-function clearSignature(who){ pads[who]?.clear(); }
-window.clearSignature = clearSignature;
-</script>
 
+  // 簽名 canvas → IMG（避免空白）
+  clone.querySelectorAll('canvas').forEach(cv=>{
+    const img = document.createElement('img');
+    try { img.src = cv.toDataURL('image/png'); } catch { img.src = ''; }
+    img.style.width  = (cv.style.width  || (cv.width  ? cv.width+'px'  : '100%'));
+    img.style.height = (cv.style.height || (cv.height ? cv.height+'px' : ''));
+    cv.replaceWith(img);
+  });
 
-<script>
-    // 收集服務方式
-    function collectServiceMethods() {
-      const selected = Array.from(document.querySelectorAll('input[name="serviceMethod"]:checked')).map(cb => cb.value);
-      const other = document.getElementById('otherService').value.trim();
-      if (other) selected.push(other);
-      return selected;
-    }
-
-    // 收集產品資料，串為字串
-    function collectProducts() {
-      const products = [];
-      for (let i = 1; i <= 3; i++) {
-        const brand = document.getElementById('brand' + i).value.trim();
-        const model = document.getElementById('model' + i).value.trim();
-        const version = document.getElementById('version' + i).value.trim();
-        const serial = document.getElementById('serial' + i).value.trim();
-        if (brand || model || version || serial) {
-          products.push(`${brand}/${model}/${version}/${serial}`);
-        }
-      }
-      return products.join('\n');
-    }
-
-    // 收集表單資料
-    function collectFormData() {
-      const get = id => document.getElementById(id)?.value?.trim() || '';
-      const checkedVals = name => Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(e=>e.value).join('、');
-      const selectedVals = id => Array.from(document.getElementById(id)?.selectedOptions || []).map(o=>o.value).join('、');
-      return {
-        projectCode: get('projectCode'),
-        ticketNo: get('ticketNo'),
-        customerName: get('customer'),
-        address: get('address'),
-        contact: get('contact'),
-        phone: get('phone'),
-        rocY: get('roc_y'),
-        rocM: get('roc_m'),
-        rocD: get('roc_d'),
-        arriveTxt: get('arriveTxt'),
-        finishTxt: get('finishTxt'),
-        serviceMethods: checkedVals('serviceMethod'),
-        products: selectedVals('serviceProduct'),
-        serviceContent: get('serviceContent'),
-        customerFeedback: get('customerFeedback'),
-        engineer: get('engineer')
-       };
-    }
-
-    // 將簽名轉為 DataURL
-    function collectSignatures() {
-      return {
-       manager:  window.pads.manager  && !window.pads.manager.isEmpty()  ? window.pads.manager.toDataURL()  : '',
-        engineer: window.pads.engineer && !window.pads.engineer.isEmpty() ? window.pads.engineer.toDataURL() : '',
-        customer: window.pads.customer && !window.pads.customer.isEmpty() ? window.pads.customer.toDataURL() : ''
-      };
-    }
-
-        <style>
-        body { font-family: 'Noto Sans TC', sans-serif; font-size: 12px; margin: 0; padding: 0; }
-        table { width: 100%; border-collapse: collapse; }
-        td, th { border: 1px solid #000; padding: 4px; vertical-align: top; }
-        th { background: #f5f5f5; }
-      </style>
-      <h2 style="text-align:center;">服務記錄表</h2>
-      <table>
-        <tr><th>專案代號</th><td>{{projectCode}}</td><th>叫修單號</th><td>{{ticketNo}}</td></tr>
-        <tr><th>客戶名稱</th><td>{{customerName}}</td><th>地址</th><td>{{address}}</td></tr>
-        <tr><th>聯絡人</th><td>{{contact}}</td><th>電話</th><td>{{phone}}</td></tr>
-        <tr><th colspan="1">服務日期</th><td colspan="3">民國{{rocY}}年{{rocM}}月{{rocD}}日&nbsp;&nbsp;到達：{{arriveTxt}}&nbsp;&nbsp;結束：{{finishTxt}}</td></tr>
-        <tr><th>服務方式</th><td colspan="3">{{serviceMethods}}</td></tr>
-        <tr><th>服務產品</th><td colspan="3">{{products}}</td></tr>
-        <tr><th>服務內容</th><td colspan="3">{{serviceContent}}</td></tr>
-        <tr><th>客戶意見</th><td colspan="3">{{customerFeedback}}</td></tr>
-        <tr>
-          <th>直屬主管簽名</th><td><img src="{{sign_manager}}" style="height:80px;"></td>
-          <th>工程師簽名</th><td><img src="{{sign_engineer}}" style="height:80px;"></td>
-        </tr>
-        <tr>
-          <th>客戶簽名</th><td><img src="{{sign_customer}}" style="height:80px;"></td>
-          <th>工程師姓名</th><td>{{engineer}}</td>
-        </tr>
-      </table>`;
-
-    // 將範本填入資料
-    function fillTemplate(template, data) {
-      let result = template;
-      const mapping = {
-        projectCode: data.projectCode,
-        ticketNo: data.ticketNo,
-        customerName: data.customerName,
-        address: data.address,
-        contact: data.contact,
-        phone: data.phone,
-        rocY: data.rocY,
-        rocM: data.rocM,
-        rocD: data.rocD,
-        arriveTxt: data.arriveTxt,
-        finishTxt: data.finishTxt,
-        serviceMethods: Array.isArray(data.serviceMethods) ? data.serviceMethods.join('、') : data.serviceMethods,
-        products: data.products,
-        serviceContent: data.serviceContent,
-        customerFeedback: data.customerFeedback,
-        sign_manager: data.sign_manager || '',
-        sign_engineer: data.sign_engineer || '',
-        sign_customer: data.sign_customer || '',
-        engineer: data.engineer || ''
-      };
-      Object.keys(mapping).forEach(key => {
-        const regex = new RegExp('{{' + key + '}}', 'g');
-        result = result.replace(regex, mapping[key]);
-      });
-      return result;
-    }
-
-// === 產 PDF（照頁面樣子；clone 放進 DOM；隱藏清除/動作按鈕）===
-// 1) 供「發送」用：回傳 PDF base64
-async function createPdf() {
-  const src = document.getElementById('service-form');   // ← 一律抓這個
-  if (!src) { alert('找不到 #service-form'); throw new Error('missing #service-form'); }
-
-  const clone = src.cloneNode(true);
-
-  // 只動 clone：把清除鍵與動作列藏起來（不影響畫面）
-  clone.querySelectorAll('.clear-btn, .actions').forEach(el => el.remove());
+  // 放到畫面外，讓 html2canvas 能吃到 CSS
   clone.style.position = 'fixed';
   clone.style.left = '-99999px';
   clone.style.background = '#fff';
   document.body.appendChild(clone);
-
-  const dataUri = await html2pdf().from(clone).set({
-    margin: 10,
-    filename: 'tmp.pdf',
-    html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-  }).outputPdf('datauristring');
-
-  clone.remove();
-  return dataUri; // data:application/pdf;base64,....
+  return clone;
 }
 
-// 2) 供「列印 / PDF」用：直接下載
-async function downloadPDF(){
-  const src = document.getElementById('service-form');   // ← 同樣抓這個
-  if (!src) { alert('找不到 #service-form'); return; }
+/* ========= 4) 建 PDF（回 dataURI 與檔名） ========= */
+async function createPdf(formData){
+  const form = $id('service-form');
+  if (!form){ alert('找不到 #service-form'); throw new Error('missing #service-form'); }
 
-  const clone = src.cloneNode(true);
-  const style = document.createElement('style');
-  style.textContent = `.pdf-hidden{display:none!important;}`;
-  clone.querySelectorAll('.clear-btn, .actions').forEach(el => el.classList.add('pdf-hidden'));
-  clone.prepend(style);
+  const snapshot = formToStaticNode(form);
+  const dateText = (formData.rocY && formData.rocM && formData.rocD)
+    ? `民國${formData.rocY}年${formData.rocM}月${formData.rocD}日` : '未填日期';
+  const fileName = `服務記錄_${safe(formData.customerName||'未填客戶')}_${safe(dateText)}_${safe(formData.engineer||'未選工程師')}.pdf`;
 
-  clone.style.position = 'fixed';
-  clone.style.left = '-99999px';
-  document.body.appendChild(clone);
-
-  const y = document.getElementById('roc_y')?.value || '';
-  const m = document.getElementById('roc_m')?.value || '';
-  const d = document.getElementById('roc_d')?.value || '';
-  const date = (y && m && d) ? `民國${y}年${m}月${d}日` : '未填日期';
-  const customer = document.getElementById('customerName')?.value || '未填客戶';
-  const engineer = document.getElementById('engineer')?.value || '未選工程師';
-
-  await html2pdf().from(clone).set({
+  const worker = html2pdf().set({
     margin: 10,
-    filename: `服務記錄_${customer}_${date}_${engineer}.pdf`,
-    html2canvas: { scale: 2, useCORS: true },
-    jsPDF: { format: 'a4', orientation: 'portrait' }
-  }).save();
+    filename: fileName,
+    image: { type:'jpeg', quality: 0.95 },
+    html2canvas: { scale: 2, useCORS: true, backgroundColor:'#ffffff' },
+    jsPDF: { unit:'mm', format:'a4', orientation:'portrait' }
+  }).from(snapshot).toPdf();
 
-  clone.remove();
+  const dataUri = await worker.output('datauristring'); // data:application/pdf;base64,...
+  snapshot.remove();
+  return { pdfBase64: dataUri, fileName };
 }
 
-// 若你的按鈕是 onclick 方式，需要匯出到全域
-window.downloadPDF = downloadPDF;
-</script>
-
-
-// === 避免 Preflight 的送法 + 備援（不要自訂 Content-Type）===
+/* ========= 5) 避免 Preflight 的送法 + 備援（三段） ========= */
 async function postToWebApp(payload){
-  // 1) 純字串 POST（text/plain）——多數情況成功
+  // 1) text/plain（大多數情境能避開 preflight）
   try{
     const r1 = await fetch(WEBAPP_URL, { method:'POST', body: JSON.stringify(payload) });
-    const t1 = await r1.text();
-    try { return { ok:true, data: JSON.parse(t1) }; } catch { return { ok:true, data:null, raw:t1 }; }
-  }catch(e1){ /* 繼續備援 */ }
+    const t1 = await r1.text(); try{ return { ok:true, data: JSON.parse(t1) }; }catch{ return { ok:true, data:null, raw:t1 }; }
+  }catch(e1){}
 
-  // 2) FormData —— 部分環境比 #1 穩定
+  // 2) multipart/form-data
   try{
-    const fd = new FormData();
-    fd.append('data', JSON.stringify(payload));
+    const fd = new FormData(); fd.append('data', JSON.stringify(payload));
     const r2 = await fetch(WEBAPP_URL, { method:'POST', body: fd });
-    const t2 = await r2.text();
-    try { return { ok:true, data: JSON.parse(t2) }; } catch { return { ok:true, data:null, raw:t2 }; }
-  }catch(e2){ /* 繼續備援 */ }
+    const t2 = await r2.text(); try{ return { ok:true, data: JSON.parse(t2) }; }catch{ return { ok:true, data:null, raw:t2 }; }
+  }catch(e2){}
 
-  // 3) no-cors —— 一定送得出去，但拿不到任何回應（opaque）
+  // 3) no-cors（一定送得到，但回應拿不到）
   try{
     await fetch(WEBAPP_URL, { method:'POST', mode:'no-cors', body: JSON.stringify(payload) });
     return { ok:true, data:null, opaque:true };
@@ -485,53 +300,61 @@ async function postToWebApp(payload){
     return { ok:false, error:'Failed to fetch（三種方式都失敗）' };
   }
 }
-<script type="text/x-template" id="pdf-template">
-  <!-- 這裡放原本的 pdf_template.html 內容，含 {{…}} 欄位 -->
-</script>
-<script>
+
+/* ========= 6) 對應你的兩顆按鈕 ========= */
+async function downloadPDF(){
+  const data = collectFormData();
+  const { pdfBase64, fileName } = await createPdf(data);
+  const a = document.createElement('a');
+  a.href = pdfBase64; a.download = fileName;
+  document.body.appendChild(a); a.click(); a.remove();
+}
 async function submitForm(){
-  const formEl = document.getElementById('service-form');
-  if (!formEl.reportValidity()) { alert('請確認所有必填欄位均已填寫'); return; }
+  const formEl = $id('service-form');
+  if (!formEl.reportValidity()){ alert('請確認所有必填欄位均已填寫'); return; }
 
-  const formData   = collectFormData();
+  const data = collectFormData();
   const signatures = collectSignatures();
-  const pdfBase64  = await createPdf();
+  const { pdfBase64, fileName } = await createPdf(data);
+  const sendTo = ($id('sendTo')?.value || '').trim();
 
-  const y=formData.rocY||'', m=formData.rocM||'', d=formData.rocD||'';
-  const date = (y&&m&&d)?`民國${y}年${m}月${d}日`:'未填日期';
-  const fileName = `服務記錄_${formData.customerName||'未填客戶'}_${date}_${formData.engineer||'未選工程師'}.pdf`;
-
-  const sendTo = document.getElementById('sendTo')?.value.trim() || '';
-  const payload = {
-    form: formData,
+  const res = await postToWebApp({
+    form: data,
     signatures,
     pdfBase64,
     filename: fileName,
     sendTo,
     sendEmail: !!sendTo
-  };
+  });
 
-  const res = await postToWebApp(payload);
   if (!res.ok){ alert(res.error || '送出失敗'); return; }
-
-  if (res.data?.ok || res.data?.result === 'ok') {
-    alert('發送成功！' + (res.data.pdfUrl ? ('\nPDF：' + res.data.pdfUrl) : ''));
-  } else if (res.opaque) {
-    alert('已送出（跨網域限制無法讀回）。請到試算表與雲端資料夾確認，或查看通知信。');
-  } else {
-    alert('送出完成，但回應無法解析：' + (res.raw ? res.raw.slice(0,200) : ''));
+  if (res.data?.ok || res.data?.result === 'ok'){
+    alert('發送成功！' + (res.data.pdfUrl ? '\nPDF：'+res.data.pdfUrl : ''));
+  }else if (res.opaque){
+    alert('已送出（跨網域限制無法讀回回覆）。請到試算表與雲端資料夾確認。');
+  }else{
+    alert('送出完成，但回應無法解析。');
   }
 }
-window.submitForm = submitForm;
+
+/* ========= 7) 啟動 ========= */
+window.addEventListener('DOMContentLoaded', initSignaturePads);
+
+/* 若你的按鈕是 inline onclick，務必把函式掛到全域 */
+window.downloadPDF = downloadPDF;
+window.submitForm  = submitForm;
 </script>
- <script>
-document.addEventListener('DOMContentLoaded', () => {
-  const btnPrint = document.getElementById('btn-print');
-  const btnSend  = document.getElementById('btn-send');
-  btnPrint?.addEventListener('click', downloadPDF);
-  btnSend?.addEventListener('click',  submitForm);
-});
+
+    </body>
+  
+  </form>
+  <!-- 隱藏容器供產生 PDF 用 -->
+  <div id="pdf-container"></div>
+  
+  <script type="text/x-template" id="pdf-template">
+  <!-- 這裡放原本的 pdf_template.html 內容，含 {{…}} 欄位 -->
 </script>
 </body>
 </html>
+
 
