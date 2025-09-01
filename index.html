@@ -70,6 +70,12 @@
   background-color: #fff;
 }
   .sig-clear{margin-top:6px}
+  .sig-cell {
+  width: 33.333%;
+  text-align: center;
+  vertical-align: top;
+}
+
 
   /* 列印/轉PDF避免拆行 */
   table, tr, th, td{ page-break-inside:avoid !important; }
@@ -137,7 +143,20 @@ canvas {
   width: 100%;
   max-width: 100%;
 }
-
+.main-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.main-table th,
+.main-table td {
+  border: 1px solid #000;
+  padding: 4px;
+}
+.main-table th[colspan],
+.main-table td[colspan] {
+  /* 保證等分，8 欄就每格 = 12.5% */
+}
 </style>
 </head>
 <body>
@@ -181,35 +200,35 @@ canvas {
 </div>
 
     <!-- 你的表格（欄位與排列保持） -->
-    <table class="form">
+   <table class="main-table">
       <tr>
-        <th style="width:12%">專案代號</th>
-        <td style="width:12%"><input id="projectCode" type="text"></td>
-        <th style="width:12%">叫修單號</th>
-        <td style="width:24%"><input id="ticketNo" type="text"></td>        
-        <th style="width:12%">CRM 安裝單號</th>
-        <td style="width:28%" ><input id="crm_install" type="text"></td>
+        <th colspan="1">專案代號</th>
+        <td colspan="2"><input id="projectCode" type="text"></td>
+        <th colspan="1">叫修單號</th>
+        <td colspan="2"><input id="ticketNo" type="text"></td>        
+        <th colspan="1">CRM 安裝單號</th>
+        <td colspan="1"><input id="crm_install" type="text"></td>
       </tr>
 
       <tr>
-        <th style="width:10%">客戶名稱</th>
-        <td style="width:40%" ><input id="customerName" type="text"></td>
-        <th style="width:10%">連絡人</th>
-        <td style="width:20%"><input id="contact" type="text"></td>     
-        <th style="width:10%">CRM 維修單號</th>
-        <td style="width:10%"><input id="crm_repair" type="text"></td>          
+        <th colspan="1">客戶名稱</th>
+        <td colspan="2" ><input id="customerName" type="text"></td>
+        <th colspan="1">連絡人</th>
+        <td colspan="2"><input id="contact" type="text"></td>     
+        <th colspan="1">CRM 維修單號</th>
+        <td colspan="1"><input id="crm_repair" type="text"></td>          
       </tr>
 
       <tr>
-        <th>地址</th>
-        <td colspan="3"><input id="address" type="text"></td>
-        <th>電話</th>
+        <th colspan="1">地址</th>
+        <td colspan="4"><input id="address" type="text"></td>
+        <th colspan="1">電話</th>
         <td colspan="2"><input id="phone" type="text"></td>
       </tr>
 
       <tr>
-        <th>服務日期（民國）</th>
-        <td >
+        <th colspan="1">服務日期（民國）</th>
+        <td colspan="3">
            <span style="display: inline-block;text-align: center;">
     <input id="roc_y" type="number" placeholder="___" style="width: 60px;"> 年
   </span>
@@ -220,9 +239,9 @@ canvas {
     <input id="roc_d" type="number" placeholder="__" style="width: 40px;"> 日
   </span>
         </td>
-        <th style="width:10%">到達時間</th>
+        <th colspan="1">到達時間</th>
         <td colspan="1"><input id="arriveTxt" class="nowrap" type="text" placeholder="__:__" style="text-align: center;"></td>
-        <th style="width:10%">結束時間</th>
+        <th colspan="1">結束時間</th>
         <td colspan="1"><input id="finishTxt" class="nowrap" type="text" placeholder="__:__" style="text-align: center;"></td>
         
       </tr>
@@ -283,24 +302,24 @@ canvas {
       </tr>
        <!-- 簽名區 -->
   <tr>
-  <th colspan="2" style="text-align: center; width: 33.33%;">直屬主管簽名</th>
-  <th colspan="2" style="text-align: center; width: 33.33%;">工程師簽名</th>
-  <th colspan="3" style="text-align: center; width: 33.33%;">客戶簽名</th>
+  <th>直屬主管簽名</th>
+  <th>工程師簽名</th>
+  <th>客戶簽名</th>
 </tr>
 <tr>
-  <td colspan="2">
+  <td class="sig-cell">
     <div class="sig-wrap">
       <div class="sig-box"><canvas id="sig-manager"></canvas></div>
       <button type="button" class="no-pdf sig-clear" onclick="clearSignature('manager')">清除</button>
     </div>
   </td>
-  <td colspan="2">
+  <td class="sig-cell">
     <div class="sig-wrap">
       <div class="sig-box"><canvas id="sig-engineer"></canvas></div>
       <button type="button" class="no-pdf sig-clear" onclick="clearSignature('engineer')">清除</button>
     </div>
   </td>
-  <td colspan="3">
+  <td class="sig-cell">
     <div class="sig-wrap">
       <div class="sig-box"><canvas id="sig-customer"></canvas></div>
       <button type="button" class="no-pdf sig-clear" onclick="clearSignature('customer')">清除</button>
@@ -518,6 +537,7 @@ window.addEventListener('load', initPads);
 </script>
 </body>
 </html>
+
 
 
 
