@@ -334,6 +334,7 @@ canvas {
      <div class="actions" style="text-align:center; margin:14px 0">
       <button type="button" class="no-pdf" onclick="downloadPDF()" style="padding:6px 18px;background-color: #FF5151; border: none; color: white;">列印 / PDF</button>
       <button type="button" class="no-pdf" onclick="submitForm()"  style="padding:6px 18px;background-color: #FF5151; border: none; color: white;">發送(Email/雲端/寫回)</button>
+      <button type="button" class="no-pdf" onclick="exportToWord()" style="padding:6px 18px;background-color: #FF5151; border: none; color: white;">轉 Word檔</button>
     </div>
   </div>
  <div class="no-pdf">寄送 Email（可選）：<input id="sendTo" type="email" placeholder="收件者 Email（若不寄送可留空）"></div>
@@ -529,7 +530,39 @@ async function submitForm(){
     alert('送出完成，但回應無法解析。');
   }
 }
+<script>
+function exportToWord() {
+  // 取得要匯出的區域（例如你的母表）
+  var content = document.querySelector('.main-table').outerHTML;
 
+  // 組合成 Word 格式的 HTML
+  var preHtml = "<html xmlns:o='urn:schemas-microsoft-com:office:office' "+
+                "xmlns:w='urn:schemas-microsoft-com:office:word' "+
+                "xmlns='http://www.w3.org/TR/REC-html40'>"+
+                "<head><meta charset='utf-8'></head><body>";
+  var postHtml = "</body></html>";
+  var html = preHtml + content + postHtml;
+
+  // 產生 Word 檔 Blob
+  var blob = new Blob(['\ufeff', html], {
+    type: 'application/msword'
+  });
+
+  // 檔名
+  var filename = "服務記錄.doc";
+
+  // 下載連結
+  var url = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(html);
+  var downloadLink = document.createElement("a");
+  document.body.appendChild(downloadLink);
+  downloadLink.href = url;
+  downloadLink.download = filename;
+
+  // 觸發下載
+  downloadLink.click();
+  document.body.removeChild(downloadLink);
+}
+</script>
 /* 掛全域與初始化 */
 window.downloadPDF = downloadPDF;
 window.submitForm  = submitForm;
@@ -537,6 +570,7 @@ window.addEventListener('load', initPads);
 </script>
 </body>
 </html>
+
 
 
 
