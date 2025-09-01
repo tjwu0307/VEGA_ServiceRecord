@@ -15,7 +15,20 @@
   body{font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;margin:0;background:#fff;color:#111}
   #service-form{width: 190mm; max-width:800px; margin:10mm auto; padding:0 4mm}
   .no-pdf{display:inline-block}
-  @media print{ .no-pdf{display:none !important} }
+  @media print{ body {
+    margin: 0;
+    padding: 0;
+  }
+
+  .form-wrapper {
+    width: 190mm;
+    padding: 10mm;
+  }
+
+  input, textarea {
+    max-width: 100%;
+  }
+}
 
   table.form{width:800px; border-collapse:collapse; table-layout:auto !important}
   table.form th, table.form td{border:1px solid #888; padding:6px; vertical-align:middle; font-size:12px}
@@ -77,8 +90,11 @@
   margin: 4px 0;
 }
 .form-wrapper {
-  max-width: 600px;
+   width: 190mm; /* A4 寬度 */
+  max-width: 100%;
   margin: 0 auto;
+  box-sizing: border-box;
+  padding: 10mm;
 }
   table {
   width: 100%;
@@ -91,6 +107,14 @@ td:first-child {
 td:last-child {
   width: auto;
 }
+  html2pdf().set({
+  margin:       0,
+  filename:     'report.pdf',
+  image:        { type: 'jpeg', quality: 0.98 },
+  html2canvas:  { scale: 2 },
+  jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+}).from(document.getElementById('form-wrapper')).save();
+
 </style>
 </head>
 <body>
@@ -471,5 +495,6 @@ window.addEventListener('load', initPads);
 </script>
 </body>
 </html>
+
 
 
