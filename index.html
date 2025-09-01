@@ -57,7 +57,7 @@
   .subtable th, .subtable td{border:1px solid #aaa; padding:4px; font-size:12px}
 
   /* 簽名區：固定高度、避免被切頁 */
- .sig-wrap {
+.sig-wrap {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -78,18 +78,7 @@
 .sig-table th, .sig-table td{ width:33.333%; padding:6px; vertical-align:top; }
 
 /* 簽名區塊保持高度、按鈕在下方 */
-.sig-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
 
-.sig-box {
-  width: 100%;
-  height: 80px;
-  border: 1px solid #ccc;
-  margin-bottom: 6px;
-}
 .sig-box canvas{ width:100%; height:100%; display:block; }
 .sig-clear{ align-self:flex-end; }
 .page {
@@ -143,6 +132,10 @@ table.form textarea {
 }
   table.form th {
   text-align: center;
+}
+canvas {
+  width: 100%;
+  max-width: 100%;
 }
 
 </style>
@@ -290,9 +283,9 @@ table.form textarea {
       </tr>
        <!-- 簽名區 -->
   <tr>
-  <th colspan="2" style="text-align: center;">直屬主管簽名</th>
-  <th colspan="2" style="text-align: center;">工程師簽名</th>
-  <th colspan="3" style="text-align: center;">客戶簽名</th>
+  <th colspan="2" style="text-align: center; width: 33.33%;">直屬主管簽名</th>
+  <th colspan="2" style="text-align: center; width: 33.33%;">工程師簽名</th>
+  <th colspan="3" style="text-align: center; width: 33.33%;">客戶簽名</th>
 </tr>
 <tr>
   <td colspan="2">
@@ -525,6 +518,7 @@ window.addEventListener('load', initPads);
 </script>
 </body>
 </html>
+
 
 
 
