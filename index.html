@@ -88,17 +88,17 @@
     <table class="form">
       <tr>
         <th style="width:10%">專案代號</th>
-        <td style="width:10%"><input id="projectCode" type="text"></td>
+        <td style="width:10%"><input id="projectCode" type="text" colspan="1"></td>
         <th style="width:10%">叫修單號</th>
         <td style="width:20%"><input id="ticketNo" type="text"></td>
         <th style="width:10%; text-align:center;font-size:20px;font-weight:bold;" colspan="1">服務記錄表</th>
         <th style="width:10%">CRM 安裝單號</th>
-        <td style="width:20%"><input id="crm_install" type="text"></td>
+        <td style="width:20% " colspan="1"><input id="crm_install" type="text"></td>
       </tr>
 
       <tr>
         <th style="width:10%">客戶名稱</th>
-        <td style="width:40%"><input id="customerName" type="text"></td>
+        <td style="width:40%" colspan="2"><input id="customerName" type="text"></td>
         <th style="width:10%">連絡人</th>
         <td style="width:20%"><input id="contact" type="text"></td>     
         <th style="width:10%">CRM 維修單號</th>
@@ -114,15 +114,15 @@
 
       <tr>
         <th>服務日期（民國）</th>
-        <td colspan="2">
-          <input id="roc_y" class="nowrap" type="number" placeholder="年" style="width:50px"> 年
-          <input id="roc_m" class="nowrap" type="number" placeholder="月" style="width:40px"> 月
-          <input id="roc_d" class="nowrap" type="number" placeholder="日" style="width:40px"> 日
+        <td colspan="1">
+          <input id="roc_y" class="nowrap" type="number" placeholder="yyy" style="width:50px"> 年
+          <input id="roc_m" class="nowrap" type="number" placeholder="MM" style="width:40px"> 月
+          <input id="roc_d" class="nowrap" type="number" placeholder="dd" style="width:40px"> 日
         </td>
         <th style="width:10%">到達時間</th>
-        <td><input id="arriveTxt" class="nowrap" type="text" placeholder="09:00"></td>
+        <td colspan="1"><input id="arriveTxt" class="nowrap" type="text" placeholder="09:00"></td>
         <th style="width:10%">結束時間</th>
-        <td><input id="finishTxt" class="nowrap" type="text" placeholder="18:00"></td>
+        <td colspan="1"><input id="finishTxt" class="nowrap" type="text" placeholder="18:00"></td>
         
       </tr>
 
@@ -138,7 +138,7 @@
           <label><input type="checkbox" name="serviceMethod" value="驗收"> 驗收</label>
           <label><input type="checkbox" name="serviceMethod" value="會議支援"> 會議支援</label>
           <label><input type="checkbox" name="serviceMethod" value="POC"> POC</label>
-          <label><input type="checkbox" name="serviceMethod" value="檢測"> 電話</label>
+          <label><input type="checkbox" name="serviceMethod" value="檢測"> 檢測</label>
           <label><input type="checkbox" name="serviceMethod" value="維修"> 維修</label>
           <label><input type="checkbox" name="serviceMethod" value="回報顧問"> 回報顧問</label>
           <span style="margin-left:10px">其他：<input id="serviceOther" type="text" style="width:220px"></span>
@@ -418,6 +418,7 @@ window.addEventListener('load', initPads);
 </script>
 </body>
 </html>
+
 
 
 
