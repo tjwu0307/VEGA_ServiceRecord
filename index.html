@@ -57,8 +57,17 @@
   .subtable th, .subtable td{border:1px solid #aaa; padding:4px; font-size:12px}
 
   /* 簽名區：固定高度、避免被切頁 */
-  .sig-box{border:1px solid #888; height:120px}
-  .sig-box canvas{width:100%; height:100%; display:block}
+  .sig-box {
+  width: 100%;
+  height: 80px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+}
+.sig-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
   .sig-clear{margin-top:6px}
 
   /* 列印/轉PDF避免拆行 */
@@ -68,8 +77,18 @@
 .sig-table th, .sig-table td{ width:33.333%; padding:6px; vertical-align:top; }
 
 /* 簽名區塊保持高度、按鈕在下方 */
-.sig-wrap{ display:flex; flex-direction:column; gap:6px; }
-.sig-box{ border:1px solid #888; height:120px; }
+.sig-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sig-box {
+  width: 100%;
+  height: 80px;
+  border: 1px solid #ccc;
+  margin-bottom: 6px;
+}
 .sig-box canvas{ width:100%; height:100%; display:block; }
 .sig-clear{ align-self:flex-end; }
 .page {
@@ -108,13 +127,19 @@ td:last-child {
   width: auto;
 }
   html2pdf().set({
-  margin:       0,
-  filename:     'report.pdf',
-  image:        { type: 'jpeg', quality: 0.98 },
-  html2canvas:  { scale: 2 },
-  jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  margin: 10,
+  filename: 'VEGA_ServiceRecord.pdf',
+  image: { type: 'jpeg', quality: 0.98 },
+  html2canvas: { scale: 2 },
+  jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
 }).from(document.getElementById('form-wrapper')).save();
-
+table.form input[type="text"],
+table.form input[type="number"],
+table.form textarea {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
 </style>
 </head>
 <body>
@@ -160,12 +185,12 @@ td:last-child {
     <!-- 你的表格（欄位與排列保持） -->
     <table class="form">
       <tr>
-        <th style="width:10%">專案代號</th>
-        <td style="width:10%"><input id="projectCode" type="text"></td>
-        <th style="width:10%">叫修單號</th>
-        <td style="width:20%"><input id="ticketNo" type="text"></td>        
-        <th style="width:10%">CRM 安裝單號</th>
-        <td style="width:20%" ><input id="crm_install" type="text"></td>
+        <th style="width:12%">專案代號</th>
+        <td style="width:12%"><input id="projectCode" type="text"></td>
+        <th style="width:12%">叫修單號</th>
+        <td style="width:24%"><input id="ticketNo" type="text"></td>        
+        <th style="width:12%">CRM 安裝單號</th>
+        <td style="width:28%" ><input id="crm_install" type="text"></td>
       </tr>
 
       <tr>
@@ -258,32 +283,30 @@ td:last-child {
         <th>客戶意見</th>
         <td colspan="7"><textarea id="customerFeedback" rows="3"></textarea></td>
       </tr>
-  <table class="sig-table">
-    <tr>
-      <th>直屬主管</th>
-      <th>工程師簽名</th>
-      <th>客戶簽名</th>
-    </tr>
-    <tr>
-      <td>
-        <div class="sig-wrap">
-          <div class="sig-box"><canvas id="sig-manager"></canvas></div>
-          <button type="button" class="no-pdf sig-clear" onclick="clearSignature('manager')">清除</button>
-        </div>
-      </td>
-      <td>
-        <div class="sig-wrap">
-          <div class="sig-box"><canvas id="sig-engineer"></canvas></div>
-          <button type="button" class="no-pdf sig-clear" onclick="clearSignature('engineer')">清除</button>
-        </div>
-      </td>
-      <td>
-        <div class="sig-wrap">
-          <div class="sig-box"><canvas id="sig-customer"></canvas></div>
-          <button type="button" class="no-pdf sig-clear" onclick="clearSignature('customer')">清除</button>
-        </div>
-      </td>
-    </tr>    
+       <!-- 簽名區 -->
+   <tr>
+  <th>直屬主管</th>
+  <td>
+    <div class="sig-wrap">
+      <div class="sig-box"><canvas id="sig-manager"></canvas></div>
+      <button type="button" class="no-pdf sig-clear" onclick="clearSignature('manager')">清除</button>
+    </div>
+  </td>
+  <th>工程師簽名</th>
+  <td>
+    <div class="sig-wrap">
+      <div class="sig-box"><canvas id="sig-engineer"></canvas></div>
+      <button type="button" class="no-pdf sig-clear" onclick="clearSignature('engineer')">清除</button>
+    </div>
+  </td>
+  <th>客戶簽名</th>
+  <td colspan="2">
+    <div class="sig-wrap">
+      <div class="sig-box"><canvas id="sig-customer"></canvas></div>
+      <button type="button" class="no-pdf sig-clear" onclick="clearSignature('customer')">清除</button>
+    </div>
+  </td>
+</tr>
   </table> 
  <table > 
     <tr>白聯：工程師部門  紅聯：財務部（請款用） 黃聯：客戶收執     
@@ -495,6 +518,7 @@ window.addEventListener('load', initPads);
 </script>
 </body>
 </html>
+
 
 
 
