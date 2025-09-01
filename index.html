@@ -336,6 +336,30 @@ canvas {
     </div>
   </td>
 </tr>
+      <tr>
+      <td colspan="8" style="text-align:left;font-weight:bold">費用申請：</td>
+    </tr>
+    <tr>
+      <td colspan="8">
+        <table style="width:100%;border-collapse:collapse">
+          <tr>
+            <th>里程 KM</th>
+            <th>出發地點</th>
+            <th>計程車資</th>
+            <th>停車費</th>
+            <th>eTag</th>
+            <th>大眾運輸</th>
+            <th>其他</th>
+          </tr>
+          <tr>
+            <td><input id="km" type="number" style="height:2em; text-align:center;"></td>
+            <td><input id="startPlace" type="text" value="公司" style="height:2em; text-align:center;"></td>
+            <td><input id="taxi" type="number" style="height:2em; text-align:center;"></td>
+            <td><input id="parking" type="number" style="height:2em; text-align:center;"></td>
+            <td><input id="etag" type="number" style="height:2em; text-align:center;"></td>
+            <td><input id="publicTrans" type="number" style="height:2em; text-align:center;"></td>
+            <td><input id="expenseOther" type="text" style="height:2em; text-align:center;"></td>
+          </tr>
   </table> 
  <table > 
     <tr>白聯：工程師部門  紅聯：財務部（請款用） 黃聯：客戶收執     
@@ -543,6 +567,7 @@ window.addEventListener('load', initPads);
 </script>
 </body>
 </html>
+
 
 
 
