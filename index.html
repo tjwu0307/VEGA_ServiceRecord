@@ -125,7 +125,7 @@ td:last-child {
   width: auto;
 }
   html2pdf().set({
-  margin: 10,
+  margin: 0,
   filename: 'VEGA_ServiceRecord.pdf',
   image: { type: 'jpeg', quality: 0.98 },
   html2canvas: { scale: 2 },
@@ -345,10 +345,6 @@ canvas {
 /* ======= 設定（換成你最新的 Web App /exec） ======= */
 const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbya6vjHvFLLFUc4Ct4xCuoO1V9LTQVsXFZ1Z4GXcR2eCYh0DrjvSBuozhSNxslAiv2thw/exec';
 
-/* 嘗試讀取 /VEGAbase64LOGO.txt 當 LOGO（沒有則忽略） */
-fetch('VEGAbase64LOGO.txt').then(r=>r.ok?r.text():Promise.reject())
- .then(t=>{ if(t.trim().startsWith('data:image/')) document.getElementById('company-logo').src=t.trim(); })
- .catch(()=>{});
 
 /* ======= 簽名板 ======= */
 let pads = {};
@@ -540,6 +536,7 @@ window.addEventListener('load', initPads);
 </script>
 </body>
 </html>
+
 
 
 
