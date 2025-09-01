@@ -149,7 +149,7 @@
         <th>服務產品</th>
         <td colspan="7" style="padding:0">
           <table class="subtable">
-            <tr><th style="width:15%;text-align: center;">廠牌</th><th style="width:25%;text-align: center;">型號</th><th style="width:15%;text-align: center;">版本</th><th style="width:45%">序號</th></tr>
+            <tr><th style="width:15%;text-align: center;">廠牌</th><th style="width:25%;text-align: center;">型號</th><th style="width:15%;text-align: center;">版本</th><th style="width:45%;text-align: center;">序號</th></tr>
             <tr>
               <td><input name="brand[]"   type="text"></td>
               <td><input name="model[]"   type="text"></td>
@@ -209,17 +209,28 @@
       </td>
     </tr> 
    
-  </table>   
-     <tr><div class="footer-note">白聯：工程師部門　｜　紅：財務部(請款用)　｜　黃：客戶收執</div></tr>
-    </form>
-      <div class="actions" style="text-align:center; margin:14px 0">
+  </table> 
+ <table> 
+        <tr>
+      <td style="background-color: white; color: black; padding: 8px; border: 1px solid #ccc;">
+        白聯：工程師部門
+      </td>
+      <td style="background-color: #FF5151; color: white; padding: 8px; border: 1px solid #ccc;">
+        紅聯：財務部（請款用）
+      </td>
+      <td style="background-color: #FFD700; color: black; padding: 8px; border: 1px solid #ccc;">
+        黃聯：客戶收執
+      </td>
+    </tr>
+   </table>        
+     <div class="actions" style="text-align:center; margin:14px 0">
       <button type="button" class="no-pdf" onclick="downloadPDF()" style="padding:6px 18px;background-color: #FF5151; border: none; color: white;">列印 / PDF</button>
       <button type="button" class="no-pdf" onclick="submitForm()"  style="padding:6px 18px;background-color: #FF5151; border: none; color: white;">發送(Email/雲端/寫回)</button>
     </div>
   </div>
 
  <div>寄送 Email（可選）：<input id="sendTo" type="email" placeholder="收件者 Email（若不寄送可留空）"></div>
-  
+</form>
 <script>
 /* ======= 設定（換成你最新的 Web App /exec） ======= */
 const WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbya6vjHvFLLFUc4Ct4xCuoO1V9LTQVsXFZ1Z4GXcR2eCYh0DrjvSBuozhSNxslAiv2thw/exec';
@@ -419,6 +430,7 @@ window.addEventListener('load', initPads);
 </script>
 </body>
 </html>
+
 
 
 
