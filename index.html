@@ -132,9 +132,15 @@
       <tr>
         <th>服務日期（民國）</th>
         <td >
-          <input id="roc_y" class="nowrap" type="number" placeholder="_" > 年
-          <input id="roc_m" class="nowrap" type="number" placeholder="_" > 月
-          <input id="roc_d" class="nowrap" type="number" placeholder="_" > 日
+           <span style="display: inline-block;">
+    <input id="roc_y" type="number" placeholder="_" style="width: 60px;"> 年
+  </span>
+  <span style="display: inline-block;">
+    <input id="roc_m" type="number" placeholder="_" style="width: 40px;"> 月
+  </span>
+  <span style="display: inline-block;">
+    <input id="roc_d" type="number" placeholder="_" style="width: 40px;"> 日
+  </span>
         </td>
         <th style="width:10%">到達時間</th>
         <td colspan="1"><input id="arriveTxt" class="nowrap" type="text" placeholder="_:_"></td>
@@ -447,6 +453,7 @@ window.addEventListener('load', initPads);
 </script>
 </body>
 </html>
+
 
 
 
