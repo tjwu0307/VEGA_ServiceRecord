@@ -108,11 +108,11 @@
     <table class="form">
       <tr>
         <th style="width:10%">專案代號</th>
-        <td style="width:10% ><input id="projectCode" type="text" colspan="1"></td>
+        <td style="width:10%"><input id="projectCode" type="text" colspan="1"></td>
         <th style="width:10%">叫修單號</th>
         <td style="width:20%"><input id="ticketNo" type="text"></td>        
         <th style="width:10%">CRM 安裝單號</th>
-        <td style="width:20% " ><input id="crm_install" type="text"></td>
+        <td style="width:20%" ><input id="crm_install" type="text"></td>
       </tr>
 
       <tr>
@@ -225,15 +225,13 @@
           <button type="button" class="no-pdf sig-clear" onclick="clearSignature('engineer')">清除</button>
         </div>
       </td>
-      <!-- ★ 這裡把原本的 colspan="3" 拿掉 -->
       <td>
         <div class="sig-wrap">
           <div class="sig-box"><canvas id="sig-customer"></canvas></div>
           <button type="button" class="no-pdf sig-clear" onclick="clearSignature('customer')">清除</button>
         </div>
       </td>
-    </tr> 
-   
+    </tr>    
   </table> 
  <table > 
         <tr>
@@ -455,6 +453,7 @@ window.addEventListener('load', initPads);
 </script>
 </body>
 </html>
+
 
 
 
