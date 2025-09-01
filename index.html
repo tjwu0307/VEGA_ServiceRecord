@@ -59,7 +59,9 @@
 .sig-box{ border:1px solid #888; height:120px; }
 .sig-box canvas{ width:100%; height:100%; display:block; }
 .sig-clear{ align-self:flex-end; }
-
+.page {
+  page-break-after: always;
+}
 </style>
 </head>
 <body>
@@ -233,15 +235,15 @@
     </tr> 
    
   </table> 
- <table> 
+ <table > 
         <tr>
-      <td style="background-color: white; color: black; padding: 8px; border: 1px solid #ccc;">
+      <td class="page" style="background-color: white; color: black; padding: 8px; border: 1px solid #ccc;">
         白聯：工程師部門
       </td>
-      <td style="background-color: white; color: black; padding: 8px; border: 1px solid #ccc;">
+      <td class="page" style="background-color: white; color: black; padding: 8px; border: 1px solid #ccc;">
         紅聯：財務部（請款用）
       </td>
-      <td style="background-color: white; color: black; padding: 8px; border: 1px solid #ccc;">
+      <td class="page" style="background-color: white; color: black; padding: 8px; border: 1px solid #ccc;">
         黃聯：客戶收執
       </td>
     </tr>
@@ -453,6 +455,7 @@ window.addEventListener('load', initPads);
 </script>
 </body>
 </html>
+
 
 
 
