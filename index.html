@@ -531,7 +531,7 @@ async function submitForm(){
     alert('送出完成，但回應無法解析。');
   }
 }
-<script>
+
 function exportToWord() {
   var content = document.querySelector('.main-table').outerHTML;
   var preHtml = "<html xmlns:o='urn:schemas-microsoft-com:office:office' "+
@@ -552,9 +552,9 @@ function exportToWord() {
   downloadLink.click();
   document.body.removeChild(downloadLink);
 }
-</script>
 
-<script>
+
+
 /* 掛全域與初始化 */
 window.downloadPDF = downloadPDF;
 window.submitForm  = submitForm;
@@ -563,6 +563,7 @@ window.addEventListener('load', initPads);
 </script>
 </body>
 </html>
+
 
 
 
