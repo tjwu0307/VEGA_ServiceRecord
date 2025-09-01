@@ -74,14 +74,14 @@
   </div>
 
   <!-- 右側公司名稱與表單標題 -->
-  <div style="flex: 1; text-align: right;">
+  <div style="display: flex; flex-direction: column; justify-content: center;">
     <div style="font-size: 1.5em; font-weight: bold;">維嘉全球科技股份有限公司</div>
     <div style="font-size: 1.2em;">服務記錄表</div>
   </div>
 </div>
 
 <!-- 三區資訊 -->
-<div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+<div style="display: flex; justify-content: space-between; margin-bottom: 20px;font-size: 0.9em;"">
   <div style="width: 32%;">
     <strong>北區</strong><br>
     免付費專線: 0800-521-800<br>
@@ -132,7 +132,7 @@
       <tr>
         <th>服務日期（民國）</th>
         <td >
-           <span style="display: inline-block;">
+           <span style="display: inline-block;text-align: center;">
     <input id="roc_y" type="number" placeholder="_" style="width: 60px;"> 年
   </span>
   <span style="display: inline-block;">
@@ -143,9 +143,9 @@
   </span>
         </td>
         <th style="width:10%">到達時間</th>
-        <td colspan="1"><input id="arriveTxt" class="nowrap" type="text" placeholder="_:_"></td>
+        <td colspan="1"><input id="arriveTxt" class="nowrap" type="text" placeholder="__:__" style="text-align: center;"></td>
         <th style="width:10%">結束時間</th>
-        <td colspan="1"><input id="finishTxt" class="nowrap" type="text" placeholder="_:_"></td>
+        <td colspan="1"><input id="finishTxt" class="nowrap" type="text" placeholder="__:__" style="text-align: center;"></td>
         
       </tr>
 
@@ -453,6 +453,7 @@ window.addEventListener('load', initPads);
 </script>
 </body>
 </html>
+
 
 
 
