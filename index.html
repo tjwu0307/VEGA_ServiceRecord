@@ -256,9 +256,9 @@ canvas {
           <label><input type="checkbox" name="serviceMethod" value="驗收"> 驗收</label>          
           <label><input type="checkbox" name="serviceMethod" value="檢修"> 檢修</label>
           <label><input type="checkbox" name="serviceMethod" value="交貨"> 交貨</label>
+          <label><input type="checkbox" name="serviceMethod" value="教育訓練"> 教育訓練</label>
           <label><input type="checkbox" name="serviceMethod" value="客戶需求訪談"> 客戶需求訪談</label>
           <label><input type="checkbox" name="serviceMethod" value="DEMO 產品展示"> DEMO 產品展示</label>
-          <label><input type="checkbox" name="serviceMethod" value="教育訓練"> 教育訓練</label>
           <label><input type="checkbox" name="serviceMethod" value="移機服務"> 移機服務</label>    
           <label><input type="checkbox" name="serviceMethod" value="會議支援"> 會議支援</label>
           <span style="margin-left:10px">其他：<input id="serviceOther" type="text" name="other" style="width:220px"></span>
@@ -302,24 +302,24 @@ canvas {
       </tr>
        <!-- 簽名區 -->
   <tr>
-  <th>直屬主管簽名</th>
-  <th>工程師簽名</th>
-  <th>客戶簽名</th>
+  <th colspan="2">直屬主管簽名</th>
+  <th colspan="3">工程師簽名</th>
+  <th colspan="3">客戶簽名</th>
 </tr>
 <tr>
-  <td class="sig-cell">
+  <td class="sig-cell" colspan="2">
     <div class="sig-wrap">
       <div class="sig-box"><canvas id="sig-manager"></canvas></div>
       <button type="button" class="no-pdf sig-clear" onclick="clearSignature('manager')">清除</button>
     </div>
   </td>
-  <td class="sig-cell">
+  <td class="sig-cell" colspan="3">
     <div class="sig-wrap">
       <div class="sig-box"><canvas id="sig-engineer"></canvas></div>
       <button type="button" class="no-pdf sig-clear" onclick="clearSignature('engineer')">清除</button>
     </div>
   </td>
-  <td class="sig-cell">
+  <td class="sig-cell" colspan="3">
     <div class="sig-wrap">
       <div class="sig-box"><canvas id="sig-customer"></canvas></div>
       <button type="button" class="no-pdf sig-clear" onclick="clearSignature('customer')">清除</button>
@@ -537,6 +537,7 @@ window.addEventListener('load', initPads);
 </script>
 </body>
 </html>
+
 
 
 
