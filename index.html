@@ -444,7 +444,7 @@ async function createPdf(form){
   const node = buildPrintableNode();
   const fileName = `服務記錄_${form.customerName||''}_${form.rocY||''}${form.rocM||''}${form.rocD||''}.pdf`;
   const opt = {
-    margin:8,
+    margin:0,
     filename:fileName,
     image:{type:'jpeg',quality:0.95},
     html2canvas:{scale:2,useCORS:true,backgroundColor:'#fff',letterRendering:true},
@@ -538,6 +538,7 @@ window.addEventListener('load', initPads);
 </script>
 </body>
 </html>
+
 
 
 
