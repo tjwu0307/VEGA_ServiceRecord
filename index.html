@@ -210,17 +210,14 @@ canvas {
     <!-- 你的表格（欄位與排列保持） -->
    <table class="main-table">
       <tr>
-        <th>專案代號</th>
-      <td ><input id="projectCode" type="text"></td>
+        <th>專案代號</th>
+      <td><input id="projectCode" type="text"></td>
       <th>叫修單號</th>
       <td><input id="ticketNo" type="text"></td>
-      <th style="font-size:18px;text-align:center">服務記錄表</th>
+      <th colspan="2" style="font-size:18px;text-align:center">服務記錄表</th>
       <th>CRM 安裝單號</th>
       <td><input id="crm_install" type="text"></td>
-      <th>CRM 維修單號</th>
-      <td><input id="crm_repair" type="text"></td>
-      </tr>
-
+    </tr>
       <tr>
         <th>客戶名稱</th>
       <td colspan="5"><input id="customerName" type="text"></td>
@@ -567,6 +564,7 @@ window.addEventListener('load', initPads);
 </script>
 </body>
 </html>
+
 
 
 
