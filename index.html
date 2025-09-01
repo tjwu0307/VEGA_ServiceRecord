@@ -115,9 +115,9 @@
       <tr>
         <th>服務日期（民國）</th>
         <td colspan="2">
-          <input id="roc_y" class="nowrap" type="number" placeholder="_" style="width:30px"> 年
-          <input id="roc_m" class="nowrap" type="number" placeholder="_" style="width:30px"> 月
-          <input id="roc_d" class="nowrap" type="number" placeholder="_" style="width:30px"> 日
+          <input id="roc_y" class="nowrap" type="number" placeholder="_" > 年
+          <input id="roc_m" class="nowrap" type="number" placeholder="_" > 月
+          <input id="roc_d" class="nowrap" type="number" placeholder="_" > 日
         </td>
         <th style="width:10%">到達時間</th>
         <td colspan="1"><input id="arriveTxt" class="nowrap" type="text" placeholder="_:_"></td>
@@ -149,7 +149,7 @@
         <th>服務產品</th>
         <td colspan="7" style="padding:0">
           <table class="subtable">
-            <tr><th style="width:15%">廠牌</th><th style="width:25%">型號</th><th style="width:15%">版本</th><th style="width:45%">序號</th></tr>
+            <tr><th style="width:15%;text-align: center;">廠牌</th><th style="width:25%;text-align: center;">型號</th><th style="width:15%;text-align: center;">版本</th><th style="width:45%">序號</th></tr>
             <tr>
               <td><input name="brand[]"   type="text"></td>
               <td><input name="model[]"   type="text"></td>
@@ -208,12 +208,13 @@
         </div>
       </td>
     </tr> 
-    <tr><div class="footer-note">白聯：工程師部門　｜　紅：財務部(請款用)　｜　黃：客戶收執</div></tr>
-  </table>  
+   
+  </table>   
+     <tr><div class="footer-note">白聯：工程師部門　｜　紅：財務部(請款用)　｜　黃：客戶收執</div></tr>
     </form>
       <div class="actions" style="text-align:center; margin:14px 0">
-      <button type="button" class="no-pdf" onclick="downloadPDF()" style="padding:6px 18px">列印 / PDF</button>
-      <button type="button" class="no-pdf" onclick="submitForm()"  style="padding:6px 18px">發送(Email/雲端/寫回)</button>
+      <button type="button" class="no-pdf" onclick="downloadPDF()" style="padding:6px 18px;background-color: #FF5151; border: none; color: white;">列印 / PDF</button>
+      <button type="button" class="no-pdf" onclick="submitForm()"  style="padding:6px 18px;background-color: #FF5151; border: none; color: white;">發送(Email/雲端/寫回)</button>
     </div>
   </div>
 
@@ -418,6 +419,7 @@ window.addEventListener('load', initPads);
 </script>
 </body>
 </html>
+
 
 
 
