@@ -307,22 +307,22 @@ canvas {
   <th colspan="3" class="sig-table">客戶簽名</th>
 </tr>
 <tr>
-  <td class="sig-cell" >
+  <td  colspan="2"class="sig-cell" >
     <div class="sig-wrap">
-      <div colspan="2" class="sig-box"><canvas id="sig-manager"></canvas></div>
+      <div class="sig-box"><canvas id="sig-manager"></canvas></div>
       <button type="button" class="no-pdf sig-clear" onclick="clearSignature('manager')">清除</button>
     </div>
   </td>
-  <td class="sig-cell">
+  <td  colspan="3" class="sig-cell">
     <div class="sig-wrap">
     <div class="sig-wrap">
-      <div  colspan="3" class="sig-box"><canvas id="sig-engineer"></canvas></div>
+      <div  class="sig-box"><canvas id="sig-engineer"></canvas></div>
       <button type="button" class="no-pdf sig-clear" onclick="clearSignature('engineer')">清除</button>
     </div>
   </td>
-  <td class="sig-cell" >
+  <td  colspan="3" class="sig-cell" >
     <div class="sig-wrap">
-      <div  colspan="3"  class="sig-box"><canvas id="sig-customer"></canvas></div>
+      <div class="sig-box"><canvas id="sig-customer"></canvas></div>
       <button type="button" class="no-pdf sig-clear" onclick="clearSignature('customer')">清除</button>
     </div>
   </td>
@@ -571,6 +571,7 @@ window.addEventListener('load', initPads);
 </script>
 </body>
 </html>
+
 
 
 
