@@ -533,10 +533,7 @@ async function submitForm(){
 }
 <script>
 function exportToWord() {
-  // 取得要匯出的區域（例如你的母表）
   var content = document.querySelector('.main-table').outerHTML;
-
-  // 組合成 Word 格式的 HTML
   var preHtml = "<html xmlns:o='urn:schemas-microsoft-com:office:office' "+
                 "xmlns:w='urn:schemas-microsoft-com:office:word' "+
                 "xmlns='http://www.w3.org/TR/REC-html40'>"+
@@ -544,22 +541,14 @@ function exportToWord() {
   var postHtml = "</body></html>";
   var html = preHtml + content + postHtml;
 
-  // 產生 Word 檔 Blob
-  var blob = new Blob(['\ufeff', html], {
-    type: 'application/msword'
-  });
-
-  // 檔名
+  var blob = new Blob(['\ufeff', html], { type: 'application/msword' });
   var filename = "服務記錄.doc";
 
-  // 下載連結
   var url = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(html);
   var downloadLink = document.createElement("a");
   document.body.appendChild(downloadLink);
   downloadLink.href = url;
   downloadLink.download = filename;
-
-  // 觸發下載
   downloadLink.click();
   document.body.removeChild(downloadLink);
 }
@@ -569,11 +558,12 @@ function exportToWord() {
 /* 掛全域與初始化 */
 window.downloadPDF = downloadPDF;
 window.submitForm  = submitForm;
-  window.exportToWord = exportToWord;
+window.exportToWord = exportToWord; 
 window.addEventListener('load', initPads);
 </script>
 </body>
 </html>
+
 
 
 
