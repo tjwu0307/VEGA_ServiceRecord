@@ -228,45 +228,36 @@ padding: 6px;
 </div>
 
     <!-- 你的表格（欄位與排列保持） -->
-   <table class="main-table">
-<tr>
-  <th>專案代號</th>
-  <td><input id="projectCode" type="text"></td>
-  <th>叫修單號</th>
-  <td><input id="ticketNo" type="text"></td>
+ <table class="main-table">
+  <tr>
+    <th>專案代號</th>
+    <td><input id="projectCode" type="text"></td>
 
-  <!-- 合併第一、二列的服務記錄表 -->
-  <th rowspan="2" colspan="2" style="font-size: 18px; text-align: center; vertical-align: middle;">
-    服務記錄表
-  </th>
+    <th>叫修單號</th>
+    <td><input id="ticketNo" type="text"></td>
 
-  <th>CRM 安裝單號</th>
-  <td><input id="crmInstallNo" type="text"></td>
-  <th>CRM 維修單號</th>
-  <td><input id="crmRepairNo" type="text"></td>
-</tr>
+    <!-- 合併欄位：服務記錄表 -->
+    <th rowspan="2" colspan="2" style="font-size: 18px; text-align: center; vertical-align: middle;">
+      服務記錄表
+    </th>
 
-<tr>
-  <th>客戶名稱</th>
-  <td colspan="4"><input id="customerName" type="text"></td>
-  <th>連絡人</th>
-  <td><input id="contactPerson" type="text"></td>
-  <th colspan="2"></th> <!-- 空白補齊欄位 -->
-</tr>
+    <th>CRM 安裝單號</th>
+    <td><input id="crmInstallNo" type="text"></td>
 
+    <th>CRM 維修單號</th>
+    <td><input id="crmRepairNo" type="text"></td>
+  </tr>
 
-      <tr>
-      <th>客戶名稱</th>
-      <td colspan="5"><input id="customerName" type="text"></td>
-      <th>連絡人</th>
-      <td><input id="crm_repair" type="text"></td>
-    </tr>
- <tr>
-      <th>地址</th>
-      <td colspan="5"><input id="address" type="text"></td>
-      <th>電話</th>
-      <td><input id="contact" type="text"></td>
-    </tr>
+  <tr>
+    <th>客戶名稱</th>
+    <td colspan="4"><input id="customerName" type="text"></td>
+
+    <th>連絡人</th>
+    <td><input id="contactPerson" type="text"></td>
+
+    <th>電話</th>
+    <td colspan="2"><input id="contactPhone" type="text"></td>
+  </tr>
       <tr>
         <th colspan="1">服務日期（民國）</th>
         <td colspan="3">
@@ -288,7 +279,7 @@ padding: 6px;
 
       <tr>
         <th>服務方式</th>
-        <td class="chkrow">
+        <td colspan="7" class="chkrow">
           <label><input type="checkbox" name="serviceMethod" value="場勘"> 場勘</label>
           <label><input type="checkbox" name="serviceMethod" value="POC"> POC</label>
           <label><input type="checkbox" name="serviceMethod" value="簡報"> 簡報</label>          
@@ -598,6 +589,7 @@ window.addEventListener('load', initPads);
 </script>
 </body>
 </html>
+
 
 
 
