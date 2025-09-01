@@ -138,7 +138,7 @@
           <label><input type="checkbox" name="serviceMethod" value="驗收"> 驗收</label>
           <label><input type="checkbox" name="serviceMethod" value="會議支援"> 會議支援</label>
           <label><input type="checkbox" name="serviceMethod" value="POC"> POC</label>
-          <label><input type="checkbox" name="serviceMethod" value="電話"> 電話</label>
+          <label><input type="checkbox" name="serviceMethod" value="檢測"> 電話</label>
           <label><input type="checkbox" name="serviceMethod" value="維修"> 維修</label>
           <label><input type="checkbox" name="serviceMethod" value="回報顧問"> 回報顧問</label>
           <span style="margin-left:10px">其他：<input id="serviceOther" type="text" style="width:220px"></span>
@@ -210,12 +210,13 @@
     </tr>
   </table>
    <div class="footer-note">白聯：工程師部門　｜　紅：財務部(請款用)　｜　黃：客戶收執</div>
-    <div class="actions" style="text-align:center; margin:14px 0">
+    </form>
+      <div class="actions" style="text-align:center; margin:14px 0">
       <button type="button" class="no-pdf" onclick="downloadPDF()" style="padding:6px 18px">列印 / PDF</button>
       <button type="button" class="no-pdf" onclick="submitForm()"  style="padding:6px 18px">發送(Email/雲端/寫回)</button>
     </div>
   </div>
-</form>
+
  <div>寄送 Email（可選）：<input id="sendTo" type="email" placeholder="收件者 Email（若不寄送可留空）"></div>
   
 <script>
@@ -417,6 +418,7 @@ window.addEventListener('load', initPads);
 </script>
 </body>
 </html>
+
 
 
 
