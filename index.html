@@ -334,7 +334,6 @@ canvas {
    </table>        
      <div class="actions" style="text-align:center; margin:14px 0">
       <button type="button" class="no-pdf" onclick="downloadPDF()" style="padding:6px 18px;background-color: #FF5151; border: none; color: white;">列印 / PDF</button>
-      <button type="button" class="no-pdf" onclick="exportToWord()" style="padding:6px 18px;background-color: #FF5151; border: none; color: white;">轉 Word檔</button>
       <button type="button" class="no-pdf" onclick="submitForm()"  style="padding:6px 18px;background-color: #FF5151; border: none; color: white;">發送(Email/雲端/寫回)</button>
     </div>
   </div>
@@ -532,53 +531,6 @@ async function submitForm(){
   }
 }
 
-function exportToWord() {
-  // 取一份 clone
-  var src   = document.getElementById('pdf-content');
-  var clone = src.cloneNode(true);
-
-  // 移除按鈕 / no-pdf
-  clone.querySelectorAll('.no-pdf, button').forEach(n=>n.remove());
-
-  // input/textarea/select 轉純文字
-  clone.querySelectorAll('input, textarea, select').forEach(el=>{
-    const span = document.createElement('span');
-    if(el.type === 'checkbox'){
-      span.textContent = el.checked ? ('■ '+(el.value||'')) : '';
-    } else {
-      span.textContent = el.value || '';
-    }
-    el.replaceWith(span);
-  });
-
-  // 簽名：把 canvas 換成 <img>
-  const sigs = getSignatures();
-  putSignatureImg(clone, 'sig-manager',  sigs.manager);
-  putSignatureImg(clone, 'sig-engineer', sigs.engineer);
-  putSignatureImg(clone, 'sig-customer', sigs.customer);
-
-  // 組 Word 文件
-  var preHtml = "<html xmlns:o='urn:schemas-microsoft-com:office:office' "+
-                "xmlns:w='urn:schemas-microsoft-com:office:word' "+
-                "xmlns='http://www.w3.org/TR/REC-html40'>"+
-                "<head><meta charset='utf-8'></head><body>";
-  var postHtml = "</body></html>";
-  var html = preHtml + clone.outerHTML + postHtml;
-
-  // 下載
-  var blob = new Blob(['\ufeff', html], { type: 'application/msword' });
-  var url = URL.createObjectURL(blob);
-  var downloadLink = document.createElement("a");
-  downloadLink.href = url;
-  downloadLink.download = "服務記錄.doc";
-  document.body.appendChild(downloadLink);
-  downloadLink.click();
-  document.body.removeChild(downloadLink);
-  URL.revokeObjectURL(url);
-}
-
-
-
 /* 掛全域與初始化 */
 window.downloadPDF = downloadPDF;
 window.submitForm  = submitForm;
@@ -587,6 +539,7 @@ window.addEventListener('load', initPads);
 </script>
 </body>
 </html>
+
 
 
 
