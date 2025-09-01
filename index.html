@@ -60,7 +60,21 @@
 .sig-box canvas{ width:100%; height:100%; display:block; }
 .sig-clear{ align-self:flex-end; }
 .page {
+ width: 190mm;
+  margin: 0 auto;
+  padding: 10mm;
   page-break-after: always;
+  font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+}
+  .page h2 {
+  font-size: 16px;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+  .page p {
+  margin: 4px 0;
 }
 </style>
 </head>
@@ -233,16 +247,7 @@
     </tr>    
   </table> 
  <table > 
-        <tr>
-      <td class="page" style="background-color: white; color: black; padding: 8px; border: 1px solid #ccc;">
-        白聯：工程師部門
-      </td>
-      <td class="page" style="background-color: white; color: black; padding: 8px; border: 1px solid #ccc;">
-        紅聯：財務部（請款用）
-      </td>
-      <td class="page" style="background-color: white; color: black; padding: 8px; border: 1px solid #ccc;">
-        黃聯：客戶收執
-      </td>
+    <tr>白聯：工程師部門  紅聯：財務部（請款用） 黃聯：客戶收執     
     </tr>
    </table>        
      <div class="actions" style="text-align:center; margin:14px 0">
@@ -250,7 +255,7 @@
       <button type="button" class="no-pdf" onclick="submitForm()"  style="padding:6px 18px;background-color: #FF5151; border: none; color: white;">發送(Email/雲端/寫回)</button>
     </div>
   </div>
- <div>寄送 Email（可選）：<input id="sendTo" type="email" placeholder="收件者 Email（若不寄送可留空）"></div>
+ <div class="no-pdf">寄送 Email（可選）：<input id="sendTo" type="email" placeholder="收件者 Email（若不寄送可留空）"></div>
 </form>
 <script>
 /* ======= 設定（換成你最新的 Web App /exec） ======= */
@@ -451,3 +456,4 @@ window.addEventListener('load', initPads);
 </script>
 </body>
 </html>
+
