@@ -159,6 +159,11 @@ canvas {
 .main-table td[colspan] {
   /* 保證等分，8 欄就每格 = 12.5% */
 }
+  .product-cell {
+  min-height: 1.2em;   /* 至少一行文字高 */
+  line-height: 1.2em;  /* 保持行高 */
+  height: 20px;        /* 可視需求設定固定高度 */
+}
 </style>
 </head>
 <body>
@@ -270,25 +275,25 @@ canvas {
       <tr>
         <th>服務產品</th>
         <td colspan="7" style="padding:0">
-          <table class="subtable">
+          <table class="product-table" class="subtable">
             <tr><th style="width:15%;text-align: center;">廠牌</th><th style="width:25%;text-align: center;">型號</th><th style="width:15%;text-align: center;">版本</th><th style="width:45%;text-align: center;">序號</th></tr>
             <tr>
-              <td><input name="brand[]"   type="text"></td>
-              <td><input name="model[]"   type="text"></td>
-              <td><input name="version[]" type="text"></td>
-              <td><input name="serial[]"  type="text"></td>
+              <td class="product-cell"><input name="brand[]"   type="text"></td>
+              <td class="product-cell"><input name="model[]"   type="text"></td>
+              <td class="product-cell"><input name="version[]" type="text"></td>
+              <td class="product-cell"><input name="serial[]"  type="text"></td>
             </tr>
             <tr>
-              <td><input name="brand[]"   type="text"></td>
-              <td><input name="model[]"   type="text"></td>
-              <td><input name="version[]" type="text"></td>
-              <td><input name="serial[]"  type="text"></td>
+              <td class="product-cell"><input name="brand[]"   type="text"></td>
+              <td class="product-cell"><input name="model[]"   type="text"></td>
+              <td class="product-cell"><input name="version[]" type="text"></td>
+              <td class="product-cell"><input name="serial[]"  type="text"></td>
             </tr>
             <tr>
-              <td><input name="brand[]"   type="text"></td>
-              <td><input name="model[]"   type="text"></td>
-              <td><input name="version[]" type="text"></td>
-              <td><input name="serial[]"  type="text"></td>
+              <td class="product-cell"><input name="brand[]"   type="text"></td>
+              <td class="product-cell"><input name="model[]"   type="text"></td>
+              <td class="product-cell"><input name="version[]" type="text"></td>
+              <td class="product-cell"><input name="serial[]"  type="text"></td>
             </tr>
           </table>
         </td>
@@ -536,6 +541,7 @@ window.addEventListener('load', initPads);
 </script>
 </body>
 </html>
+
 
 
 
