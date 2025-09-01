@@ -229,6 +229,7 @@ padding: 6px;
 
     <!-- 你的表格（欄位與排列保持） -->
  <table class="main-table">
+   <!-- 第一列 -->
   <tr>
     <th>專案代號</th>
     <td><input id="projectCode" type="text"></td>
@@ -236,65 +237,60 @@ padding: 6px;
     <th>叫修單號</th>
     <td><input id="ticketNo" type="text"></td>
 
-    <!-- 合併欄位：服務記錄表 -->
-    <th rowspan="2" colspan="2" style="font-size: 18px; text-align: center; vertical-align: middle;">
-      服務記錄表
-    </th>
-
     <th>CRM 安裝單號</th>
     <td><input id="crmInstallNo" type="text"></td>
+
+    <th rowspan="2" style="font-size: 18px; text-align: center; vertical-align: middle;">
+      服務記錄表
+    </th>
+  </tr>
+
+  <!-- 第二列 -->
+  <tr>
+    <th>客戶名稱</th>
+    <td colspan="2"><input id="customerName" type="text"></td>
+
+    <th>連絡人</th>
+    <td><input id="contactPerson" type="text"></td>
 
     <th>CRM 維修單號</th>
     <td><input id="crmRepairNo" type="text"></td>
   </tr>
 
+  <!-- 第三列 -->
   <tr>
-    <th>客戶名稱</th>
-    <td colspan="4"><input id="customerName" type="text"></td>
+    <th>服務日期（民國）</th>
+    <td colspan="3">
+      <input id="roc_y" type="number" placeholder="___" style="width: 60px;"> 年
+      <input id="roc_m" type="number" placeholder="__" style="width: 40px;"> 月
+      <input id="roc_d" type="number" placeholder="__" style="width: 40px;"> 日
+    </td>
 
-    <th>連絡人</th>
-    <td><input id="contactPerson" type="text"></td>
+    <th>到達時間</th>
+    <td><input id="arriveTxt" type="text" placeholder="__:__" style="text-align: center;"></td>
 
-    <th>電話</th>
-    <td colspan="2"><input id="contactPhone" type="text"></td>
+    <th>結束時間</th>
+    <td><input id="finishTxt" type="text" placeholder="__:__" style="text-align: center;"></td>
   </tr>
-      <tr>
-        <th colspan="1">服務日期（民國）</th>
-        <td colspan="3">
-           <span style="display: inline-block;text-align: center;">
-    <input id="roc_y" type="number" placeholder="___" style="width: 60px;"> 年
-  </span>
-  <span style="display: inline-block;">
-    <input id="roc_m" type="number" placeholder="__" style="width: 40px;"> 月
-  </span>
-  <span style="display: inline-block;">
-    <input id="roc_d" type="number" placeholder="__" style="width: 40px;"> 日
-  </span>
-        </td>
-        <th colspan="1">到達時間</th>
-        <td colspan="1"><input id="arriveTxt" class="nowrap" type="text" placeholder="__:__" style="text-align: center;"></td>
-        <th colspan="1">結束時間</th>
-        <td colspan="1"><input id="finishTxt" class="nowrap" type="text" placeholder="__:__" style="text-align: center;"></td>      
-      </tr>
-
-      <tr>
-        <th>服務方式</th>
-        <td colspan="7" class="chkrow">
-          <label><input type="checkbox" name="serviceMethod" value="場勘"> 場勘</label>
-          <label><input type="checkbox" name="serviceMethod" value="POC"> POC</label>
-          <label><input type="checkbox" name="serviceMethod" value="簡報"> 簡報</label>          
-          <label><input type="checkbox" name="serviceMethod" value="安裝"> 安裝</label>
-          <label><input type="checkbox" name="serviceMethod" value="驗收"> 驗收</label>          
-          <label><input type="checkbox" name="serviceMethod" value="檢修"> 檢修</label>
-          <label><input type="checkbox" name="serviceMethod" value="交貨"> 交貨</label>
-          <label><input type="checkbox" name="serviceMethod" value="教育訓練"> 教育訓練</label>
-          <label><input type="checkbox" name="serviceMethod" value="客戶需求訪談"> 客戶需求訪談</label>
-          <label><input type="checkbox" name="serviceMethod" value="DEMO 產品展示"> DEMO 產品展示</label>
-          <label><input type="checkbox" name="serviceMethod" value="移機服務"> 移機服務</label>    
-          <label><input type="checkbox" name="serviceMethod" value="會議支援"> 會議支援</label>
-          <span style="margin-left:10px">其他：<input id="serviceOther" type="text" name="other" style="width:220px"></span>
-        </td>
-      </tr>
+ <!-- 第四列 -->
+  <tr>
+    <th>服務方式</th>
+    <td colspan="6" class="chkrow">
+      <label><input type="checkbox" name="serviceMethod" value="場勘"> 場勘</label>
+      <label><input type="checkbox" name="serviceMethod" value="POC"> POC</label>
+      <label><input type="checkbox" name="serviceMethod" value="簡報"> 簡報</label>
+      <label><input type="checkbox" name="serviceMethod" value="安裝"> 安裝</label>
+      <label><input type="checkbox" name="serviceMethod" value="驗收"> 驗收</label>
+      <label><input type="checkbox" name="serviceMethod" value="檢修"> 檢修</label>
+      <label><input type="checkbox" name="serviceMethod" value="交貨"> 交貨</label>
+      <label><input type="checkbox" name="serviceMethod" value="教育訓練"> 教育訓練</label>
+      <label><input type="checkbox" name="serviceMethod" value="客戶需求訪談"> 客戶需求訪談</label>
+      <label><input type="checkbox" name="serviceMethod" value="DEMO 產品展示"> DEMO 產品展示</label>
+      <label><input type="checkbox" name="serviceMethod" value="移機服務"> 移機服務</label>
+      <label><input type="checkbox" name="serviceMethod" value="會議支援"> 會議支援</label>
+      <span style="margin-left:10px">其他：<input id="serviceOther" type="text" name="other" style="width:220px"></span>
+    </td>
+  </tr>
 
       <tr>
         <th>服務產品</th>
@@ -589,6 +585,7 @@ window.addEventListener('load', initPads);
 </script>
 </body>
 </html>
+
 
 
 
