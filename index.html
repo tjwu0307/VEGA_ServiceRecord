@@ -209,7 +209,7 @@ canvas {
     <!-- 你的表格（欄位與排列保持） -->
    <table class="main-table">
       <tr>
-        <th>專案代號</th>
+      <th>專案代號</th>
       <td><input id="projectCode" type="text"></td>
       <th>叫修單號</th>
       <td><input id="ticketNo" type="text"></td>
@@ -220,18 +220,18 @@ canvas {
       <tr>
       <th>客戶名稱</th>
       <td colspan="5"><input id="customerName" type="text"></td>
-      <th>CRM 維修單號</th>
+      <th>連絡人</th>
       <td><input id="crm_repair" type="text"></td>
     </tr>
  <tr>
       <th>地址</th>
       <td colspan="5"><input id="address" type="text"></td>
-      <th>連絡人</th>
+      <th>電話</th>
       <td><input id="contact" type="text"></td>
     </tr>
       <tr>
         <th colspan="1">服務日期（民國）</th>
-        <td colspan="3">
+        <td colspan="2">
            <span style="display: inline-block;text-align: center;">
     <input id="roc_y" type="number" placeholder="___" style="width: 60px;"> 年
   </span>
@@ -245,9 +245,7 @@ canvas {
         <th colspan="1">到達時間</th>
         <td colspan="1"><input id="arriveTxt" class="nowrap" type="text" placeholder="__:__" style="text-align: center;"></td>
         <th colspan="1">結束時間</th>
-        <td colspan="1"><input id="finishTxt" class="nowrap" type="text" placeholder="__:__" style="text-align: center;"></td>
-       <th>電話</th>
-      <td><input id="phone" type="text"></td>
+        <td colspan="1"><input id="finishTxt" class="nowrap" type="text" placeholder="__:__" style="text-align: center;"></td>      
       </tr>
 
       <tr>
@@ -562,5 +560,6 @@ window.addEventListener('load', initPads);
 </script>
 </body>
 </html>
+
 
 
