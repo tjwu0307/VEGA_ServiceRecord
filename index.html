@@ -302,24 +302,24 @@ canvas {
       </tr>
        <!-- 簽名區 -->
   <tr>
-  <th colspan="2">直屬主管簽名</th>
-  <th colspan="3">工程師簽名</th>
-  <th colspan="3">客戶簽名</th>
+  <th class="sig-table">直屬主管簽名</th>
+  <th class="sig-table">工程師簽名</th>
+  <th class="sig-table">客戶簽名</th>
 </tr>
 <tr>
-  <td class="sig-cell" colspan="2">
+  <td class="sig-cell" >
     <div class="sig-wrap">
       <div class="sig-box"><canvas id="sig-manager"></canvas></div>
       <button type="button" class="no-pdf sig-clear" onclick="clearSignature('manager')">清除</button>
     </div>
   </td>
-  <td class="sig-cell" colspan="3">
+  <td class="sig-cell">
     <div class="sig-wrap">
       <div class="sig-box"><canvas id="sig-engineer"></canvas></div>
       <button type="button" class="no-pdf sig-clear" onclick="clearSignature('engineer')">清除</button>
     </div>
   </td>
-  <td class="sig-cell" colspan="3">
+  <td class="sig-cell" >
     <div class="sig-wrap">
       <div class="sig-box"><canvas id="sig-customer"></canvas></div>
       <button type="button" class="no-pdf sig-clear" onclick="clearSignature('customer')">清除</button>
@@ -537,6 +537,7 @@ window.addEventListener('load', initPads);
 </script>
 </body>
 </html>
+
 
 
 
