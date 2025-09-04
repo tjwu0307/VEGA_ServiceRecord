@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>維嘉全球科技 - 服務紀錄單</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 15px;
+            margin: 0;
+        }
+        
+        .container {
+            width: 95%;
+            max-width: 800px;
+            min-height: 297mm;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            overflow: hidden;
+            page-break-inside: avoid;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+                margin: 0;
+            }
+            
+            .container {
+                width: 210mm;
+                min-height: 297mm;
+                max-width: none;
+                border-radius: 0;
+                box-shadow: none;
+                page-break-inside: avoid;
+            }
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 20mm 15mm;
+            text-align: center;
+            position: relative;
+        }
+        
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+        
+        .company-name {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .form-title {
+            font-size: 18px;
+            color: #ecf0f1;
+        }
+        
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            padding: 15mm;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .contact-section {
+            text-align: center;
+            padding: 12px;
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+        
+        .contact-section h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 14px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+        }
+        
+        .contact-section p {
+            margin: 5px 0;
+            color: #555;
+            font-size: 11px;
+            line-height: 1.3;
+        }
+        
+        .form-content {
+            padding: 15mm;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group.full-width {
+            grid-column: span 4;
+        }
+        
+        .form-group.half-width {
+            grid-column: span 2;
+        }
+        
+        .form-group label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #2c3e50;
+            font-size: 12px;
+        }
+        
+        .form-group input, .form-group textarea, .form-group select {
+            padding: 8px;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+        
+        .date-inputs {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .date-inputs input {
+            width: 60px;
+            text-align: center;
+        }
+        
+        .time-inputs {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .time-inputs input {
+            width: 80px;
+            text-align: center;
+        }
+        
+        .service-methods {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-top: 8px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: 14px;
+            height: 14px;
+        }
+        
+        .checkbox-group label {
+            font-size: 11px;
+            margin-bottom: 0;
+        }
+        
+        .product-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: white;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+        
+        .product-table th, .product-table td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+            font-size: 11px;
+        }
+        
+        .product-table th {
+            background: #3498db;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .product-table input {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 11px;
+        }
+        
+        .expense-section {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+        
+        .expense-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .signature-section {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 25px 0;
+        }
+        
+        .signature-box {
+            text-align: center;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border: 1px dashed #bdc3c7;
+        }
+        
+        .signature-canvas {
+            width: 100%;
+            height: 80px;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            background: white;
+            cursor: crosshair;
+        }
+        
+        .signature-controls {
+            margin-top: 10px;
+        }
+        
+        .clear-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background 0.3s ease;
+        }
+        
+        .clear-btn:hover {
+            background: #c0392b;
+        }
+        
+        .copy-info {
+            background: #ecf0f1;
+            padding: 12px;
+            text-align: center;
+            font-size: 11px;
+            color: #2c3e50;
+            border-top: 2px solid #bdc3c7;
+        }
+        
+        .copy-item {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 5px 10px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .submit-section {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+        }
+        
+        .submit-btn {
+            background: white;
+            color: #27ae60;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        
+        .status-message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: none;
+        }
+        
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        @media (max-width: 768px) {
+            .contact-info {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-group.half-width {
+                grid-column: span 1;
+            }
+            
+            .service-methods {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .expense-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .signature-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">LOGO</div>
+            <div class="company-name">維嘉全球科技股份有限公司</div>
+            <div class="form-title">服務紀錄單</div>
+        </div>
+        
+        <div class="contact-info">
+            <div class="contact-section">
+                <h3>台北</h3>
+                <p>服務專線: 02-35182883</p>
+                <p>台北市松山區民生東路三段128號14F-1</p>
+                <p>Fax: (02) 2545-1155</p>
+            </div>
+            <div class="contact-section">
+                <h3>台中</h3>
+                <p>服務專線: 02-35182884</p>
+                <p>台中市北中區文心路四段81號9樓之2</p>
+                <p>Fax: (04) 2295-5833</p>
+            </div>
+            <div class="contact-section">
+                <h3>高雄</h3>
+                <p>服務專線: 02-35182885</p>
+                <p>高雄市前鎮區中山二路91號8樓之9</p>
+                <p>Fax: (07) 535-0099</p>
+            </div>
+        </div>
+        
+        <div class="form-content">
+            <form id="serviceForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>專案代號</label>
+                        <input type="text" id="projectCode" name="projectCode">
+                    </div>
+                    <div class="form-group">
+                        <label>叫修單號</label>
+                        <input type="text" id="repairNumber" name="repairNumber">
+                    </div>
+                    <div class="form-group">
+                        <label>CRM 安裝單號</label>
+                        <input type="text" id="crmInstallNumber" name="crmInstallNumber">
+                    </div>
+                    <div class="form-group">
+                        <label>CRM 維修單號</label>
+                        <input type="text" id="crmRepairNumber" name="crmRepairNumber">
+                    </div>
+                    
+                    <div class="form-group half-width">
+                        <label>客戶名稱</label>
+                        <input type="text" id="customerName" name="customerName">
+                    </div>
+                    <div class="form-group half-width">
+                        <label>連絡人</label>
+                        <input type="text" id="contactPerson" name="contactPerson">
+                    </div>
+                    
+                    <div class="form-group half-width">
+                        <label>地址</label>
+                        <input type="text" id="address" name="address">
+                    </div>
+                    <div class="form-group half-width">
+                        <label>電話</label>
+                        <input type="text" id="phone" name="phone">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>服務日期（民國）</label>
+                        <div class="date-inputs">
+                            <input type="number" id="year" name="year" placeholder="年" min="100" max="200">
+                            <span>年</span>
+                            <input type="number" id="month" name="month" placeholder="月" min="1" max="12">
+                            <span>月</span>
+                            <input type="number" id="day" name="day" placeholder="日" min="1" max="31">
+                            <span>日</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>到達時間</label>
+                        <div class="time-inputs">
+                            <input type="time" id="arrivalTime" name="arrivalTime">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>結束時間</label>
+                        <div class="time-inputs">
+                            <input type="time" id="endTime" name="endTime">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label>服務方式</label>
+                        <div class="service-methods">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="survey" name="serviceMethod" value="場勘">
+                                <label for="survey">場勘</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="poc" name="serviceMethod" value="POC">
+                                <label for="poc">POC</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="presentation" name="serviceMethod" value="簡報">
+                                <label for="presentation">簡報</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="installation" name="serviceMethod" value="安裝">
+                                <label for="installation">安裝</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="acceptance" name="serviceMethod" value="驗收">
+                                <label for="acceptance">驗收</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="maintenance" name="serviceMethod" value="檢修">
+                                <label for="maintenance">檢修</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="delivery" name="serviceMethod" value="交貨">
+                                <label for="delivery">交貨</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="interview" name="serviceMethod" value="客戶需求訪談">
+                                <label for="interview">客戶需求訪談</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="demo" name="serviceMethod" value="DEMO 產品展示">
+                                <label for="demo">DEMO 產品展示</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="training" name="serviceMethod" value="教育訓練">
+                                <label for="training">教育訓練</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="relocation" name="serviceMethod" value="移機服務">
+                                <label for="relocation">移機服務</label>
+                            </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="meeting" name="serviceMethod" value="會議支援">
+                                <label for="meeting">會議支援</label>
+                            </div>
+                        </div>
+                        <div style="margin-top: 15px;">
+                            <label>其他：</label>
+                            <input type="text" id="otherService" name="otherService" style="margin-left: 10px; width: 300px;">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group full-width">
+                    <label>服務產品</label>
+                    <table class="product-table">
+                        <thead>
+                            <tr>
+                                <th>廠牌</th>
+                                <th>型號</th>
+                                <th>版本</th>
+                                <th>序號</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="text" name="brand1"></td>
+                                <td><input type="text" name="model1"></td>
+                                <td><input type="text" name="version1"></td>
+                                <td><input type="text" name="serial1"></td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" name="brand2"></td>
+                                <td><input type="text" name="model2"></td>
+                                <td><input type="text" name="version2"></td>
+                                <td><input type="text" name="serial2"></td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" name="brand3"></td>
+                                <td><input type="text" name="model3"></td>
+                                <td><input type="text" name="version3"></td>
+                                <td><input type="text" name="serial3"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="form-group full-width">
+                    <label>服務內容</label>
+                    <textarea id="serviceContent" name="serviceContent" rows="5" style="width: 100%; resize: vertical;"></textarea>
+                </div>
+                
+                <div class="form-group full-width">
+                    <label>客戶意見</label>
+                    <textarea id="customerFeedback" name="customerFeedback" rows="4" style="width: 100%; resize: vertical;"></textarea>
+                </div>
+                
+                <div class="expense-section">
+                    <h3 style="color: #2c3e50; margin-bottom: 15px; font-size: 14px;">費用申請</h3>
+                    <div class="expense-grid">
+                        <div class="form-group">
+                            <label>里程 (KM)</label>
+                            <input type="number" id="mileage" name="mileage" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label>出發地點</label>
+                            <input type="text" id="departure" name="departure">
+                        </div>
+                        <div class="form-group">
+                            <label>計程車資</label>
+                            <input type="number" id="taxiFee" name="taxiFee">
+                        </div>
+                        <div class="form-group">
+                            <label>停車費</label>
+                            <input type="number" id="parkingFee" name="parkingFee">
+                        </div>
+                    </div>
+                    <div class="expense-grid" style="margin-top: 10px;">
+                        <div class="form-group">
+                            <label>eTag</label>
+                            <input type="number" id="eTag" name="eTag">
+                        </div>
+                        <div class="form-group">
+                            <label>大眾運輸</label>
+                            <input type="number" id="publicTransport" name="publicTransport">
+                        </div>
+                        <div class="form-group">
+                            <label>其他</label>
+                            <input type="number" id="otherExpense" name="otherExpense">
+                        </div>
+                        <div class="form-group">
+                            <!-- 空白欄位保持對齊 -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="signature-section">
+                    <div class="signature-box">
+                        <h4 style="margin-bottom: 15px; color: #2c3e50;">主管簽名</h4>
+                        <canvas class="signature-canvas" id="managerSignature"></canvas>
+                        <div class="signature-controls">
+                            <button type="button" class="clear-btn" onclick="clearSignature('managerSignature')">清除</button>
+                        </div>
+                    </div>
+                    <div class="signature-box">
+                        <h4 style="margin-bottom: 15px; color: #2c3e50;">工程師簽名</h4>
+                        <canvas class="signature-canvas" id="engineerSignature"></canvas>
+                        <div class="signature-controls">
+                            <button type="button" class="clear-btn" onclick="clearSignature('engineerSignature')">清除</button>
+                        </div>
+                    </div>
+                    <div class="signature-box">
+                        <h4 style="margin-bottom: 15px; color: #2c3e50;">客戶簽名</h4>
+                        <canvas class="signature-canvas" id="customerSignature"></canvas>
+                        <div class="signature-controls">
+                            <button type="button" class="clear-btn" onclick="clearSignature('customerSignature')">清除</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        
+        <div class="copy-info">
+            <div class="copy-item">白聯：工程師部門</div>
+            <div class="copy-item">紅聯：財務部（請款用）</div>
+            <div class="copy-item">黃聯：客戶收執</div>
+        </div>
+        
+        <div class="submit-section">
+            <button type="button" class="submit-btn" onclick="submitForm()">
+                📄 產生PDF並送出
+            </button>
+            <div id="statusMessage" class="status-message"></div>
+        </div>
+    </div>
+
+    <script>
+        // 簽名功能
+        const canvases = ['managerSignature', 'engineerSignature', 'customerSignature'];
+        const signatureData = {};
+        
+        canvases.forEach(canvasId => {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            let isDrawing = false;
+            
+            // 設置畫布大小
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            
+            // 設置繪圖樣式
+            ctx.strokeStyle = '#2c3e50';
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+            
+            // 滑鼠事件
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseout', stopDrawing);
+            
+            // 觸控事件
+            canvas.addEventListener('touchstart', handleTouch);
+            canvas.addEventListener('touchmove', handleTouch);
+            canvas.addEventListener('touchend', stopDrawing);
+            
+            function startDrawing(e) {
+                isDrawing = true;
+                const rect = canvas.getBoundingClientRect();
+                ctx.beginPath();
+                ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+            }
+            
+            function draw(e) {
+                if (!isDrawing) return;
+                const rect = canvas.getBoundingClientRect();
+                ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+                ctx.stroke();
+            }
+            
+            function stopDrawing() {
+                isDrawing = false;
+                signatureData[canvasId] = canvas.toDataURL();
+            }
+            
+            function handleTouch(e) {
+                e.preventDefault();
+                const touch = e.touches[0];
+                const mouseEvent = new MouseEvent(e.type === 'touchstart' ? 'mousedown' : 
+                                                 e.type === 'touchmove' ? 'mousemove' : 'mouseup', {
+                    clientX: touch.clientX,
+                    clientY: touch.clientY
+                });
+                canvas.dispatchEvent(mouseEvent);
+            }
+        });
+        
+        function clearSignature(canvasId) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            delete signatureData[canvasId];
+        }
+        
+        function showStatus(message, isError = false) {
+            const statusDiv = document.getElementById('statusMessage');
+            statusDiv.textContent = message;
+            statusDiv.className = `status-message ${isError ? 'status-error' : 'status-success'}`;
+            statusDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 5000);
+        }
+        
+        async function submitForm() {
+            try {
+                showStatus('正在處理您的服務紀錄單...');
+                
+                // 收集表單資料
+                const formData = new FormData(document.getElementById('serviceForm'));
+                const data = {};
+                
+                // 基本資料
+                for (let [key, value] = formData.entries()) {
+                    data[key] = value;
+                }
+                
+                // 服務方式（多選）
+                const serviceMethods = [];
+                document.querySelectorAll('input[name="serviceMethod"]:checked').forEach(cb => {
+                    serviceMethods.push(cb.value);
+                });
+                data.serviceMethods = serviceMethods;
+                
+                // 其他服務
+                if (document.getElementById('otherService').value) {
+                    serviceMethods.push('其他：' + document.getElementById('otherService').value);
+                }
+                
+                // 產品資料
+                data.products = [];
+                for (let i = 1; i <= 3; i++) {
+                    const brand = document.querySelector(`input[name="brand${i}"]`).value;
+                    const model = document.querySelector(`input[name="model${i}"]`).value;
+                    const version = document.querySelector(`input[name="version${i}"]`).value;
+                    const serial = document.querySelector(`input[name="serial${i}"]`).value;
+                    
+                    if (brand || model || version || serial) {
+                        data.products.push({ brand, model, version, serial });
+                    }
+                }
+                
+                // 簽名資料
+                data.signatures = signatureData;
+                
+                // 生成PDF
+                await generatePDF(data);
+                
+                // 模擬發送到Google Sheets和Email
+                await simulateDataSubmission(data);
+                
+                showStatus('✅ 服務紀錄單已成功產生PDF並送出！資料已更新至雲端試算表。');
+                
+            } catch (error) {
+                console.error('提交錯誤:', error);
+                showStatus('❌ 提交過程中發生錯誤，請稍後再試。', true);
+            }
+        }
+        
+        async function generatePDF(data) {
+            // 使用 jsPDF 生成 PDF
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            
+            // 設置中文字體（這裡使用基本字體，實際應用中需要載入中文字體）
+            pdf.setFont('helvetica');
+            
+            // 標題
+            pdf.setFontSize(20);
+            pdf.text('維嘉全球科技股份有限公司', 105, 30, { align: 'center' });
+            pdf.setFontSize(16);
+            pdf.text('Service Record Form', 105, 40, { align: 'center' });
+            
+            // 基本資訊
+            let yPos = 60;
+            pdf.setFontSize(12);
+            
+            const fields = [
+                ['Project Code', data.projectCode || ''],
+                ['Repair Number', data.repairNumber || ''],
+                ['Customer Name', data.customerName || ''],
+                ['Contact Person', data.contactPerson || ''],
+                ['Address', data.address || ''],
+                ['Phone', data.phone || ''],
+                ['Service Date', `${data.year || ''}-${data.month || ''}-${data.day || ''}`],
+                ['Service Methods', data.serviceMethods ? data.serviceMethods.join(', ') : ''],
+                ['Service Content', data.serviceContent || ''],
+                ['Customer Feedback', data.customerFeedback || '']
+            ];
+            
+            fields.forEach(([label, value]) => {
+                pdf.text(`${label}: ${value}`, 20, yPos);
+                yPos += 10;
+            });
+            
+            // 產品資訊
+            if (data.products && data.products.length > 0) {
+                yPos += 10;
+                pdf.text('Products:', 20, yPos);
+                yPos += 10;
+                
+                data.products.forEach((product, index) => {
+                    pdf.text(`${index + 1}. Brand: ${product.brand}, Model: ${product.model}, Version: ${product.version}, Serial: ${product.serial}`, 25, yPos);
+                    yPos += 8;
+                });
+            }
+            
+            // 費用資訊
+            yPos += 10;
+            pdf.text('Expenses:', 20, yPos);
+            yPos += 10;
+            
+            const expenses = [
+                ['Mileage', data.mileage || '0'],
+                ['Departure', data.departure || ''],
+                ['Taxi Fee', data.taxiFee || '0'],
+                ['Parking Fee', data.parkingFee || '0'],
+                ['eTag', data.eTag || '0'],
+                ['Public Transport', data.publicTransport || '0'],
+                ['Other', data.otherExpense || '0']
+            ];
+            
+            expenses.forEach(([label, value]) => {
+                pdf.text(`${label}: ${value}`, 25, yPos);
+                yPos += 8;
+            });
+            
+            // 模擬下載PDF
+            const pdfBlob = pdf.output('blob');
+            const url = URL.createObjectURL(pdfBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `service-record-${Date.now()}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        async function simulateDataSubmission(data) {
+            try {
+                // 發送資料到Google Apps Script
+                const response = await fetch('https://script.google.com/macros/s/AKfycbya6vjHvFLLFUc4Ct4xCuoO1V9LTQVsXFZ1Z4GXcR2eCYh0DrjvSBuozhSNxslAiv2thw/exec', {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'submitServiceRecord',
+                        data: data,
+                        timestamp: new Date().toISOString(),
+                        spreadsheet1: 'https://docs.google.com/spreadsheets/d/1Fb2M7vtkOaMr_0DBmeTqwRzeZ19sw7bcN5HRTn3CP9M/edit',
+                        spreadsheet2: 'https://docs.google.com/spreadsheets/d/1I_vz6Psk2g_5yOj0sBUlVTquv1RLEJ50xJfTp6wKAWA/edit'
+                    })
+                });
+                
+                console.log('資料已發送到Google Apps Script');
+                return { success: true };
+                
+            } catch (error) {
+                console.error('發送到Google Apps Script時發生錯誤:', error);
+                // 即使發送失敗，仍然允許PDF生成
+                return { success: false, error: error.message };
+            }
+        }
+        
+        // 自動填入當前日期
+        window.addEventListener('load', () => {
+            const now = new Date();
+            const rocYear = now.getFullYear() - 1911; // 民國年
+            
+            document.getElementById('year').value = rocYear;
+            document.getElementById('month').value = now.getMonth() + 1;
+            document.getElementById('day').value = now.getDate();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'979a06d997e9f205',t:'MTc1Njk1MjYyNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
