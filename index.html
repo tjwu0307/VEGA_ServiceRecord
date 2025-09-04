@@ -15,20 +15,17 @@
         
         body {
             font-family: 'Microsoft JhengHei', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: white;
             min-height: 100vh;
             padding: 15px;
             margin: 0;
         }
         
         .container {
-            width: 95%;
-            max-width: 800px;
+            width: 210mm;
             min-height: 297mm;
             margin: 0 auto;
             background: white;
-            border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             overflow: hidden;
             page-break-inside: avoid;
         }
@@ -48,82 +45,112 @@
                 box-shadow: none;
                 page-break-inside: avoid;
             }
+            
+            .submit-section, .clear-btn, .signature-controls {
+                display: none !important;
+            }
         }
         
         .header {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            color: white;
-            padding: 20mm 15mm;
-            text-align: center;
-            position: relative;
+            background: white;
+            color: #333;
+            padding: 8mm;
+            display: flex;
+            align-items: center;
+            gap: 20px;
         }
         
         .logo {
-            width: 60px;
-            height: 60px;
-            background: white;
-            border-radius: 50%;
-            margin: 0 auto 15px;
+            width: 80px;
+            height: auto;
+            flex-shrink: 0;
+        }
+        
+        .logo img {
+            width: 100%;
+            height: auto;
+        }
+        
+        .right-section {
+            flex: 1;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #2c3e50;
-            font-size: 14px;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .company-info {
+            text-align: left;
         }
         
         .company-name {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: bold;
             margin-bottom: 8px;
+            color: #333;
         }
         
         .form-title {
-            font-size: 18px;
-            color: #ecf0f1;
+            font-size: 20px;
+            color: #666;
         }
         
         .contact-info {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            padding: 15mm;
-            background: #f8f9fa;
-            border-bottom: 2px solid #e9ecef;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
         }
         
         .contact-section {
-            text-align: center;
-            padding: 12px;
-            background: white;
-            border-radius: 6px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            text-align: left;
+            padding: 8px;
+            flex: 1;
         }
         
         .contact-section h3 {
-            color: #2c3e50;
-            margin-bottom: 10px;
-            font-size: 14px;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 5px;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 12px;
+            font-weight: bold;
         }
         
         .contact-section p {
-            margin: 5px 0;
-            color: #555;
-            font-size: 11px;
-            line-height: 1.3;
+            margin: 3px 0;
+            color: #333;
+            font-size: 10px;
+            line-height: 1.2;
         }
         
         .form-content {
-            padding: 15mm;
+            padding: 5mm 10mm;
         }
         
         .form-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
+            display: table;
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+        
+        .form-row {
+            display: table-row;
+        }
+        
+        .form-cell {
+            display: table-cell;
+            border: 1px solid #333;
+            padding: 8px;
+            vertical-align: middle;
+        }
+        
+        .form-cell.label {
+            background: #f0f0f0;
+            font-weight: bold;
+            width: 25%;
+            text-align: center;
+        }
+        
+        .form-cell.input {
+            width: 25%;
         }
         
         .form-group {
@@ -147,17 +174,16 @@
         }
         
         .form-group input, .form-group textarea, .form-group select {
-            padding: 8px;
-            border: 1px solid #e9ecef;
-            border-radius: 4px;
+            padding: 4px;
+            border: none;
             font-size: 12px;
-            transition: all 0.3s ease;
+            width: 100%;
+            background: transparent;
         }
         
         .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
             outline: none;
-            border-color: #3498db;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+            background: #f9f9f9;
         }
         
         .date-inputs {
@@ -201,7 +227,7 @@
         }
         
         .checkbox-group label {
-            font-size: 11px;
+            font-size: 12px;
             margin-bottom: 0;
         }
         
@@ -210,21 +236,19 @@
             border-collapse: collapse;
             margin: 15px 0;
             background: white;
-            border-radius: 6px;
-            overflow: hidden;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            border: 1px solid #333;
         }
         
         .product-table th, .product-table td {
             padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #e9ecef;
+            text-align: center;
+            border: 1px solid #333;
             font-size: 11px;
         }
         
         .product-table th {
-            background: #3498db;
-            color: white;
+            background: #f0f0f0;
+            color: #333;
             font-weight: bold;
             font-size: 12px;
         }
@@ -232,38 +256,97 @@
         .product-table input {
             width: 100%;
             padding: 5px;
-            border: 1px solid #ddd;
-            border-radius: 3px;
+            border: none;
             font-size: 11px;
+            background: transparent;
+            text-align: center;
+        }
+        
+        .section-title {
+            background: #f0f0f0;
+            padding: 8px;
+            border: 1px solid #333;
+            border-bottom: none;
+            font-weight: bold;
+            text-align: left;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+        
+        .section-content {
+            border: 1px solid #333;
+            padding: 10px;
+            margin-bottom: 15px;
         }
         
         .expense-section {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 6px;
-            margin: 20px 0;
+            border: 1px solid #333;
+            margin: 15px 0;
         }
         
         .expense-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+        
+        .expense-item {
+            flex: 1;
+            min-width: 120px;
+            display: flex;
+            flex-direction: column;
+            padding: 8px;
+            border-right: 2px solid #333;
+            background: #fafafa;
+        }
+        
+        .expense-item:last-child {
+            border-right: none;
+        }
+        
+        .expense-item:nth-child(even) {
+            background: #f5f5f5;
+        }
+        
+        .expense-item label {
+            font-weight: bold;
+            font-size: 11px;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+        
+        .expense-item input {
+            padding: 4px;
+            border: none;
+            font-size: 11px;
+            background: transparent;
+            text-align: center;
         }
         
         .signature-section {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin: 25px 0;
+            display: table;
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            border: 1px solid #333;
+        }
+        
+        .signature-row {
+            display: table-row;
         }
         
         .signature-box {
+            display: table-cell;
             text-align: center;
             padding: 12px;
-            background: #f8f9fa;
-            border-radius: 6px;
-            border: 1px dashed #bdc3c7;
+            vertical-align: top;
+            width: 33.33%;
+            position: relative;
+            border-right: 1px solid #333;
+        }
+        
+        .signature-box:last-child {
+            border-right: none;
         }
         
         .signature-canvas {
@@ -276,64 +359,62 @@
         }
         
         .signature-controls {
-            margin-top: 10px;
+            position: absolute;
+            top: 5px;
+            right: 5px;
         }
         
         .clear-btn {
-            background: #e74c3c;
+            background: #66B3FF;
             color: white;
             border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
+            padding: 4px 8px;
+            border-radius: 3px;
             cursor: pointer;
             font-size: 12px;
             transition: background 0.3s ease;
         }
         
         .clear-btn:hover {
-            background: #c0392b;
+            background: #4A9FFF;
         }
         
         .copy-info {
-            background: #ecf0f1;
+            background: white;
             padding: 12px;
             text-align: center;
-            font-size: 11px;
-            color: #2c3e50;
-            border-top: 2px solid #bdc3c7;
+            font-size: 16px;
+            color: #333;
         }
         
         .copy-item {
-            display: inline-block;
-            margin: 0 10px;
-            padding: 5px 10px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: inline;
+            margin: 0 20px;
         }
         
         .submit-section {
             text-align: center;
             padding: 20px;
-            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            background: white;
         }
         
         .submit-btn {
-            background: white;
-            color: #27ae60;
+            background: linear-gradient(145deg, #FF5151, #E04545);
+            color: white;
             border: none;
             padding: 12px 30px;
-            border-radius: 25px;
             font-size: 14px;
             font-weight: bold;
             cursor: pointer;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(255, 81, 81, 0.3);
             transition: all 0.3s ease;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
         }
         
         .submit-btn:hover {
+            background: linear-gradient(145deg, #E04545, #CC3A3A);
+            box-shadow: 0 6px 12px rgba(255, 81, 81, 0.4);
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
         }
         
         .status-message {
@@ -387,157 +468,212 @@
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo">LOGO</div>
-            <div class="company-name">維嘉全球科技股份有限公司</div>
-            <div class="form-title">服務紀錄單</div>
-        </div>
-        
-        <div class="contact-info">
-            <div class="contact-section">
-                <h3>台北</h3>
-                <p>服務專線: 02-35182883</p>
-                <p>台北市松山區民生東路三段128號14F-1</p>
-                <p>Fax: (02) 2545-1155</p>
+            <div class="logo">
+                <img src="https://vega-global.com/wp-content/uploads/2024/07/Website-Logo-2048x1833-1-1536x1375.png" alt="維嘉全球科技" onerror="this.src=''; this.alt='LOGO'; this.style.display='none';">
             </div>
-            <div class="contact-section">
-                <h3>台中</h3>
-                <p>服務專線: 02-35182884</p>
-                <p>台中市北中區文心路四段81號9樓之2</p>
-                <p>Fax: (04) 2295-5833</p>
-            </div>
-            <div class="contact-section">
-                <h3>高雄</h3>
-                <p>服務專線: 02-35182885</p>
-                <p>高雄市前鎮區中山二路91號8樓之9</p>
-                <p>Fax: (07) 535-0099</p>
+            <div class="right-section">
+                <div class="company-info">
+                    <div class="company-name">維嘉全球科技股份有限公司</div>
+                    <div class="form-title">服務紀錄單</div>
+                </div>
+                <div class="contact-info">
+                    <div class="contact-section">
+                        <h3>台北</h3>
+                        <p>服務專線: 02-35182883</p>
+                        <p>台北市松山區民生東路三段128號14F-1</p>
+                        <p>Fax: (02) 2545-1155</p>
+                    </div>
+                    <div class="contact-section">
+                        <h3>台中</h3>
+                        <p>服務專線: 02-35182884</p>
+                        <p>台中市北中區文心路四段81號9樓之2</p>
+                        <p>Fax: (04) 2295-5833</p>
+                    </div>
+                    <div class="contact-section">
+                        <h3>高雄</h3>
+                        <p>服務專線: 02-35182885</p>
+                        <p>高雄市前鎮區中山二路91號8樓之9</p>
+                        <p>Fax: (07) 535-0099</p>
+                    </div>
+                </div>
             </div>
         </div>
         
         <div class="form-content">
             <form id="serviceForm">
                 <div class="form-grid">
-                    <div class="form-group">
-                        <label>專案代號</label>
-                        <input type="text" id="projectCode" name="projectCode">
-                    </div>
-                    <div class="form-group">
-                        <label>叫修單號</label>
-                        <input type="text" id="repairNumber" name="repairNumber">
-                    </div>
-                    <div class="form-group">
-                        <label>CRM 安裝單號</label>
-                        <input type="text" id="crmInstallNumber" name="crmInstallNumber">
-                    </div>
-                    <div class="form-group">
-                        <label>CRM 維修單號</label>
-                        <input type="text" id="crmRepairNumber" name="crmRepairNumber">
-                    </div>
-                    
-                    <div class="form-group half-width">
-                        <label>客戶名稱</label>
-                        <input type="text" id="customerName" name="customerName">
-                    </div>
-                    <div class="form-group half-width">
-                        <label>連絡人</label>
-                        <input type="text" id="contactPerson" name="contactPerson">
-                    </div>
-                    
-                    <div class="form-group half-width">
-                        <label>地址</label>
-                        <input type="text" id="address" name="address">
-                    </div>
-                    <div class="form-group half-width">
-                        <label>電話</label>
-                        <input type="text" id="phone" name="phone">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>服務日期（民國）</label>
-                        <div class="date-inputs">
-                            <input type="number" id="year" name="year" placeholder="年" min="100" max="200">
-                            <span>年</span>
-                            <input type="number" id="month" name="month" placeholder="月" min="1" max="12">
-                            <span>月</span>
-                            <input type="number" id="day" name="day" placeholder="日" min="1" max="31">
-                            <span>日</span>
+                    <div class="form-row">
+                        <div class="form-cell label">專案代號</div>
+                        <div class="form-cell input">
+                            <div class="form-group">
+                                <input type="text" id="projectCode" name="projectCode">
+                            </div>
+                        </div>
+                        <div class="form-cell label">CRM安裝單號</div>
+                        <div class="form-cell input">
+                            <div class="form-group">
+                                <input type="text" id="crmInstallNumber" name="crmInstallNumber">
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="form-group">
-                        <label>到達時間</label>
-                        <div class="time-inputs">
-                            <input type="time" id="arrivalTime" name="arrivalTime">
+                    <div class="form-row">
+                        <div class="form-cell label">叫修單號</div>
+                        <div class="form-cell input">
+                            <div class="form-group">
+                                <input type="text" id="repairNumber" name="repairNumber">
+                            </div>
+                        </div>
+                        <div class="form-cell label">CRM維修單號</div>
+                        <div class="form-cell input">
+                            <div class="form-group">
+                                <input type="text" id="crmRepairNumber" name="crmRepairNumber">
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="form-group">
-                        <label>結束時間</label>
-                        <div class="time-inputs">
-                            <input type="time" id="endTime" name="endTime">
+                    <div class="form-row">
+                        <div class="form-cell label">客戶名稱</div>
+                        <div class="form-cell input">
+                            <div class="form-group">
+                                <input type="text" id="customerName" name="customerName">
+                            </div>
+                        </div>
+                        <div class="form-cell label"></div>
+                        <div class="form-cell input"></div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-cell label">EMAIL</div>
+                        <div class="form-cell input">
+                            <div class="form-group">
+                                <input type="email" id="email" name="email">
+                            </div>
+                        </div>
+                        <div class="form-cell label"></div>
+                        <div class="form-cell input"></div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-cell label">地址</div>
+                        <div class="form-cell input">
+                            <div class="form-group">
+                                <input type="text" id="address" name="address">
+                            </div>
+                        </div>
+                        <div class="form-cell label"></div>
+                        <div class="form-cell input"></div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-cell label">連絡人</div>
+                        <div class="form-cell input">
+                            <div class="form-group">
+                                <input type="text" id="contactPerson" name="contactPerson">
+                            </div>
+                        </div>
+                        <div class="form-cell label">電話</div>
+                        <div class="form-cell input">
+                            <div class="form-group">
+                                <input type="text" id="phone" name="phone">
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="form-group full-width">
-                        <label>服務方式</label>
-                        <div class="service-methods">
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="survey" name="serviceMethod" value="場勘">
-                                <label for="survey">場勘</label>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="poc" name="serviceMethod" value="POC">
-                                <label for="poc">POC</label>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="presentation" name="serviceMethod" value="簡報">
-                                <label for="presentation">簡報</label>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="installation" name="serviceMethod" value="安裝">
-                                <label for="installation">安裝</label>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="acceptance" name="serviceMethod" value="驗收">
-                                <label for="acceptance">驗收</label>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="maintenance" name="serviceMethod" value="檢修">
-                                <label for="maintenance">檢修</label>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="delivery" name="serviceMethod" value="交貨">
-                                <label for="delivery">交貨</label>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="interview" name="serviceMethod" value="客戶需求訪談">
-                                <label for="interview">客戶需求訪談</label>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="demo" name="serviceMethod" value="DEMO 產品展示">
-                                <label for="demo">DEMO 產品展示</label>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="training" name="serviceMethod" value="教育訓練">
-                                <label for="training">教育訓練</label>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="relocation" name="serviceMethod" value="移機服務">
-                                <label for="relocation">移機服務</label>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="meeting" name="serviceMethod" value="會議支援">
-                                <label for="meeting">會議支援</label>
+                    <div class="form-row">
+                        <div class="form-cell label">服務日期</div>
+                        <div class="form-cell input">
+                            <div class="form-group">
+                                <div class="date-inputs">
+                                    <input type="number" id="year" name="year" placeholder="年" min="100" max="200" style="width: 50px;">
+                                    <span>年</span>
+                                    <input type="number" id="month" name="month" placeholder="月" min="1" max="12" style="width: 40px;">
+                                    <span>月</span>
+                                    <input type="number" id="day" name="day" placeholder="日" min="1" max="31" style="width: 40px;">
+                                    <span>日</span>
+                                </div>
                             </div>
                         </div>
-                        <div style="margin-top: 15px;">
-                            <label>其他：</label>
-                            <input type="text" id="otherService" name="otherService" style="margin-left: 10px; width: 300px;">
+                        <div class="form-cell label"></div>
+                        <div class="form-cell input"></div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-cell label">到達時間</div>
+                        <div class="form-cell input">
+                            <div class="form-group">
+                                <input type="time" id="arrivalTime" name="arrivalTime">
+                            </div>
+                        </div>
+                        <div class="form-cell label">結束時間</div>
+                        <div class="form-cell input">
+                            <div class="form-group">
+                                <input type="time" id="endTime" name="endTime">
+                            </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="form-group full-width">
-                    <label>服務產品</label>
+                <div class="section-title">服務方式</div>
+                <div class="section-content">
+                    <div class="service-methods">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="survey" name="serviceMethod" value="場勘">
+                            <label for="survey">場勘</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="poc" name="serviceMethod" value="POC">
+                            <label for="poc">POC</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="presentation" name="serviceMethod" value="簡報">
+                            <label for="presentation">簡報</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="installation" name="serviceMethod" value="安裝">
+                            <label for="installation">安裝</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="acceptance" name="serviceMethod" value="驗收">
+                            <label for="acceptance">驗收</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="maintenance" name="serviceMethod" value="檢修">
+                            <label for="maintenance">檢修</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="delivery" name="serviceMethod" value="交貨">
+                            <label for="delivery">交貨</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="interview" name="serviceMethod" value="客戶需求訪談">
+                            <label for="interview">客戶需求訪談</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="demo" name="serviceMethod" value="DEMO 產品展示">
+                            <label for="demo">DEMO 產品展示</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="training" name="serviceMethod" value="教育訓練">
+                            <label for="training">教育訓練</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="relocation" name="serviceMethod" value="移機服務">
+                            <label for="relocation">移機服務</label>
+                        </div>
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="meeting" name="serviceMethod" value="會議支援">
+                            <label for="meeting">會議支援</label>
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <label>其他：</label>
+                        <input type="text" id="otherService" name="otherService" style="margin-left: 10px; width: 300px; border: 1px solid #ccc; padding: 4px;">
+                    </div>
+                </div>
+                
+                <div class="section-title">服務產品</div>
+                <div class="section-content">
                     <table class="product-table">
                         <thead>
                             <tr>
@@ -570,75 +706,72 @@
                     </table>
                 </div>
                 
-                <div class="form-group full-width">
-                    <label>服務內容</label>
-                    <textarea id="serviceContent" name="serviceContent" rows="5" style="width: 100%; resize: vertical;"></textarea>
+                <div class="section-title">服務內容</div>
+                <div class="section-content">
+                    <textarea id="serviceContent" name="serviceContent" rows="5" style="width: 100%; border: none; resize: vertical; background: transparent;"></textarea>
                 </div>
                 
-                <div class="form-group full-width">
-                    <label>客戶意見</label>
-                    <textarea id="customerFeedback" name="customerFeedback" rows="4" style="width: 100%; resize: vertical;"></textarea>
-                </div>
-                
-                <div class="expense-section">
-                    <h3 style="color: #2c3e50; margin-bottom: 15px; font-size: 14px;">費用申請</h3>
-                    <div class="expense-grid">
-                        <div class="form-group">
-                            <label>里程 (KM)</label>
-                            <input type="number" id="mileage" name="mileage" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label>出發地點</label>
-                            <input type="text" id="departure" name="departure">
-                        </div>
-                        <div class="form-group">
-                            <label>計程車資</label>
-                            <input type="number" id="taxiFee" name="taxiFee">
-                        </div>
-                        <div class="form-group">
-                            <label>停車費</label>
-                            <input type="number" id="parkingFee" name="parkingFee">
-                        </div>
-                    </div>
-                    <div class="expense-grid" style="margin-top: 10px;">
-                        <div class="form-group">
-                            <label>eTag</label>
-                            <input type="number" id="eTag" name="eTag">
-                        </div>
-                        <div class="form-group">
-                            <label>大眾運輸</label>
-                            <input type="number" id="publicTransport" name="publicTransport">
-                        </div>
-                        <div class="form-group">
-                            <label>其他</label>
-                            <input type="number" id="otherExpense" name="otherExpense">
-                        </div>
-                        <div class="form-group">
-                            <!-- 空白欄位保持對齊 -->
-                        </div>
-                    </div>
+                <div class="section-title">客戶意見</div>
+                <div class="section-content">
+                    <textarea id="customerFeedback" name="customerFeedback" rows="4" style="width: 100%; border: none; resize: vertical; background: transparent;"></textarea>
                 </div>
                 
                 <div class="signature-section">
-                    <div class="signature-box">
-                        <h4 style="margin-bottom: 15px; color: #2c3e50;">主管簽名</h4>
-                        <canvas class="signature-canvas" id="managerSignature"></canvas>
-                        <div class="signature-controls">
-                            <button type="button" class="clear-btn" onclick="clearSignature('managerSignature')">清除</button>
+                    <div class="signature-row">
+                        <div class="signature-box">
+                            <h4 style="margin-bottom: 15px; color: #333;">主管簽名</h4>
+                            <canvas class="signature-canvas" id="managerSignature"></canvas>
+                            <div class="signature-controls">
+                                <button type="button" class="clear-btn" onclick="clearSignature('managerSignature')">清除</button>
+                            </div>
+                        </div>
+                        <div class="signature-box">
+                            <h4 style="margin-bottom: 15px; color: #333;">工程師簽名</h4>
+                            <canvas class="signature-canvas" id="engineerSignature"></canvas>
+                            <div class="signature-controls">
+                                <button type="button" class="clear-btn" onclick="clearSignature('engineerSignature')">清除</button>
+                            </div>
+                        </div>
+                        <div class="signature-box">
+                            <h4 style="margin-bottom: 15px; color: #333;">客戶簽名</h4>
+                            <canvas class="signature-canvas" id="customerSignature"></canvas>
+                            <div class="signature-controls">
+                                <button type="button" class="clear-btn" onclick="clearSignature('customerSignature')">清除</button>
+                            </div>
                         </div>
                     </div>
-                    <div class="signature-box">
-                        <h4 style="margin-bottom: 15px; color: #2c3e50;">工程師簽名</h4>
-                        <canvas class="signature-canvas" id="engineerSignature"></canvas>
-                        <div class="signature-controls">
-                            <button type="button" class="clear-btn" onclick="clearSignature('engineerSignature')">清除</button>
+                </div>
+                
+                <div class="section-title">費用申請：(以下由工程師收回單據後填寫申請)</div>
+                <div class="section-content">
+                    <div class="expense-grid">
+                        <div class="expense-item">
+                            <label>里程 (KM)</label>
+                            <input type="number" id="mileage" name="mileage" step="0.1">
                         </div>
-                    </div>
-                    <div class="signature-box">
-                        <h4 style="margin-bottom: 15px; color: #2c3e50;">客戶簽名</h4>
-                        <canvas class="signature-canvas" id="customerSignature"></canvas>
-                        <div class="signature-controls">
-                            <button type="button" class="clear-btn" onclick="clearSignature('customerSignature')">清除</button>
+                        <div class="expense-item">
+                            <label>出發地點</label>
+                            <input type="text" id="departure" name="departure">
+                        </div>
+                        <div class="expense-item">
+                            <label>計程車資</label>
+                            <input type="number" id="taxiFee" name="taxiFee">
+                        </div>
+                        <div class="expense-item">
+                            <label>停車費</label>
+                            <input type="number" id="parkingFee" name="parkingFee">
+                        </div>
+                        <div class="expense-item">
+                            <label>eTag</label>
+                            <input type="number" id="eTag" name="eTag">
+                        </div>
+                        <div class="expense-item">
+                            <label>大眾運輸</label>
+                            <input type="number" id="publicTransport" name="publicTransport">
+                        </div>
+                        <div class="expense-item">
+                            <label>其他</label>
+                            <input type="number" id="otherExpense" name="otherExpense">
                         </div>
                     </div>
                 </div>
@@ -646,14 +779,14 @@
         </div>
         
         <div class="copy-info">
-            <div class="copy-item">白聯：工程師部門</div>
-            <div class="copy-item">紅聯：財務部（請款用）</div>
-            <div class="copy-item">黃聯：客戶收執</div>
+            <span class="copy-item">白聯：工程師部門</span>
+            <span class="copy-item">紅聯：財務部（請款用）</span>
+            <span class="copy-item">黃聯：客戶收執</span>
         </div>
         
         <div class="submit-section">
             <button type="button" class="submit-btn" onclick="submitForm()">
-                📄 產生PDF並送出
+                📄 產生PDF並送出EMAIL
             </button>
             <div id="statusMessage" class="status-message"></div>
         </div>
@@ -911,5 +1044,5 @@
             document.getElementById('day').value = now.getDate();
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'979a06d997e9f205',t:'MTc1Njk1MjYyNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'979a6b19734af205',t:'MTc1Njk1NjczMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
