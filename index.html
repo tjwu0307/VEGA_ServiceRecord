@@ -23,85 +23,39 @@
     @media print {
       .no-print { display:none !important; }
     }
-    .header {
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      margin-bottom:10px;
-    }
+    .header { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
     .logo { width:80px; }
     .company-info { flex:1; margin-left:10px; }
     .company-name { font-size:20px; font-weight:bold; }
     .form-title { font-size:16px; }
     .contact-info { display:flex; gap:20px; margin-top:8px; }
     .contact-section { font-size:12px; }
-    .form-grid {
-      display:table;
-      width:100%;
-      border-collapse:collapse;
-      margin-bottom:10px;
-    }
+    .form-grid { display:table; width:100%; border-collapse:collapse; margin-bottom:10px; }
     .form-row { display:table-row; }
-    .form-cell {
-      display:table-cell;
-      border:1px solid #333;
-      padding:6px;
-      vertical-align:middle;
-    }
+    .form-cell { display:table-cell; border:1px solid #333; padding:6px; vertical-align:middle; }
     .form-cell.label { background:#f0f0f0; width:25%; font-weight:bold; text-align:center; }
-    .form-cell.input input, .form-cell.input textarea {
-      width:100%; border:none; font-size:12px; background:transparent;
-    }
-    .section-title {
-      background:#f0f0f0;
-      padding:6px;
-      border:1px solid #333;
-      border-bottom:none;
-      font-weight:bold;
-      text-align:left;
-      margin-top:10px;
-    }
-    .section-content {
-      border:1px solid #333;
-      padding:8px;
-      margin-bottom:10px;
-    }
-    .service-methods {
-      display:grid;
-      grid-template-columns:repeat(5,1fr);
-      gap:6px;
-    }
+    .form-cell.input input, .form-cell.input textarea { width:100%; border:none; font-size:12px; background:transparent; }
+    .section-title { background:#f0f0f0; padding:6px; border:1px solid #333; border-bottom:none; font-weight:bold; text-align:left; margin-top:10px; }
+    .section-content { border:1px solid #333; padding:8px; margin-bottom:10px; }
+    .service-methods { display:grid; grid-template-columns:repeat(5,1fr); gap:6px; }
     .checkbox-group { font-size:12px; }
-    .product-table {
-      width:100%; border-collapse:collapse;
-    }
-    .product-table th, .product-table td {
-      border:1px solid #333; padding:6px; text-align:center; font-size:12px;
-    }
-    .signature-section {
-      display:table; width:100%; border:1px solid #333; margin:10px 0;
-    }
+    .product-table { width:100%; border-collapse:collapse; }
+    .product-table th, .product-table td { border:1px solid #333; padding:6px; text-align:center; font-size:12px; }
+    .signature-section { display:table; width:100%; border:1px solid #333; margin:10px 0; }
     .signature-row { display:table-row; }
-    .signature-box {
-      display:table-cell; width:33.3%; text-align:center; padding:10px; border-right:1px solid #333; position:relative;
-    }
+    .signature-box { display:table-cell; width:33.3%; text-align:center; padding:10px; border-right:1px solid #333; position:relative; }
     .signature-box:last-child { border-right:none; }
     .signature-canvas { width:100%; height:80px; border:1px solid #ccc; }
     .signature-controls { position:absolute; top:5px; right:5px; }
-    .clear-btn {
-      background:#66B3FF; color:white; border:none; padding:4px 8px; cursor:pointer;
-    }
-    .expense-grid { display:flex; }
-    .expense-item { flex:1; border-right:1px solid #333; padding:6px; }
+    .clear-btn { background:#66B3FF; color:white; border:none; padding:4px 8px; cursor:pointer; }
+    .expense-grid { display:flex; flex-wrap:wrap; }
+    .expense-item { flex:1; border-right:1px solid #333; padding:6px; min-width:100px; }
     .expense-item:last-child { border-right:none; }
     .expense-item label { font-weight:bold; font-size:12px; display:block; margin-bottom:4px; }
     .expense-item input { width:100%; border:none; font-size:12px; text-align:center; }
     .copy-info { text-align:center; margin:10px 0; font-size:14px; }
     .submit-section { text-align:center; margin-top:15px; }
-    .submit-btn {
-      background:#FF5151; color:white; border:none; padding:10px 20px;
-      font-weight:bold; border-radius:6px; cursor:pointer;
-    }
+    .submit-btn { background:#FF5151; color:white; border:none; padding:10px 20px; font-weight:bold; border-radius:6px; cursor:pointer; }
   </style>
 </head>
 <body>
@@ -114,21 +68,9 @@
         <div class="company-name">維嘉全球科技股份有限公司</div>
         <div class="form-title">服務紀錄單</div>
         <div class="contact-info">
-          <div class="contact-section">
-            【台北】服務專線 02-35182883<br>
-            台北市松山區民生東路三段128號14F-1<br>
-            Fax:(02)2545-1155
-          </div>
-          <div class="contact-section">
-            【台中】服務專線 02-35182884<br>
-            台中市北中區文心路四段81號9樓之2<br>
-            Fax:(04)2295-5833
-          </div>
-          <div class="contact-section">
-            【高雄】服務專線 02-35182885<br>
-            高雄市前鎮區中山二路91號8樓之9<br>
-            Fax:(07)535-0099
-          </div>
+          <div class="contact-section">【台北】服務專線 02-35182883<br>台北市松山區民生東路三段128號14F-1<br>Fax:(02)2545-1155</div>
+          <div class="contact-section">【台中】服務專線 02-35182884<br>台中市北中區文心路四段81號9樓之2<br>Fax:(04)2295-5833</div>
+          <div class="contact-section">【高雄】服務專線 02-35182885<br>高雄市前鎮區中山二路91號8樓之9<br>Fax:(07)535-0099</div>
         </div>
       </div>
     </div>
@@ -260,7 +202,7 @@
     </div>
 
     <div class="submit-section no-print">
-      <button type="button" class="submit-btn" onclick="generatePDF()">📄 產生PDF並送出EMAIL</button>
+      <button type="button" class="submit-btn" onclick="generateAndSubmit()">📄 產生PDF並送出EMAIL</button>
     </div>
   </div>
 
@@ -273,7 +215,7 @@
     }
     function clearSignature(pad) { pad.clear(); }
 
-    async function generatePDF() {
+    async function generateAndSubmit() {
       const element = document.getElementById('pdfContent');
       const canvas = await html2canvas(element, { scale:2 });
       const imgData = canvas.toDataURL('image/png');
@@ -281,7 +223,41 @@
       const pdfW = pdf.internal.pageSize.getWidth();
       const pdfH = pdf.internal.pageSize.getHeight();
       pdf.addImage(imgData,'PNG',0,0,pdfW,pdfH);
+
+      // 下載 PDF
       pdf.save('service-record.pdf');
+
+      // 轉成 Base64 (送到 Google Script)
+      const pdfBase64 = pdf.output('datauristring');
+
+      // 收集表單資料
+      const data = {
+        projectCode: document.getElementById('projectCode').value,
+        crmInstall: document.getElementById('crmInstall').value,
+        repairNo: document.getElementById('repairNo').value,
+        crmRepair: document.getElementById('crmRepair').value,
+        customerName: document.getElementById('customerName').value,
+        email: document.getElementById('email').value,
+        address: document.getElementById('address').value,
+        contactPerson: document.getElementById('contactPerson').value,
+        phone: document.getElementById('phone').value,
+        serviceDate: document.getElementById('serviceDate').value,
+        arrival: document.getElementById('arrival').value,
+        finish: document.getElementById('finish').value,
+        pdfFile: pdfBase64
+      };
+
+      try {
+        await fetch("https://script.google.com/macros/s/AKfycbya6vjHvFLLFUc4Ct4xCuoO1V9LTQVsXFZ1Z4GXcR2eCYh0DrjvSBuozhSNxslAiv2thw/exec", {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: { "Content-Type": "application/json" }
+        });
+        alert("✅ PDF 已產生並寄送 Email/更新試算表！");
+      } catch (err) {
+        console.error(err);
+        alert("❌ 發送失敗，請稍後再試。");
+      }
     }
   </script>
 </body>
