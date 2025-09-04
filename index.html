@@ -464,6 +464,22 @@
             }
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.6/dist/signature_pad.umd.min.js"></script>
+const managerPad = new SignaturePad(document.getElementById('managerSignature'));
+const engineerPad = new SignaturePad(document.getElementById('engineerSignature'));
+const customerPad = new SignaturePad(document.getElementById('customerSignature'));
+
+function clearSignature(id) {
+  if (id === 'managerSignature') managerPad.clear();
+  if (id === 'engineerSignature') engineerPad.clear();
+  if (id === 'customerSignature') customerPad.clear();
+    .no-print { display: block; }
+.no-print { display: block; }
+@media print {
+  .no-print { display: none !important; }
+}
+}
+
 </head>
 <body>
     <div class="container">
@@ -543,16 +559,17 @@
                         <div class="form-cell input"></div>
                     </div>
                     
-                    <div class="form-row">
-                        <div class="form-cell label">EMAIL</div>
-                        <div class="form-cell input">
-                            <div class="form-group">
-                                <input type="email" id="email" name="email">
-                            </div>
-                        </div>
-                        <div class="form-cell label"></div>
-                        <div class="form-cell input"></div>
-                    </div>
+                    <div class="form-row no-print">
+    <div class="form-cell label">EMAIL</div>
+    <div class="form-cell input">
+        <div class="form-group">
+            <input type="email" id="email" name="email">
+        </div>
+    </div>
+    <div class="form-cell label"></div>
+    <div class="form-cell input"></div>
+</div>
+
                     
                     <div class="form-row">
                         <div class="form-cell label">地址</div>
@@ -722,21 +739,21 @@
                             <h4 style="margin-bottom: 15px; color: #333;">主管簽名</h4>
                             <canvas class="signature-canvas" id="managerSignature"></canvas>
                             <div class="signature-controls">
-                                <button type="button" class="clear-btn" onclick="clearSignature('managerSignature')">清除</button>
+                                <button type="button" class="clear-btn no-print" onclick="clearSignature('managerSignature')">清除</button>
                             </div>
                         </div>
                         <div class="signature-box">
                             <h4 style="margin-bottom: 15px; color: #333;">工程師簽名</h4>
                             <canvas class="signature-canvas" id="engineerSignature"></canvas>
                             <div class="signature-controls">
-                                <button type="button" class="clear-btn" onclick="clearSignature('engineerSignature')">清除</button>
+                                <button type="button" class="clear-btn no-print" onclick="clearSignature('engineerSignature')">清除</button>
                             </div>
                         </div>
                         <div class="signature-box">
                             <h4 style="margin-bottom: 15px; color: #333;">客戶簽名</h4>
                             <canvas class="signature-canvas" id="customerSignature"></canvas>
                             <div class="signature-controls">
-                                <button type="button" class="clear-btn" onclick="clearSignature('customerSignature')">清除</button>
+                                <button type="button" class="clear-btn no-print" onclick="clearSignature('customerSignature')">清除</button>
                             </div>
                         </div>
                     </div>
@@ -785,7 +802,7 @@
         </div>
         
         <div class="submit-section">
-            <button type="button" class="submit-btn" onclick="submitForm()">
+            <button type="button" class="submit-btn no-print" onclick="submitForm()">
                 📄 產生PDF並送出EMAIL
             </button>
             <div id="statusMessage" class="status-message"></div>
