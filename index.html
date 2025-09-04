@@ -7,6 +7,20 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
+        body {
+  margin: 0;
+  padding: 0;
+  background: white;
+}
+
+.container {
+  width: 210mm;        /* A4 寬度 */
+  min-height: 297mm;   /* A4 高度 */
+  margin: 0 auto;
+  background: white;
+  box-sizing: border-box;
+  padding: 0;          /* ← 移除多餘邊距 */
+}
         * {
             margin: 0;
             padding: 0;
@@ -897,15 +911,14 @@ function clearSignature(id) {
                 
                 // 生成PDF
                async function generatePDF() {
-  const element = document.querySelector('.container');
-  const canvas = await html2canvas(element, { scale: 2 });
-  const imgData = canvas.toDataURL('image/png');
-  const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
-  const imgProps = pdf.getImageProperties(imgData);
-  const pdfWidth = pdf.internal.pageSize.getWidth();
-  const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-  pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-  pdf.save(`service-record-${Date.now()}.pdf`);
+ const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
+const element = document.querySelector('.container');
+const canvas = await html2canvas(element, { scale: 2 });
+const imgData = canvas.toDataURL('image/png');
+const pdfWidth = pdf.internal.pageSize.getWidth();
+const pdfHeight = pdf.internal.pageSize.getHeight();
+pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+pdf.save('service-record.pdf');
 }
 
                 // 模擬發送到Google Sheets和Email
