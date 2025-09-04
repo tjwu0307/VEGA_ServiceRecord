@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>維嘉全球科技 - 服務紀錄單</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+   <!-- 外掛：先載入（順序不能換） -->
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -499,245 +501,126 @@
             </div>
         </div>
         
-        <div class="form-content">
-            <form id="serviceForm">
-                <div class="form-grid">
-                    <div class="form-row">
-                        <div class="form-cell label">專案代號</div>
-                        <div class="form-cell input">
-                            <div class="form-group">
-                                <input type="text" id="projectCode" name="projectCode">
-                            </div>
-                        </div>
-                        <div class="form-cell label">CRM安裝單號</div>
-                        <div class="form-cell input">
-                            <div class="form-group">
-                                <input type="text" id="crmInstallNumber" name="crmInstallNumber">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-cell label">叫修單號</div>
-                        <div class="form-cell input">
-                            <div class="form-group">
-                                <input type="text" id="repairNumber" name="repairNumber">
-                            </div>
-                        </div>
-                        <div class="form-cell label">CRM維修單號</div>
-                        <div class="form-cell input">
-                            <div class="form-group">
-                                <input type="text" id="crmRepairNumber" name="crmRepairNumber">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-cell label">客戶名稱</div>
-                        <div class="form-cell input">
-                            <div class="form-group">
-                                <input type="text" id="customerName" name="customerName">
-                            </div>
-                        </div>
-                        <div class="form-cell label"></div>
-                        <div class="form-cell input"></div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-cell label">EMAIL</div>
-                        <div class="form-cell input">
-                            <div class="form-group">
-                                <input type="email" id="email" name="email">
-                            </div>
-                        </div>
-                        <div class="form-cell label"></div>
-                        <div class="form-cell input"></div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-cell label">地址</div>
-                        <div class="form-cell input">
-                            <div class="form-group">
-                                <input type="text" id="address" name="address">
-                            </div>
-                        </div>
-                        <div class="form-cell label"></div>
-                        <div class="form-cell input"></div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-cell label">連絡人</div>
-                        <div class="form-cell input">
-                            <div class="form-group">
-                                <input type="text" id="contactPerson" name="contactPerson">
-                            </div>
-                        </div>
-                        <div class="form-cell label">電話</div>
-                        <div class="form-cell input">
-                            <div class="form-group">
-                                <input type="text" id="phone" name="phone">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-cell label">服務日期</div>
-                        <div class="form-cell input">
-                            <div class="form-group">
-                                <div class="date-inputs">
-                                    <input type="number" id="year" name="year" placeholder="年" min="100" max="200" style="width: 50px;">
-                                    <span>年</span>
-                                    <input type="number" id="month" name="month" placeholder="月" min="1" max="12" style="width: 40px;">
-                                    <span>月</span>
-                                    <input type="number" id="day" name="day" placeholder="日" min="1" max="31" style="width: 40px;">
-                                    <span>日</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-cell label"></div>
-                        <div class="form-cell input"></div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-cell label">到達時間</div>
-                        <div class="form-cell input">
-                            <div class="form-group">
-                                <input type="time" id="arrivalTime" name="arrivalTime">
-                            </div>
-                        </div>
-                        <div class="form-cell label">結束時間</div>
-                        <div class="form-cell input">
-                            <div class="form-group">
-                                <input type="time" id="endTime" name="endTime">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="section-title">服務方式</div>
-                <div class="section-content">
-                    <div class="service-methods">
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="survey" name="serviceMethod" value="場勘">
-                            <label for="survey">場勘</label>
-                        </div>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="poc" name="serviceMethod" value="POC">
-                            <label for="poc">POC</label>
-                        </div>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="presentation" name="serviceMethod" value="簡報">
-                            <label for="presentation">簡報</label>
-                        </div>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="installation" name="serviceMethod" value="安裝">
-                            <label for="installation">安裝</label>
-                        </div>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="acceptance" name="serviceMethod" value="驗收">
-                            <label for="acceptance">驗收</label>
-                        </div>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="maintenance" name="serviceMethod" value="檢修">
-                            <label for="maintenance">檢修</label>
-                        </div>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="delivery" name="serviceMethod" value="交貨">
-                            <label for="delivery">交貨</label>
-                        </div>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="interview" name="serviceMethod" value="客戶需求訪談">
-                            <label for="interview">客戶需求訪談</label>
-                        </div>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="demo" name="serviceMethod" value="DEMO 產品展示">
-                            <label for="demo">DEMO 產品展示</label>
-                        </div>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="training" name="serviceMethod" value="教育訓練">
-                            <label for="training">教育訓練</label>
-                        </div>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="relocation" name="serviceMethod" value="移機服務">
-                            <label for="relocation">移機服務</label>
-                        </div>
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="meeting" name="serviceMethod" value="會議支援">
-                            <label for="meeting">會議支援</label>
-                        </div>
-                    </div>
-                    <div style="margin-top: 15px;">
-                        <label>其他：</label>
-                        <input type="text" id="otherService" name="otherService" style="margin-left: 10px; width: 300px; border: 1px solid #ccc; padding: 4px;">
-                    </div>
-                </div>
-                
-                <div class="section-title">服務產品</div>
-                <div class="section-content">
-                    <table class="product-table">
-                        <thead>
-                            <tr>
-                                <th>廠牌</th>
-                                <th>型號</th>
-                                <th>版本</th>
-                                <th>序號</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><input type="text" name="brand1"></td>
-                                <td><input type="text" name="model1"></td>
-                                <td><input type="text" name="version1"></td>
-                                <td><input type="text" name="serial1"></td>
-                            </tr>
-                            <tr>
-                                <td><input type="text" name="brand2"></td>
-                                <td><input type="text" name="model2"></td>
-                                <td><input type="text" name="version2"></td>
-                                <td><input type="text" name="serial2"></td>
-                            </tr>
-                            <tr>
-                                <td><input type="text" name="brand3"></td>
-                                <td><input type="text" name="model3"></td>
-                                <td><input type="text" name="version3"></td>
-                                <td><input type="text" name="serial3"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="section-title">服務內容</div>
-                <div class="section-content">
-                    <textarea id="serviceContent" name="serviceContent" rows="5" style="width: 100%; border: none; resize: vertical; background: transparent;"></textarea>
-                </div>
-                
-                <div class="section-title">客戶意見</div>
-                <div class="section-content">
-                    <textarea id="customerFeedback" name="customerFeedback" rows="4" style="width: 100%; border: none; resize: vertical; background: transparent;"></textarea>
-                </div>
-                
+          <table class="form">
+    <tr>
+      <th>專案代號</th>
+      <td colspan="1"><input id="projectCode" type="text"></td>
+      <th>叫修單號</th>
+      <td><input id="ticketNo" type="text"></td>
+      <th colspan="2" style="font-size:18px;text-align:center">服務記錄表</th>
+      <th colspan="1">CRM 安裝單號</th>
+      <td colspan="1"><input id="crm_install" type="text"></td>
+    </tr>
+    <tr>
+      <th>客戶名稱</th>
+      <td colspan="5"><input id="customerName" type="text"></td>
+      <th>CRM 維修單號</th>
+      <td><input id="crm_repair" type="text"></td>
+    </tr>
+    <tr>
+      <th>地址</th>
+      <td colspan="5"><input id="address" type="text"></td>
+      <th>連絡人</th>
+      <td><input id="contact" type="text"></td>
+    </tr>
+    <tr>
+      <th>服務時間</th>
+      <td colspan="5">
+        民國 <input id="roc_y" type="text" style="width:40px">年
+        <input id="roc_m" type="text" style="width:25px">月
+        <input id="roc_d" type="text" style="width:25px">日 |
+        到達時間 <input id="arriveTxt" type="text" style="width:80px">
+        | 結束時間 <input id="finishTxt" type="text" style="width:80px">
+      </td>
+      <th>電話</th>
+      <td><input id="phone" type="text"></td>
+    </tr>
+
+ <tr>
+      <th>服務方式</th>
+      <td colspan="7">
+        <div class="checkboxes" id="serviceMethods">
+          <label><input type="checkbox" value="場勘">場勘</label>
+          <label><input type="checkbox" value="客戶需求訪談">客戶需求訪談</label>
+          <label><input type="checkbox" value="POC">POC</label>
+          <label><input type="checkbox" value="簡報">簡報</label>
+          <label><input type="checkbox" value="工地會議">工地會議</label>
+          <label><input type="checkbox" value="交貨">交貨</label>
+          <label><input type="checkbox" value="安裝">安裝</label>
+          <label><input type="checkbox" value="教育訓練">教育訓練</label>
+          <label><input type="checkbox" value="驗收">驗收</label>
+          <label><input type="checkbox" value="檢修">檢修</label>
+          <label><input type="checkbox" value="維修">維修</label>
+          <label><input type="checkbox" value="移機服務">移機服務</label>
+          <label><input type="checkbox" value="DEMO 產品展示">DEMO 產品展示</label>
+          <label><input type="checkbox" value="會議支援">會議支援</label>
+          <label>其他：<input id="otherServiceMethod" type="text" style="border:1px solid #000; width:100px"></label>
+        </div>
+      </td>
+    </tr>
+
+
+
+      <tr>
+        <th>服務產品</th>
+        <td colspan="7" style="padding:0">
+          <table class="product-table" class="subtable">
+            <tr><th style="width:15%;text-align: center;">廠牌</th><th style="width:25%;text-align: center;">型號</th><th style="width:15%;text-align: center;">版本</th><th style="width:45%;text-align: center;">序號</th></tr>
+            <tr>
+              <td class="product-cell"><input name="brand[]"   type="text"></td>
+              <td class="product-cell"><input name="model[]"   type="text"></td>
+              <td class="product-cell"><input name="version[]" type="text"></td>
+              <td class="product-cell"><input name="serial[]"  type="text"></td>
+            </tr>
+            <tr>
+              <td class="product-cell"><input name="brand[]"   type="text"></td>
+              <td class="product-cell"><input name="model[]"   type="text"></td>
+              <td class="product-cell"><input name="version[]" type="text"></td>
+              <td class="product-cell"><input name="serial[]"  type="text"></td>
+            </tr>
+            <tr>
+              <td class="product-cell"><input name="brand[]"   type="text"></td>
+              <td class="product-cell"><input name="model[]"   type="text"></td>
+              <td class="product-cell"><input name="version[]" type="text"></td>
+              <td class="product-cell"><input name="serial[]"  type="text"></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+      <tr>
+        <th>服務內容</th>
+        <td colspan="7"><textarea id="serviceContent" rows="4"></textarea></td>
+      </tr>
+      <tr>
+        <th>客戶意見</th>
+        <td colspan="7"><textarea id="customerFeedback" rows="3"></textarea></td>
+      </tr>
+       <!-- 簽名區 -->
                 <div class="signature-section">
                     <div class="signature-row">
                         <div class="signature-box">
                             <h4 style="margin-bottom: 15px; color: #333;">主管簽名</h4>
                             <canvas class="signature-canvas" id="managerSignature"></canvas>
-                            <div class="signature-controls">
-                                <button type="button" class="clear-btn" onclick="clearSignature('managerSignature')">清除</button>
-                            </div>
+                             <div class="sig-wrap">
+      <div class="sig-box"><canvas id="sig-manager"></canvas></div>
+      <button type="button" class="no-pdf sig-clear" onclick="clearSignature('manager')">清除</button>
+    </div>
                         </div>
                         <div class="signature-box">
                             <h4 style="margin-bottom: 15px; color: #333;">工程師簽名</h4>
                             <canvas class="signature-canvas" id="engineerSignature"></canvas>
-                            <div class="signature-controls">
-                                <button type="button" class="clear-btn" onclick="clearSignature('engineerSignature')">清除</button>
-                            </div>
+                                  <div  class="sig-box"><canvas id="sig-engineer"></canvas></div>
+      <button type="button" class="no-pdf sig-clear" onclick="clearSignature('engineer')">清除</button>
+    </div>
                         </div>
                         <div class="signature-box">
                             <h4 style="margin-bottom: 15px; color: #333;">客戶簽名</h4>
                             <canvas class="signature-canvas" id="customerSignature"></canvas>
-                            <div class="signature-controls">
-                                <button type="button" class="clear-btn" onclick="clearSignature('customerSignature')">清除</button>
-                            </div>
+                            <div class="sig-wrap">
+      <div class="sig-box"><canvas id="sig-customer"></canvas></div>
+      <button type="button" class="no-pdf sig-clear" onclick="clearSignature('customer')">清除</button>
+    </div>
                         </div>
                     </div>
                 </div>
