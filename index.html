@@ -464,7 +464,7 @@
             }
         }
 
-    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.6/dist/signature_pad.umd.min.js"></script>
+
 const managerPad = new SignaturePad(document.getElementById('managerSignature'));
 const engineerPad = new SignaturePad(document.getElementById('engineerSignature'));
 const customerPad = new SignaturePad(document.getElementById('customerSignature'));
@@ -480,6 +480,8 @@ function clearSignature(id) {
 }
     </style>
 
+    
+     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.6/dist/signature_pad.umd.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -579,35 +581,21 @@ function clearSignature(id) {
                         </div>
                     </div>
                     
-                    <div class="form-row">
-                        <div class="form-cell label">服務日期</div>
-                        <div class="form-cell input">
-                            <div class="form-group">
-                                <div class="date-inputs">
-                                    <input type="number" id="year" name="year" placeholder="__" min="100" max="200" style="width: 50px;">
-                                    <span>年</span>
-                                    <input type="number" id="month" name="month" placeholder="__" min="1" max="12" style="width: 40px;">
-                                    <span>月</span>
-                                    <input type="number" id="day" name="day" placeholder="__" min="1" max="31" style="width: 40px;">
-                                    <span>日</span>
-                        </div>
-                        <div class="form-cell label"></div>
-                        <div class="form-cell input"></div>
-                    </div>
-                        <div class="form-cell label">到達時間</div>
-                        <div class="form-cell input">
-                            <div class="form-group">
-                                <input type="type" id="arrivalTime" name="arrivalTime">
-                            </div>
-                        </div>
-                        <div class="form-cell label">結束時間</div>
-                        <div class="form-cell input">
-                            <div class="form-group">
-                                <input type="type" id="endTime" name="endTime">
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                  <div class="form-row">
+  <div class="form-cell label">服務日期</div>
+  <div class="form-cell input">
+    <div class="date-inputs">
+      <input type="number" id="year" name="year" style="width: 50px;"> 年
+      <input type="number" id="month" name="month" style="width: 40px;"> 月
+      <input type="number" id="day" name="day" style="width: 40px;"> 日
+    </div>
+  </div>
+  <div class="form-cell label">到達時間</div>
+  <div class="form-cell input"><input type="time" id="arrivalTime" name="arrivalTime"></div>
+  <div class="form-cell label">結束時間</div>
+  <div class="form-cell input"><input type="time" id="endTime" name="endTime"></div>
+</div>
+
                 
                 <div class="section-title">服務方式</div>
                 <div class="section-content">
@@ -908,8 +896,18 @@ function clearSignature(id) {
                 data.signatures = signatureData;
                 
                 // 生成PDF
-                await generatePDF(data);
-                
+               async function generatePDF() {
+  const element = document.querySelector('.container');
+  const canvas = await html2canvas(element, { scale: 2 });
+  const imgData = canvas.toDataURL('image/png');
+  const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
+  const imgProps = pdf.getImageProperties(imgData);
+  const pdfWidth = pdf.internal.pageSize.getWidth();
+  const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+  pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+  pdf.save(`service-record-${Date.now()}.pdf`);
+}
+
                 // 模擬發送到Google Sheets和Email
                 await simulateDataSubmission(data);
                 
@@ -1000,7 +998,16 @@ function clearSignature(id) {
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
         }
-        
+        let managerPad = new SignaturePad(document.getElementById('managerSignature'));
+let engineerPad = new SignaturePad(document.getElementById('engineerSignature'));
+let customerPad = new SignaturePad(document.getElementById('customerSignature'));
+
+function clearSignature(id) {
+  if (id === 'managerSignature') managerPad.clear();
+  if (id === 'engineerSignature') engineerPad.clear();
+  if (id === 'customerSignature') customerPad.clear();
+}
+
         async function simulateDataSubmission(data) {
             try {
                 // 發送資料到Google Apps Script
